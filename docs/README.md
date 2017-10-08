@@ -74,11 +74,12 @@
 |__Saturday__|Learn Node.js, Express.js, MongoDB|Make 3D models, learn cannon.js, learn babylon.js|Learn Node.js, Express.js, MongoDB|
 |__Sunday__|Build basic Express.app, establish git workflow, write proposal, and set up Socket.io|Build basic Express.app, establish git workflow, make wireframes, set up babylon.js and cannon.js|Build basic Express.app, establish git workflow, and set up MongoDB, Mongoose|
 |__Monday__|Learn babylon.js, set up babsic UI for game and auth|Work on tank movement interaction/animation|Set up auth (front end and back end)|
-|__Tuesday__|Set up tank attack interaction|Work on tank attack interaction/animation|Polish and debug auth (front end and back end)|
-|__Wednesday__|Work on tank attack interaction/animation with Adan|Work on tank attack interaction/animation with Khai|Polish and debug auth (front end and back end)|
-|__Thursday__|Integrate Socket.io|Work on tank attack interaction/animation with Khai|Polish and debug auth (front end and back end)|
-
-
+|__Tuesday__|Help Adan|Work on tank attack interaction/animation|Polish and debug auth (front end and back end)|
+|__Wednesday__|Integrate Socket.io|Integrate Socket.io|Integrate Socket.io|
+|__Thursday__|Work on Socket.io health, coordinate, and firing trajectory sync|Polish tank attack and movement interaction/animation|Work on backend models and controllers/routing to store tank movement coordinate, health, etc|
+|__Friday__|Integrate turn-based game logic with Socket.io|Work on Tank health loss interaction and animation|Continue to work on backend models and controllers/routing to store tank coordinate, health, etc|
+|__Saturday__|Debug, test, polish|Debug, test, polish|Debug, test, polish|
+|__Saturday__|Debug, test, polish|Debug, test, polish|Debug, test, polish|
 
 ## Plan for getting users and reviews
 * Casually challenge friends, family, and recruiters to play a tank game
