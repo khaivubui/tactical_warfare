@@ -1,10 +1,13 @@
 body {
   color: red;
+  margin: 0;
 }
-
+.ui{
+  position: absolute;
+}
 .game{
   width: 100vw;
-  height: 100vw;  
+  height: 100vw;
 }
 .game > #render-canvas{
   width: 100%;
