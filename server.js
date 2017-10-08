@@ -6,16 +6,11 @@ const app = express();
 app.set('view engine', 'ejs');
 
 // middlewares
-app.use(express.static('public'));
+app.use(express.static(`${__dirname}/public`));
 
 // ---------- Root Route ----------
 
-app.get(
-  '/',
-  (req, res) => {
-    res.render('root');
-  }
-);
+app.get( '/', (req, res) => res.render('root'));
 
 // ---------- Start Server ----------
 
