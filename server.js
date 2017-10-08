@@ -5,6 +5,9 @@ const app = express();
 // Setting view engine to use `ejs` instead of default html
 app.set('view engine', 'ejs');
 
+// middlewares
+app.use(express.static('public'));
+
 // ---------- Root Route ----------
 
 app.get(
