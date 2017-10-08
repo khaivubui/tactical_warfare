@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const routes = require('./routes');
 
@@ -9,6 +10,7 @@ app.set('view engine', 'ejs');
 
 // middlewares
 app.use(express.static(`${__dirname}/../public`));
+app.use(bodyParser.json());
 
 // ---------- Root Route ----------
 
