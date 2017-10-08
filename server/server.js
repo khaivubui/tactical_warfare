@@ -1,5 +1,7 @@
 const express = require('express');
 
+const routes = require('./routes');
+
 const app = express();
 
 // Setting view engine to use `ejs` instead of default html
@@ -10,7 +12,7 @@ app.use(express.static(`${__dirname}/../public`));
 
 // ---------- Root Route ----------
 
-app.get( '/', (req, res) => res.render('root'));
+routes(app);
 
 // ---------- Start Server ----------
 
