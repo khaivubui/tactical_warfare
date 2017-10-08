@@ -1,12 +1,12 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require("express");
+const bodyParser = require("body-parser");
 
-const routes = require('./routes');
+const routes = require("./routes/routes");
 
 const app = express();
 
 // Setting view engine to use `ejs` instead of default html
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 
 // middlewares
 app.use(express.static(`${__dirname}/../public`));
@@ -20,7 +20,4 @@ routes(app);
 
 const port = process.env.PORT || 3000;
 
-app.listen(
-  port,
-  () => console.log(`Server started on port ${port}`)
-);
+app.listen(port, () => console.log(`Server started on port ${port}`));
