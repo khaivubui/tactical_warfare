@@ -6,5 +6,3 @@ document.addEventListener("DOMContentLoaded", () => {
     .querySelector(".game")
     .addEventListener("click", () => alert("AHAHAHAHAHAH"));
 });
-
-// DO YOU SEE THIS Khai???
