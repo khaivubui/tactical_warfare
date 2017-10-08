@@ -5,6 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelector('.game').addEventListener(
     'click',
-    () => alert('= ,()')
+    () => alert('AHAHAHAHAHAH')
   );
 });
