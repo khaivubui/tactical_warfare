@@ -2,7 +2,7 @@ const express = require('express');
 
 const app = express();
 
-// Setting view engine, ejs default directory is `views/`
+// Setting view engine to use `ejs` instead of default html
 app.set('view engine', 'ejs');
 
 // ---------- Root Route ----------
