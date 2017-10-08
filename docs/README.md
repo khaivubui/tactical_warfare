@@ -78,7 +78,7 @@
 |__Wednesday__|Integrate Socket.io|Integrate Socket.io|Integrate Socket.io|
 |__Thursday__|Work on Socket.io health, coordinate, and firing trajectory sync|Polish tank attack and movement interaction/animation|Work on backend models and controllers/routing to store tank movement coordinate, health, etc|
 |__Friday__|Integrate turn-based game logic with Socket.io|Work on Tank health loss interaction and animation|Continue to work on backend models and controllers/routing to store tank coordinate, health, etc|
-|__Saturday__|Debug, test, polish|Debug, test, polish|Debug, test, polish|
+|__Saturday__|Help Adan|Work on Tank death interaction and animation|Debug, test, polish|
 |__Saturday__|Debug, test, polish|Debug, test, polish|Debug, test, polish|
 
 ## Plan for getting users and reviews
