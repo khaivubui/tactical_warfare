@@ -7,4 +7,4 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", () => alert("AHAHAHAHAHAH"));
 });
 
-// DO YOU SEE THIS MICHAEL???
+// DO YOU SEE THIS Khai???
