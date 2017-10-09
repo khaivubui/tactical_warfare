@@ -4,10 +4,22 @@ const mongoose = require("mongoose");
 const routes = require("./routes/routes");
 
 const app = express();
-
-mongoose.connect("mongodb://localhost/my_database");
-
 mongoose.Promise = global.promise;
+
+//Connect to mongodb
+var promise = mongoose.connect("mongodb://localhost/tactical_warfare", {
+  userMongoClient: true
+});
+
+//Catch success or failure
+promise
+  .then(() => {
+    console.log("Connection has been made");
+  })
+  .catch(err => {
+    console.log("Connection error:", err.stack);
+  });
+
 // Setting view engine to use `ejs` instead of default html
 app.set("view engine", "ejs");
 
