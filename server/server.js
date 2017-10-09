@@ -4,10 +4,10 @@ const mongoose = require("mongoose");
 const routes = require("./routes/routes");
 
 const app = express();
-mongoose.Promise = global.promise;
+mongoose.Promise = global.Promise;
 
 //Connect to mongodb
-var promise = mongoose.connect("mongodb://localhost/tactical_warfare", {
+const promise = mongoose.connect("mongodb://localhost/tactical_warfare", {
   userMongoClient: true
 });
 
