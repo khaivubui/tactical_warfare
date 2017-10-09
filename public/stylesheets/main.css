@@ -22,9 +22,9 @@ body {
   background: #EDC9AF;
   box-shadow: 1px 1px 10px #333;
   border-radius: 5px;
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  left: 20px;
+  transform: translate(0, -50%);
 }
