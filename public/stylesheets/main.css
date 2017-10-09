@@ -19,6 +19,10 @@ body {
 
 .camera-widget {
   position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   background: #EDC9AF;
   box-shadow: 1px 1px 10px #333;
   border-radius: 5px;
@@ -27,4 +31,12 @@ body {
   top: 50%;
   left: 20px;
   transform: translate(0, -50%);
+}
+
+.camera-widget-toggle {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  border-left: 1px solid #AAA;
+  height: 150px;
 }
