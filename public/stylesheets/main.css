@@ -39,4 +39,6 @@ body {
   border: none;
   font-size: 20px;
   height: 200px;
+  width: 30px;
+  border-left: 1px solid #AAA;
 }
