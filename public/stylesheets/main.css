@@ -15,8 +15,20 @@ body {
 
 /* ---------- auth-ui ---------- */
 
-.auth-ui{
+.auth-widget{
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(300, 300, 300, 0.7);
+  border-radius: 5px;
+  max-width: 500px;
+  height: 200px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: top 0.8s;
 }
 
 /* ---------- camera-widget ---------- */
