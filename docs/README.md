@@ -3,6 +3,11 @@
 ## Overview
 2 player turn-based 3D tank game with realistic physics. Each tank spawns with 100hp. Every turn, a player may choose to either move a tank to an adjacent field or fire a projectile. Tank takes damage if hit by a projectile. Game is over when either tank runs out of health.
 
+## Wireframes
+
+![Splash](https://github.com/khaivubui/tactical_warfare/blob/master/docs/Splash.png)
+![Game](https://github.com/khaivubui/tactical_warfare/blob/master/docs/Game.png)
+
 ## Functionality and MVP
 #### User Auth
 - [ ] User can register for an account
