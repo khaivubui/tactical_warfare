@@ -18,10 +18,12 @@
 </div>
 
 <script>
+  var cameraWidget = document.querySelector('.camera-widget');
+  cameraWidget.style.left = '20px';
   document.querySelector('.camera-widget-toggle').addEventListener(
     'click',
     () => {
-      document.querySelector('.camera-widget').style.left = '-170px';
+      cameraWidget.style.left = '-170px';
     }
   )
 </script>
