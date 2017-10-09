@@ -20,11 +20,11 @@
 <script>
   const cameraWidget = document.querySelector('.camera-widget');
   const cameraWidgetToggle = document.querySelector('.camera-widget-toggle');
-  cameraWidget.style.left = '20px';
+  
   cameraWidgetToggle.addEventListener(
     'click',
     () => {
-      if (cameraWidget.style.left === '20px') {
+      if (!cameraWidget.style.left || cameraWidget.style.left === '20px') {
         cameraWidget.style.left = '-170px';
         cameraWidgetToggle.innerHTML = '>';
       } else {
