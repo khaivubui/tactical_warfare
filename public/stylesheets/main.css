@@ -24,8 +24,9 @@ body {
   background: rgba(100, 100, 100, 0.9);
   box-shadow: 1px 1px 10px #333;
   border-radius: 5px;
-  width: 400px;
-  height: 300px;
+  width: 100%;
+  max-width: 900px;
+  height: 400px;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
