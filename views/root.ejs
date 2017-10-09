@@ -9,7 +9,7 @@
   <div class="camera-actions">
 
   </div>
-  <button class="camera-widget-toggle"><</button>
+  <button class="camera-widget-toggle">></button>
 </div>
 
 <div class="game">
@@ -23,12 +23,12 @@
   cameraWidgetToggle.addEventListener(
     'click',
     () => {
-      if (!cameraWidget.style.left || cameraWidget.style.left === '20px') {
-        cameraWidget.style.left = '-170px';
-        cameraWidgetToggle.innerHTML = '>';
-      } else {
+      if (!cameraWidget.style.left || cameraWidget.style.left === '-170px') {
         cameraWidget.style.left = '20px';
         cameraWidgetToggle.innerHTML = '<';
+      } else {
+        cameraWidget.style.left = '-170px';
+        cameraWidgetToggle.innerHTML = '>';
       }
     }
   )

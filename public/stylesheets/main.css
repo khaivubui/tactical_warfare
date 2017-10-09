@@ -46,7 +46,7 @@ body {
   width: 200px;
   height: 200px;
   top: 50%;
-  left: 20px;
+  left: -170px;
   transform: translate(0, -50%);
   transition: left 0.8s;
 }
