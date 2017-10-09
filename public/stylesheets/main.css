@@ -6,8 +6,6 @@ body {
   position: absolute;
 }
 .game{
-  width: 100vw;
-  height: 100vw;
 }
 .game > #render-canvas{
   width: 100%;
