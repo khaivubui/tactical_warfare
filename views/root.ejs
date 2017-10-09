@@ -18,12 +18,19 @@
 </div>
 
 <script>
-  var cameraWidget = document.querySelector('.camera-widget');
+  const cameraWidget = document.querySelector('.camera-widget');
+  const cameraWidgetToggle = document.querySelector('.camera-widget-toggle');
   cameraWidget.style.left = '20px';
-  document.querySelector('.camera-widget-toggle').addEventListener(
+  cameraWidgetToggle.addEventListener(
     'click',
     () => {
-      cameraWidget.style.left = '-170px';
+      if (cameraWidget.style.left === '20px') {
+        cameraWidget.style.left = '-170px';
+        cameraWidgetToggle.innerHTML = '>';
+      } else {
+        cameraWidget.style.left = '20px';
+        cameraWidgetToggle.innerHTML = '<';
+      }
     }
   )
 </script>
