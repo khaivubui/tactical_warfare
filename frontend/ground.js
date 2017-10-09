@@ -14,8 +14,8 @@ export default class Ground{
   }
   _createGroundMesh(){
     return BABYLON.Mesh.CreateGround("ground", this.cellSize*
-    this.cellCount * 2,
-    this.cellSize*this.cellCount* this.cellCount + this.wallThickness,
+    this.cellCount,
+    this.cellSize*this.cellCount+ this.wallThickness,
     2, this.scene);
   }
   startListeningForPosition(onDoneCallback){
@@ -24,12 +24,33 @@ export default class Ground{
     document.getElementById("render-canvas").onClick =
       this._handleConfirmPosition(onDoneCallback);
   }
-  _getCellCenteredCoordinates(globalCoordinates){
-    const x = Math.floor(globalCoordinates.x / this.cellSize)*this.cellSize +
-      this.cellSize/2;
-    const z = Math.floor(globalCoordinates.z / this.cellSize)*this.cellSize+
-      this.cellSize/2;
+  _getCellIndices(globalCoordinates){
+    const xIndex = Math.floor(
+      (globalCoordinates.x +
+        (this.cellCount * this.cellSize/2)
+      ) / this.cellSize
+    );
 
+    let zIndex =  Math.floor(
+      (globalCoordinates.z + this.wallThickness /2
+
+      ) / this.cellSize * -1
+    );
+    if(zIndex < 0)
+      zIndex = 0;
+    console.log((globalCoordinates.z + this.wallThickness /2
+
+    ) / this.cellSize);
+    return [xIndex, zIndex];
+
+  }
+  getGroundWidth(){
+    return this.cellSize * this.cellCount;
+  }
+  _getCellCenteredCoordinates(globalCoordinates){
+    let indices = this._getCellIndices(globalCoordinates);
+    let x = indices[0] * this.cellSize + this.cellSize/2 - this.getGroundWidth()/2;
+    let z = -1 * (indices[1] * this.cellSize + this.cellSize/2 + this.wallThickness/2);
     return new BABYLON.Vector3(x, 0, z);
   }
   _createCursor(){

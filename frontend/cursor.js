@@ -13,7 +13,6 @@ export default class Cursor{
   setDisplayPosition(globalCoordinates){
     this._mesh.position = globalCoordinates;
     this._mesh.position.y = CURSOR_Y_POSITION;
-    console.log(this._mesh.position);
   }
   gridPosition(){
     const gridPosition = this._mesh.position.clone();
