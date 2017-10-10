@@ -104,7 +104,7 @@ body {
 
 /* ---------- camera-widget ---------- */
 
-.camera-widget {
+/*.camera-widget {
   position: absolute;
   display: flex;
   flex-direction: row;
@@ -127,4 +127,14 @@ body {
   font-size: 20px;
   height: 200px;
   width: 30px;
+}*/
+
+/* ---------- new-camera-widget ---------- */
+.center-camera-widget {
+	color: blue;
+	font-size: 2em;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
