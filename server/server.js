@@ -1,3 +1,5 @@
+// APP SERVER
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -33,6 +35,12 @@ app.set("view engine", "ejs");
 
 // CORS Middleware
 app.use(cors());
+
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./config/passport')(passport);
 
 // middlewares
 app.use(express.static(`${__dirname}/../public`));
