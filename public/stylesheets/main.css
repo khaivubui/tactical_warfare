@@ -89,6 +89,7 @@ body {
   top: -120px;
   transform: translate(-50%, -50%);
   transition: top 0.8s;
+	z-index: 100;
 }
 
 .auth-widget h1 {
