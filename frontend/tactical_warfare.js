@@ -1,6 +1,10 @@
+import io from 'socket.io-client';
+
 import {Game, createDemoGame} from "./game.js";
 import authStuff from "./auth_stuff/auth_stuff.js";
 import webSockets from './websockets';
+
+const socket = io();
 
 const createScene = function () {
   const canvas = document.getElementById("render-canvas");
@@ -31,8 +35,9 @@ const createScene = function () {
     engine.runRenderLoop( () => {
       scene.render();
     });
+    scene.socket = socket;
+    
     return scene;
-
 };
 
 const startGame = function startGame(){
