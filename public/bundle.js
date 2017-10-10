@@ -1,1 +1,108 @@
-!function(e){function n(r){if(t[r])return t[r].exports;var o=t[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}var t={};n.m=e,n.c=t,n.d=function(e,t,r){n.o(e,t)||Object.defineProperty(e,t,{configurable:!1,enumerable:!0,get:r})},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,n){return Object.prototype.hasOwnProperty.call(e,n)},n.p="",n(n.s=0)}([function(e,n,t){"use strict";var r=function(){var e=document.getElementById("render-canvas"),n=new BABYLON.Engine(e,!0),t=new BABYLON.Scene(n),r=new BABYLON.ArcRotateCamera("camera",0,.8,5,new BABYLON.Vector3.Zero,t);r.attachControl(e,!1);new BABYLON.HemisphericLight("light1",new BABYLON.Vector3(0,1,0),t);window.addEventListener("resize",function(){n.resize()}),n.runRenderLoop(function(){t.render()});BABYLON.SceneLoader.ImportMesh("Cube.001","models/tanks/sand_tank/","sand_tank.babylon",t,function(e){r.target=e[0]});return t},o=function(){r()};document.addEventListener("DOMContentLoaded",o)}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var createScene = function createScene() {
+  var canvas = document.getElementById("render-canvas");
+  var engine = new BABYLON.Engine(canvas, true);
+  var scene = new BABYLON.Scene(engine);
+
+  var camera = new BABYLON.ArcRotateCamera('camera', 0, 0.8, 5, new BABYLON.Vector3.Zero(), scene);
+  camera.attachControl(canvas, false);
+  var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
+  //const sphere = BABYLON.Mesh.    window.tank_mesh = tank_mesh;CreateSphere('sphere1', 16, 2, scene);
+  //const ground = BABYLON.Mesh.CreateGround('ground1', 100,100,2, scene);
+
+  window.addEventListener('resize', function () {
+    engine.resize();
+  });
+  engine.runRenderLoop(function () {
+    scene.render();
+  });
+
+  var tank_mesh = BABYLON.SceneLoader.ImportMesh("Cube.001", "models/tanks/sand_tank/", "sand_tank.babylon", scene, function (newMeshes) {
+    // Set the target of the camera to the first imported mesh
+    camera.target = newMeshes[0];
+  });
+
+  return scene;
+};
+
+var startGame = function startGame() {
+  var scene = createScene();
+
+  //const tank_mesh = new sand_tank.Cube_001("tank1",scene, "");
+};
+document.addEventListener("DOMContentLoaded", startGame);
+
+/***/ })
+/******/ ]);
+//# sourceMappingURL=bundle.js.map
