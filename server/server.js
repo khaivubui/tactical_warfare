@@ -54,9 +54,6 @@ app.use('/users', users);
 // ---------- Root Route ----------
 
 routes(app);
-app.get('/', (req, res) => {
-  res.send('Invalid Endpoint');
-});
 
 // ---------- Start Server ----------
 
