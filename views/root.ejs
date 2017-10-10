@@ -4,7 +4,7 @@
 
 <div class="auth-widget">
   <h1>Tactical Warfare</h1>
-  <button class="auth-widget-toggle">Play Now</button>
+  <button class="auth-widget-toggle">Sign In</button>
 </div>
 
 <div class="camera-widget">
@@ -21,11 +21,12 @@
 <script>
   const authWidget = document.querySelector('.auth-widget');
   const authWidgetToggle = document.querySelector('.auth-widget-toggle');
+  authWidget.style.top = '-120px';
 
   authWidgetToggle.addEventListener(
     'click',
     () => {
-      if (!authWidget.style.top || authWidget.style.top === '50%') {
+      if (authWidget.style.top === '50%') {
         authWidget.style.top = '-120px';
         authWidgetToggle.innerHTML = 'Sign In';
       } else {
