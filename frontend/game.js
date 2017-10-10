@@ -1,19 +1,23 @@
 import Arena from "./arena.js";
 import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
-export const createDemoGame = (scene)=>{
-  BABYLON.SceneLoader.ImportMesh("Cube.001", "models/tanks/sand_tank/",
-       "sand_tank.babylon", scene, newMeshes=>{
-        const tank1 = newMeshes[0];
-        const tank2 = tank1.createInstance("tank2");
-        const arena = new Arena(scene);
-        const Player1 = new LocalPlayer(tank1, arena);
-        const Player2 = new DemoPlayer(tank2);
+export const createDemoGame = (scene) => {
+  BABYLON.SceneLoader.ImportMesh(
+    "Cube.001",
+    "models/tanks/sand_tank/",
+    "sand_tank.babylon",
+    scene,
+    newMeshes => {
+      const tank1 = newMeshes[0];
+      const tank2 = tank1.createInstance("tank2");
+      const arena = new Arena(scene);
+      const Player1 = new LocalPlayer(tank1, arena);
+      const Player2 = new DemoPlayer(tank2);
 
-        const game = new Game(scene, [Player1, Player2], arena );
+      const game = new Game(scene, [Player1, Player2], arena );
 
-        game.startGame();
+      game.startGame();
 
-       });
+    });
 };
 export class Game{
   constructor(scene, players, arena ){

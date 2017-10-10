@@ -18,7 +18,7 @@ const createScene = function () {
       new BABYLON.Vector3(0, 1, 0),
       scene
     );
-    
+
     light.intensity = 0.7;
 
     window.addEventListener('resize', () => {
