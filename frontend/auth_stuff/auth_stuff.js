@@ -26,7 +26,8 @@ export default () => {
 
     axios.post('/users/register', { username, password })
       .then(function(response) {
-        console.log(response.data.username);
+        console.log(response);
+        window.currentUser = response.data.username;
       });
   });
 
@@ -42,7 +43,8 @@ export default () => {
 
     axios.post('/users/authenticate', { username, password })
       .then(function(response) {
-        console.log(response.data.user);
+        console.log(response);
+        window.currentUser = response.data;
     });
   });
 };
