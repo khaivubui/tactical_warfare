@@ -36,8 +36,6 @@ export default class Ground{
 
       ) / this.cellSize * -1
     );
-    if(zIndex < 0)
-      zIndex = 0;
     return [xIndex, zIndex];
 
   }
@@ -64,9 +62,12 @@ export default class Ground{
       return this.mesh.name ===mesh.name;
     });
     if(pickResult.hit){
-      this.cursor.setDisplayPosition(
-        this._getCellCenteredCoordinates(pickResult.pickedPoint)
-      );
+      const indices = this._getCellIndices(pickResult.pickedPoint);
+      if (indices[1] >= 0){
+        this.cursor.setDisplayPosition(this.cellIndicesToGlobalCoordinates(
+          indices
+        ));
+      }
     }
   }
   _handleConfirmPosition(onDoneCallback){
@@ -75,16 +76,19 @@ export default class Ground{
         return this.mesh.name ===mesh.name;
       });
       if(pickResult.hit){
-        this.cursor.setDisplayPosition(
-          this._getCellCenteredCoordinates(pickResult.pickedPoint)
-        );
-        document.getElementById('render-canvas').removeEventListener("mousemove",
-          this._handleListeningForPosition);
-        document.getElementById('render-canvas').onclick = null;
-        const gridPosition = this.cursor.gridPosition();
-        this.cursor.dispose();
-        this.cursor = null;
-        onDoneCallback(gridPosition);
+        const indices = this._getCellIndices(pickResult.pickedPoint);
+        if (indices[1] >= 0){
+          this.cursor.setDisplayPosition(
+            this.cellIndicesToGlobalCoordinates(indices)
+          );
+          document.getElementById('render-canvas').removeEventListener("mousemove",
+            this._handleListeningForPosition);
+          document.getElementById('render-canvas').onclick = null;
+          const gridPosition = this.cursor.gridPosition();
+          this.cursor.dispose();
+          this.cursor = null;
+          onDoneCallback(gridPosition);
+        }
       }
     }
   }
