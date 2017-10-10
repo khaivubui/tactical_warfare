@@ -109,32 +109,24 @@ body {
 	transition: max-height 1s;
 }
 
-/* ---------- camera-widget ---------- */
+/* ---------- online-users-widget ---------- */
 
-/*.camera-widget {
+.online-users-widget {
   position: absolute;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   background: #EDC9AF;
   box-shadow: 1px 1px 10px #333;
   border-radius: 5px;
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 500px;
   top: 50%;
-  left: -170px;
-  transform: translate(0, -50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
   transition: left 0.8s;
+	z-index: 50;
 }
-
-.camera-widget-toggle {
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  height: 200px;
-  width: 30px;
-}*/
 
 /* ---------- new-camera-widget ---------- */
 
