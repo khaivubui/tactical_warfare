@@ -36,5 +36,7 @@ export default () => {
     const password = document.querySelector(
       '#signin-form input[type=password]'
     ).value;
+
+    axios.post('/users/authenticate', { username, password });
   });
 };
