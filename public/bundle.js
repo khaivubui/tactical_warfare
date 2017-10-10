@@ -126,11 +126,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var createDemoGame = exports.createDemoGame = function createDemoGame(scene) {
-  BABYLON.SceneLoader.ImportMesh("Cube.001", "models/tanks/sand_tank/", "sand_tank.babylon", scene, function (newMeshes) {
+  BABYLON.SceneLoader.ImportMesh("tank_body", "models/tanks/sand_tank/", "sand_tank.babylon", scene, function (newMeshes) {
     var tank1 = newMeshes[0];
-    var tank2 = tank1.createInstance("tank2");
+    var tank2 = tank1.clone("tank2");
+    tank2.rotation.y = Math.PI;
     var arena = new _arena2.default(scene);
-    var Player1 = new _player.LocalPlayer(tank1, arena);
+    var Player1 = new _player.LocalPlayer(tank1, scene, arena);
     var Player2 = new _player.DemoPlayer(tank2);
 
     var game = new Game(scene, [Player1, Player2], arena);
@@ -146,6 +147,7 @@ var Game = exports.Game = function () {
     this.players = players;
     this.currentPlayerIdx = 0;
     this.myPlayerIdx = 0;
+    this.scene = scene;
     this.arena = arena;
     this.receiveMovePosition = this.receiveMovePosition.bind(this);
     this.receiveMoveType = this.receiveMoveType.bind(this);
@@ -184,11 +186,19 @@ var Game = exports.Game = function () {
       this.players[this.currentPlayerIdx].startListeningForPosition(this.receiveMovePosition);
     }
   }, {
+    key: "startListeningForAttack",
+    value: function startListeningForAttack() {
+      this.players[this.currentPlayerIdx].startListeningForAttack(this.receiveAttack);
+    }
+  }, {
     key: "receiveMoveType",
     value: function receiveMoveType(type) {
       switch (type) {
         case "position":
           this.startListeningForPosition();
+          break;
+        case "attack":
+          this.startListeningForAttack();
           break;
       }
     }
@@ -199,6 +209,9 @@ var Game = exports.Game = function () {
       this.switchPlayer();
       this.startListeningForMoveOptions();
     }
+  }, {
+    key: "receiveAttack",
+    value: function receiveAttack(xRot, yRot) {}
   }, {
     key: "startListeningForTrajectory",
     value: function startListeningForTrajectory() {}
@@ -460,6 +473,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var AIMING_CAMERA_ROT_SPEED = 0.05;
+var AIMING_CAMERA_RADIUS = 2;
+var AIMING_CAMERA_HEIGHT = 1;
+
+var AIMING_MAX_X_ROT = 0.9;
+var AIMING_MIN_X_ROT = -0.5;
+
 var Player = exports.Player = function () {
   function Player(tank) {
     _classCallCheck(this, Player);
@@ -470,7 +490,12 @@ var Player = exports.Player = function () {
   _createClass(Player, [{
     key: "startListeningForMoveOptions",
     value: function startListeningForMoveOptions(onDoneCallback) {
-      onDoneCallback("position");
+      onDoneCallback("attack");
+    }
+  }, {
+    key: "startListeningForAttack",
+    value: function startListeningForAttack(onDoneCallback) {
+      onDoneCallback(0, 0);
     }
   }]);
 
@@ -507,25 +532,114 @@ var SocketPlayer = exports.SocketPlayer = function (_Player2) {
     return _possibleConstructorReturn(this, (SocketPlayer.__proto__ || Object.getPrototypeOf(SocketPlayer)).call(this, tank));
   }
 
+  _createClass(SocketPlayer, [{
+    key: "startListeningForPosition",
+    value: function startListeningForPosition(onDoneCallback) {
+      //socket.on
+    }
+  }]);
+
   return SocketPlayer;
 }(Player);
 
 var LocalPlayer = exports.LocalPlayer = function (_Player3) {
   _inherits(LocalPlayer, _Player3);
 
-  function LocalPlayer(tank, arena) {
+  function LocalPlayer(tank, scene, arena) {
     _classCallCheck(this, LocalPlayer);
 
     var _this3 = _possibleConstructorReturn(this, (LocalPlayer.__proto__ || Object.getPrototypeOf(LocalPlayer)).call(this, tank));
 
     _this3.arena = arena;
+    _this3.scene = scene;
+    _this3.previousMouseX = null;
+    _this3.previousMouseY = null;
+    _this3.handleAimingMouseDrag = _this3.handleAimingMouseDrag.bind(_this3);
+    _this3.handleAimingMouseDown = _this3.handleAimingMouseDown.bind(_this3);
+    _this3.handleAimingMouseUp = _this3.handleAimingMouseUp.bind(_this3);
+
+    var childMeshes = _this3.tank.getChildMeshes();
+    _this3._rotXMesh = null;
+    _this3._rotYMesh = null;
+    for (var i = 0; i < childMeshes.length; ++i) {
+      if (childMeshes[i].name === "tank_rot_x") {
+        _this3._rotXMesh = childMeshes[i];
+      } else if (childMeshes[i].name === "tank_rot_y") {
+        _this3._rotYMesh = childMeshes[i];
+      }
+    }
     return _this3;
   }
 
   _createClass(LocalPlayer, [{
     key: "startListeningForPosition",
     value: function startListeningForPosition(onDoneCallback) {
+
       this.arena.ground.startListeningForPosition(onDoneCallback);
+      //socket.emit
+    }
+  }, {
+    key: "_positionAimingCamera",
+    value: function _positionAimingCamera() {
+      var camera = this.scene.activeCamera;
+      var cameraTarget = this._rotXMesh.getAbsolutePosition().clone();
+      cameraTarget.y += AIMING_CAMERA_HEIGHT;
+      camera.target = cameraTarget;
+      camera.radius = AIMING_CAMERA_RADIUS;
+      camera.alpha = -1 * this._rotYMesh.rotation.y + Math.PI / 2;
+      camera.beta = this._rotXMesh.rotation.x + Math.PI / 2;
+    }
+  }, {
+    key: "startListeningForAttack",
+    value: function startListeningForAttack(onDoneCallback) {
+      this.scene.activeCamera.inputs.clear();
+      var camera = this.scene.activeCamera;
+
+      this.previousCameraTarget = camera.target;
+      this.previousCameraRadius = camera.radius;
+      camera.radius = AIMING_CAMERA_RADIUS;
+      var canvas = document.getElementById("render-canvas");
+      var rotationWidget = document.querySelector(".camera-rotation");
+      this.originalRotationWidgetMouseDown = rotationWidget.onmousedown;
+      rotationWidget.onmousedown = this.handleAimingMouseDown;
+      this._positionAimingCamera();
+    }
+  }, {
+    key: "stopListeningForAttack",
+    value: function stopListeningForAttack() {
+      var rotationWidget = document.querySelector(".camera-rotation");
+      rotationWidget.onmousedown = this.originalRotationWidgetMouseDown;
+    }
+  }, {
+    key: "handleAimingMouseDrag",
+    value: function handleAimingMouseDrag(e) {
+      var deltaX = e.screenX - this.previousMouseX;
+      var deltaY = e.screenY - this.previousMouseY;
+      this._rotYMesh.rotation.y += deltaX * AIMING_CAMERA_ROT_SPEED;
+      this._rotXMesh.rotation.x -= deltaY * AIMING_CAMERA_ROT_SPEED;
+      this.previousMouseX = e.screenX;
+      this.previousMouseY = e.screenY;
+      if (this._rotXMesh.rotation.x > AIMING_MAX_X_ROT) {
+        this._rotXMesh.rotation.x = AIMING_MAX_X_ROT;
+      }
+      if (this._rotXMesh.rotation.x < AIMING_MIN_X_ROT) {
+        this._rotXMesh.rotation.x = AIMING_MIN_X_ROT;
+      }
+      this._positionAimingCamera();
+    }
+  }, {
+    key: "handleAimingMouseDown",
+    value: function handleAimingMouseDown(e) {
+      this.previousMouseX = e.screenX;
+      this.previousMouseY = e.screenY;
+      window.onmousemove = this.handleAimingMouseDrag;
+      window.onmouseup = this.handleAimingMouseUp;
+    }
+  }, {
+    key: "handleAimingMouseUp",
+    value: function handleAimingMouseUp(e) {
+      window.onmousemove = null;
+      window.onmouseup = null;
     }
   }]);
 

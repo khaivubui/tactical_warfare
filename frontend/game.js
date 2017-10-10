@@ -3,15 +3,16 @@ import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
 
 export const createDemoGame = (scene) => {
   BABYLON.SceneLoader.ImportMesh(
-    "Cube.001",
+    "tank_body",
     "models/tanks/sand_tank/",
     "sand_tank.babylon",
     scene,
     newMeshes => {
       const tank1 = newMeshes[0];
-      const tank2 = tank1.createInstance("tank2");
+      const tank2 = tank1.clone("tank2");
+      tank2.rotation.y = Math.PI;
       const arena = new Arena(scene);
-      const Player1 = new LocalPlayer(tank1, arena);
+      const Player1 = new LocalPlayer(tank1, scene, arena);
       const Player2 = new DemoPlayer(tank2);
 
       const game = new Game(scene, [Player1, Player2], arena );
@@ -26,6 +27,7 @@ export class Game{
     this.players = players;
     this.currentPlayerIdx = 0;
     this.myPlayerIdx = 0;
+    this.scene = scene;
     this.arena = arena;
     this.receiveMovePosition = this.receiveMovePosition.bind(this);
     this.receiveMoveType = this.receiveMoveType.bind(this);
@@ -59,10 +61,17 @@ export class Game{
     this.players[this.currentPlayerIdx].startListeningForPosition(
       this.receiveMovePosition);
   }
+  startListeningForAttack(){
+    this.players[this.currentPlayerIdx].startListeningForAttack(
+      this.receiveAttack);
+  }
   receiveMoveType(type){
     switch(type){
       case "position":
         this.startListeningForPosition();
+        break;
+      case "attack":
+        this.startListeningForAttack();
         break;
     }
   }
@@ -70,6 +79,9 @@ export class Game{
     this.players[this.currentPlayerIdx].tank.position = position;
     this.switchPlayer();
     this.startListeningForMoveOptions();
+  }
+  receiveAttack(xRot, yRot){
+
   }
   startListeningForTrajectory(){
 
