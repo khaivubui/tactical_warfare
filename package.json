@@ -20,9 +20,14 @@
     "ejs": "^2.5.7",
     "express": "^4.16.1",
     "mongoose": "^4.12.1",
+    "webpack": "^3.6.0",
+    "bcryptjs": "*",
+    "cors": "*",
+    "jsonwebtoken": "*",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1"
     "node-sass": "^4.5.3",
     "socket.io": "^2.0.3",
-    "webpack": "^3.6.0"
   },
   "devDependencies": {
     "nodemon": "^1.12.1"
