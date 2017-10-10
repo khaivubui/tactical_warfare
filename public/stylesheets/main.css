@@ -93,6 +93,13 @@ body {
 
 .auth-widget h1 {
   font-size: 2em;
+  margin-top: 20px;
+}
+
+.auth-widget-toggle {
+  font-size: 1em;
+  border: none;
+  background: transparent;
 }
 
 /* ---------- camera-widget ---------- */
