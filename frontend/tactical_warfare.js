@@ -1,5 +1,6 @@
 import {Game, createDemoGame} from "./game.js";
 import authStuff from "./auth_stuff/auth_stuff.js";
+import webSockets from './websockets';
 
 const createScene = function () {
   const canvas = document.getElementById("render-canvas");
@@ -42,3 +43,4 @@ const startGame = function startGame(){
 };
 document.addEventListener("DOMContentLoaded", startGame);
 document.addEventListener("DOMContentLoaded", authStuff);
+document.addEventListener("DOMContentLoaded", webSockets);
