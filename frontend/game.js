@@ -1,5 +1,6 @@
 import Arena from "./arena.js";
 import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
+
 export const createDemoGame = (scene) => {
   BABYLON.SceneLoader.ImportMesh(
     "Cube.001",
@@ -19,6 +20,7 @@ export const createDemoGame = (scene) => {
 
     });
 };
+
 export class Game{
   constructor(scene, players, arena ){
     this.players = players;
