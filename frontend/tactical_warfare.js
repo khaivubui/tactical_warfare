@@ -1,4 +1,5 @@
 import {Game, createDemoGame} from "./game.js";
+import authStuff from "./auth_stuff/auth_stuff.js";
 import webSockets from './websockets';
 
 const createScene = function () {
@@ -41,4 +42,5 @@ const startGame = function startGame(){
   //const tank_mesh = new sand_tank.Cube_001("tank1",scene, "");
 };
 document.addEventListener("DOMContentLoaded", startGame);
+document.addEventListener("DOMContentLoaded", authStuff);
 document.addEventListener("DOMContentLoaded", webSockets);

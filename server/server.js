@@ -54,11 +54,7 @@ app.use('/users', users);
 
 // ---------- Root Route ----------
 
-routes(app); // ./routes/routes
-
-app.get('/', (req, res) => {
-  res.send('Invalid Endpoint');
-});
+routes(app);
 
 // ---------- socket.io stuff ----------
 
