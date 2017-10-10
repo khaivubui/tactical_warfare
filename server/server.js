@@ -60,19 +60,3 @@ app.get('/', (req, res) => {
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
-
-
-//
-// //Connect to mongodb
-// const promise = mongoose.connect("mongodb://localhost/tactical_warfare", {
-//   userMongoClient: true
-// });
-//
-// //Catch success or failure
-// promise
-//   .then(() => {
-//     console.log("Connection has been made");
-//   })
-//   .catch(err => {
-//     console.log("Connection error:", err.stack);
-//   });
