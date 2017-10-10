@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default () => {
   const registerForm = document.querySelector("#register-form");
   const signinForm = document.querySelector("#signin-form");
@@ -21,6 +23,8 @@ export default () => {
     const password = document.querySelector(
       '#register-form input[type=password]'
     ).value;
+
+    axios.post('/users/register', { username, password });
   });
 
 
