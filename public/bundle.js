@@ -77,14 +77,16 @@ var createScene = function createScene() {
   var engine = new BABYLON.Engine(canvas, true);
   var scene = new BABYLON.Scene(engine);
 
-  var camera = new BABYLON.ArcRotateCamera("camera1", 5, 5, 10, new BABYLON.Vector3(0, 0, 0), scene);
+  var camera = new BABYLON.ArcRotateCamera("camera1", -1, 0.8, 15, new BABYLON.Vector3(0, 0, 0), scene);
   camera.attachControl(canvas);
   var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+
   light.intensity = 0.7;
 
   window.addEventListener('resize', function () {
     engine.resize();
   });
+
   engine.runRenderLoop(function () {
     scene.render();
   });
