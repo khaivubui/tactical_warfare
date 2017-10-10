@@ -71,14 +71,21 @@ export default class Ground{
   }
   _handleConfirmPosition(onDoneCallback){
     return e=>{
-      document.getElementById('render-canvas').removeEventListener("mousemove",
-        this._handleListeningForPosition);
-      document.getElementById('render-canvas').onclick = null;
-      const gridPosition = this.cursor.gridPosition();
-      this.cursor.dispose();
-      this.cursor = null;
-      debugger;
-      onDoneCallback(gridPosition);
+      const pickResult = this.scene.pick(e.clientX, e.clientY, mesh => {
+        return this.mesh.name ===mesh.name;
+      });
+      if(pickResult.hit){
+        this.cursor.setDisplayPosition(
+          this._getCellCenteredCoordinates(pickResult.pickedPoint)
+        );
+        document.getElementById('render-canvas').removeEventListener("mousemove",
+          this._handleListeningForPosition);
+        document.getElementById('render-canvas').onclick = null;
+        const gridPosition = this.cursor.gridPosition();
+        this.cursor.dispose();
+        this.cursor = null;
+        onDoneCallback(gridPosition);
+      }
     }
   }
 }

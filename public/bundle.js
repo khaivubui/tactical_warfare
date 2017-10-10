@@ -77,12 +77,11 @@ var createScene = function createScene() {
   var engine = new BABYLON.Engine(canvas, true);
   var scene = new BABYLON.Scene(engine);
 
-  var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -20), scene);
-
+  var camera = new BABYLON.ArcRotateCamera("camera1", 5, 5, 10, new BABYLON.Vector3(0, 0, 0), scene);
+  camera.attachControl(canvas);
   var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
   light.intensity = 0.7;
 
-  // Our built-in 'ground' shape. Params: name, width, depth, subdivs, scene
   window.addEventListener('resize', function () {
     engine.resize();
   });
@@ -360,13 +359,18 @@ var Ground = function () {
       var _this2 = this;
 
       return function (e) {
-        document.getElementById('render-canvas').removeEventListener("mousemove", _this2._handleListeningForPosition);
-        document.getElementById('render-canvas').onclick = null;
-        var gridPosition = _this2.cursor.gridPosition();
-        _this2.cursor.dispose();
-        _this2.cursor = null;
-        debugger;
-        onDoneCallback(gridPosition);
+        var pickResult = _this2.scene.pick(e.clientX, e.clientY, function (mesh) {
+          return _this2.mesh.name === mesh.name;
+        });
+        if (pickResult.hit) {
+          _this2.cursor.setDisplayPosition(_this2._getCellCenteredCoordinates(pickResult.pickedPoint));
+          document.getElementById('render-canvas').removeEventListener("mousemove", _this2._handleListeningForPosition);
+          document.getElementById('render-canvas').onclick = null;
+          var gridPosition = _this2.cursor.gridPosition();
+          _this2.cursor.dispose();
+          _this2.cursor = null;
+          onDoneCallback(gridPosition);
+        }
       };
     }
   }]);

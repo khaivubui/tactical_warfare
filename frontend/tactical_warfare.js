@@ -2,14 +2,13 @@ import {Game, createDemoGame} from "./game.js";
 const createScene = function () {
   const canvas = document.getElementById("render-canvas");
     const engine = new BABYLON.Engine(canvas, true);
-    var scene = new BABYLON.Scene(engine);
+    const scene = new BABYLON.Scene(engine);
 
-    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -20), scene);
-
-    var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+    const camera = new BABYLON.ArcRotateCamera("camera1", 5, 5, 10, new BABYLON.Vector3(0, 0, 0), scene);
+    camera.attachControl(canvas);
+    const light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
     light.intensity = 0.7;
 
-    // Our built-in 'ground' shape. Params: name, width, depth, subdivs, scene
     window.addEventListener('resize', ()=> {
           engine.resize();
         });
