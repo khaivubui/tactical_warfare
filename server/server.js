@@ -16,6 +16,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
 const routes = require("./routes/routes");
+const webSockets = require('./websockets/websockets');
 
 mongoose.Promise = global.Promise;
 
@@ -53,10 +54,15 @@ app.use('/users', users);
 
 // ---------- Root Route ----------
 
-routes(app);
+routes(app); // ./routes/routes
+
 app.get('/', (req, res) => {
   res.send('Invalid Endpoint');
 });
+
+// ---------- socket.io stuff ----------
+
+webSockets(io); // ./websockets/websockets.js
 
 // ---------- Start Server ----------
 
