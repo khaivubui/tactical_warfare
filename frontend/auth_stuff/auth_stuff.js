@@ -22,4 +22,15 @@ export default () => {
       '#register-form input[type=password]'
     ).value;
   });
+
+
+  signinForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const username = document.querySelector(
+      '#signin-form input[type=text]'
+    ).value;
+    const password = document.querySelector(
+      '#signin-form input[type=password]'
+    ).value;
+  });
 };
