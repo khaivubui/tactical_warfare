@@ -1,9 +1,4 @@
 // APP SERVER
-
-const express = require("express");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-const routes = require("./routes/routes");
 const passport = require("passport");
 const cors = require("cors");
 const path = require("path");
@@ -12,7 +7,15 @@ const path = require("path");
 const users = require("./routes/users");
 const config = require('./config/database');
 
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const express = require('express');
+
 const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
+const routes = require("./routes/routes");
 
 mongoose.Promise = global.Promise;
 
@@ -59,4 +62,4 @@ app.get('/', (req, res) => {
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+http.listen(port, () => console.log(`Server started on port ${port}`));

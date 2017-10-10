@@ -1,13 +1,141 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
 body {
-  color: red;
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* ---------- ---------- ---------- ---------- ---------- ---------- */
+
+/* ---------- general ---------- */
+
+* {
+  outline: none;
+}
+
+body {
+  font-family: sans-serif;
+  font-size: 16px;
+  color: #333;
+}
+
+body {
   margin: 0;
 }
-.ui{
-  position: absolute;
-}
+
 .game{
 }
 .game > #render-canvas{
   width: 100%;
   height: 100%;
+}
+
+/* ---------- auth-ui ---------- */
+
+.auth-widget{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(256, 256, 256, 0.8);
+  box-shadow: 1px 1px 10px #333;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 500px;
+  height: 300px;
+  left: 50%;
+  top: -120px;
+  transform: translate(-50%, -50%);
+  transition: top 0.8s;
+	z-index: 100;
+}
+
+.auth-widget h1 {
+  font-size: 2em;
+  margin-top: 20px;
+}
+
+.auth-widget-toggle {
+  font-size: 1em;
+  border: none;
+  background: transparent;
+}
+
+/* ---------- camera-widget ---------- */
+
+/*.camera-widget {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background: #EDC9AF;
+  box-shadow: 1px 1px 10px #333;
+  border-radius: 5px;
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  left: -170px;
+  transform: translate(0, -50%);
+  transition: left 0.8s;
+}
+
+.camera-widget-toggle {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  height: 200px;
+  width: 30px;
+}*/
+
+/* ---------- new-camera-widget ---------- */
+.center-camera-widget {
+	color: blue;
+	font-size: 2em;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
