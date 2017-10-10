@@ -312,7 +312,6 @@ var Ground = function () {
       var xIndex = Math.floor((globalCoordinates.x + this.cellCount * this.cellSize / 2) / this.cellSize);
 
       var zIndex = Math.floor((globalCoordinates.z + this.wallThickness / 2) / this.cellSize * -1);
-      if (zIndex < 0) zIndex = 0;
       return [xIndex, zIndex];
     }
   }, {
@@ -350,7 +349,10 @@ var Ground = function () {
         return _this.mesh.name === mesh.name;
       });
       if (pickResult.hit) {
-        this.cursor.setDisplayPosition(this._getCellCenteredCoordinates(pickResult.pickedPoint));
+        var indices = this._getCellIndices(pickResult.pickedPoint);
+        if (indices[1] >= 0) {
+          this.cursor.setDisplayPosition(this.cellIndicesToGlobalCoordinates(indices));
+        }
       }
     }
   }, {
@@ -363,13 +365,16 @@ var Ground = function () {
           return _this2.mesh.name === mesh.name;
         });
         if (pickResult.hit) {
-          _this2.cursor.setDisplayPosition(_this2._getCellCenteredCoordinates(pickResult.pickedPoint));
-          document.getElementById('render-canvas').removeEventListener("mousemove", _this2._handleListeningForPosition);
-          document.getElementById('render-canvas').onclick = null;
-          var gridPosition = _this2.cursor.gridPosition();
-          _this2.cursor.dispose();
-          _this2.cursor = null;
-          onDoneCallback(gridPosition);
+          var indices = _this2._getCellIndices(pickResult.pickedPoint);
+          if (indices[1] >= 0) {
+            _this2.cursor.setDisplayPosition(_this2.cellIndicesToGlobalCoordinates(indices));
+            document.getElementById('render-canvas').removeEventListener("mousemove", _this2._handleListeningForPosition);
+            document.getElementById('render-canvas').onclick = null;
+            var gridPosition = _this2.cursor.gridPosition();
+            _this2.cursor.dispose();
+            _this2.cursor = null;
+            onDoneCallback(gridPosition);
+          }
         }
       };
     }
