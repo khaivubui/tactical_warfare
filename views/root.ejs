@@ -21,7 +21,19 @@
 <script>
   const authWidget = document.querySelector('.auth-widget');
   const authWidgetToggle = document.querySelector('.auth-widget-toggle');
-  debugger;
+
+  authWidgetToggle.addEventListener(
+    'click',
+    () => {
+      if (!authWidget.style.top || authWidget.style.top === '50%') {
+        authWidget.style.top = '-120px';
+        authWidgetToggle.innerHTML = 'Sign In';
+      } else {
+        authWidget.style.top = '50%';
+        authWidgetToggle.innerHTML = 'Play now';
+      }
+    }
+  )
 
   const cameraWidget = document.querySelector('.camera-widget');
   const cameraWidgetToggle = document.querySelector('.camera-widget-toggle');
