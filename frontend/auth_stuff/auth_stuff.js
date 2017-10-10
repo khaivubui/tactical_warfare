@@ -12,4 +12,14 @@ export default () => {
     registerForm.style['max-height'] = '0px';
     signinForm.style['max-height'] = '200px';
   });
+
+  registerForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const username = document.querySelector(
+      '#register-form input[type=text]'
+    ).value;
+    const password = document.querySelector(
+      '#register-form input[type=password]'
+    ).value;
+  });
 };
