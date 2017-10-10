@@ -104,8 +104,9 @@ body {
 }
 
 #register-form, #signin-form {
-	height: 0;
+	max-height: 0;
 	overflow: hidden;
+	transition: max-height 1s;
 }
 
 /* ---------- camera-widget ---------- */
