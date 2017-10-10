@@ -22,17 +22,18 @@ module.exports = {
   devtool: 'source-map',
   resolve: {
     extensions: ['.js', '*']
-  },
-  plugins:[
-    new webpack.DefinePlugin({
-      'process.env':{
-        'NODE_ENV': JSON.stringify('production')
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress:{
-        warnings: true
-      }
-    })
-  ]
+  }//,
+  // plugins:[
+  //   new webpack.DefinePlugin({
+  //     'process.env':{
+  //       'NODE_ENV': JSON.stringify('production')
+  //     }
+  //   }),
+  //   new webpack.optimize.UglifyJsPlugin({
+  //     compress:{
+  //       warnings: true,
+  //       drop_debugger: false
+  //     },sourceMap: true
+  //   })
+  // ]
 };

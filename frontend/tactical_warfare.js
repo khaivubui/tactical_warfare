@@ -16,12 +16,6 @@ const createScene = function () {
         engine.runRenderLoop(()=>{
           scene.render();
         });
-        const tank_mesh = BABYLON.SceneLoader.ImportMesh("Cube.001", "models/tanks/sand_tank/",
-             "sand_tank.babylon", scene,
-            function (newMeshes) {
-                //  Set the target of the camera to the first imported mesh
-                 camera.lockedTarget = newMeshes[0];
-             });
     return scene;
 
 };
@@ -29,9 +23,7 @@ const createScene = function () {
 const startGame = function startGame(){
   const scene = createScene();
   window.scene = scene;
-  const game = new createDemoGame(scene);
-  game.startGame();
-
+  createDemoGame(scene);
   //const tank_mesh = new sand_tank.Cube_001("tank1",scene, "");
 };
 document.addEventListener("DOMContentLoaded", startGame);

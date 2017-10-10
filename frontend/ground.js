@@ -21,7 +21,7 @@ export default class Ground{
   startListeningForPosition(onDoneCallback){
     document.getElementById('render-canvas').addEventListener("mousemove",
       this._handleListeningForPosition);
-    document.getElementById("render-canvas").onClick =
+    document.getElementById("render-canvas").onclick =
       this._handleConfirmPosition(onDoneCallback);
   }
   _getCellIndices(globalCoordinates){
@@ -38,20 +38,20 @@ export default class Ground{
     );
     if(zIndex < 0)
       zIndex = 0;
-    console.log((globalCoordinates.z + this.wallThickness /2
-
-    ) / this.cellSize);
     return [xIndex, zIndex];
 
+  }
+  cellIndicesToGlobalCoordinates(indices){
+    let x = indices[0] * this.cellSize + this.cellSize/2 - this.getGroundWidth()/2;
+    let z = -1 * (indices[1] * this.cellSize + this.cellSize/2 + this.wallThickness/2);
+    return new BABYLON.Vector3(x, 0, z);
   }
   getGroundWidth(){
     return this.cellSize * this.cellCount;
   }
   _getCellCenteredCoordinates(globalCoordinates){
     let indices = this._getCellIndices(globalCoordinates);
-    let x = indices[0] * this.cellSize + this.cellSize/2 - this.getGroundWidth()/2;
-    let z = -1 * (indices[1] * this.cellSize + this.cellSize/2 + this.wallThickness/2);
-    return new BABYLON.Vector3(x, 0, z);
+    return this.cellIndicesToGlobalCoordinates(indices);
   }
   _createCursor(){
     this.cursor = new Cursor(this.scene, this.cellSize);
@@ -73,10 +73,12 @@ export default class Ground{
     return e=>{
       document.getElementById('render-canvas').removeEventListener("mousemove",
         this._handleListeningForPosition);
-      document.getElementById('render-canvas').onClick = null;
+      document.getElementById('render-canvas').onclick = null;
+      const gridPosition = this.cursor.gridPosition();
       this.cursor.dispose();
       this.cursor = null;
-      onDoneCallback(this.cursor.gridPostion());
+      debugger;
+      onDoneCallback(gridPosition);
     }
   }
 }
