@@ -24,7 +24,10 @@ export default () => {
       '#register-form input[type=password]'
     ).value;
 
-    axios.post('/users/register', { username, password });
+    axios.post('/users/register', { username, password })
+      .then(function(response) {
+        console.log(response.data.username);
+      });
   });
 
 
@@ -37,6 +40,9 @@ export default () => {
       '#signin-form input[type=password]'
     ).value;
 
-    axios.post('/users/authenticate', { username, password });
+    axios.post('/users/authenticate', { username, password })
+      .then(function(response) {
+        console.log(response.data.user);
+    });
   });
 };
