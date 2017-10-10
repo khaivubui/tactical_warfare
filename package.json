@@ -27,7 +27,9 @@
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
     "node-sass": "^4.5.3",
-    "socket.io": "^2.0.3"
+    "socket.io": "^2.0.3",
+    "source-map": "^0.6.1",
+    "webpack": "^3.6.0"
   },
   "devDependencies": {
     "nodemon": "^1.12.1"
