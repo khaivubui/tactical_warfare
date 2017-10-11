@@ -126,6 +126,10 @@ body {
 	transition: max-height 1s;
 }
 
+#register-button, #signin-button {
+	cursor: pointer;
+}
+
 /* ---------- active-sockets-widget ---------- */
 
 .active-sockets-widget {
