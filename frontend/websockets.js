@@ -8,9 +8,16 @@ export const webSockets = () => {
 
   otherActiveSockets.appendActiveSocket = data => {
     const activeSocket = document.createElement('span');
-    activeSocket.innerHTML =
-    `${data.displayName} <button>Challenge</button>`;
+    activeSocket.innerHTML = data.displayName;
+
+    const challengeButton = document.createElement('button');
+    challengeButton.classList.add('challenge-button');
+    challengeButton.id = data.id;
+    challengeButton.innerHTML = 'challenge';
+
+    activeSocket.appendChild(challengeButton);
     activeSocket.id = data.id;
+
     otherActiveSockets.appendChild(activeSocket);
   };
 
