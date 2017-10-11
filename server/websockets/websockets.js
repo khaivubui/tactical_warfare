@@ -20,10 +20,12 @@ module.exports = io => {
     // emit to all other sockets that there is a new online socket
     socket.broadcast.emit('newActiveSocket', activeSockets[socket.id]);
 
-    //
+    // routing the challenge to the opponent
     socket.on('challengeSent', opponentSocketId => {
-      console.log(`${socket.id} is challenging ${opponentSocketId}`);
-      io.to(opponentSocketId).emit('challengeReceived', socket.id);
+      io.to(opponentSocketId).emit(
+        'challengeReceived',
+        activeSockets[socket.id]
+      );
     });
 
     // remove itself from all other socket lists

@@ -52,8 +52,12 @@ export const webSockets = () => {
 
   // ---------- challengeReceived ----------
 
-  socket.on('challengeReceived', challengerId => {
-    console.log(document.getElementById(challengerId));
+  socket.on('challengeReceived', challenger => {
+    document.querySelector('.challenge-message').innerHTML =
+    `${challenger.displayName} has challenged you to a tank duel`;
+
+    document.querySelector('.challenge-received')
+            .style['max-height'] = '200px';
   });
 
   // ---------- toggling the widget ----------
