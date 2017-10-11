@@ -1,4 +1,8 @@
-export default socket => {
+import io from 'socket.io-client';
+
+export const socket = io();
+
+export const webSockets = () => {
   socket.on('currentSocket', data => {
     document.querySelector('.current-socket').innerHTML = data.displayName;
   });
@@ -24,7 +28,7 @@ export default socket => {
   });
 
   socket.on('removeActiveSocket', data => {
-    
+
   });
 
 
