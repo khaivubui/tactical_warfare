@@ -14,6 +14,7 @@ export const webSockets = () => {
 
     const challengeButton = document.createElement('button');
     challengeButton.classList.add('challenge-button');
+    challengeButton.id = data.id;
     challengeButton.innerHTML = 'challenge';
 
     // handler for clicking 'challenge'
@@ -84,9 +85,20 @@ export const webSockets = () => {
 
     noButton.addEventListener('click', () => {
       closeWidget();
+      socket.emit('challengeDenied', socket.id, challenger.id);
     });
 
     challengeReceivedWidget.style['max-height'] = '200px';
+  });
+
+  // ---------- denial handler ----------
+
+  socket.on('challengeDenied', denierId => {
+    const challengeButton =
+    document.querySelector(`button#${denierId}`);
+
+    challengeButton.innerHTML = 'challenge';
+    challengeButton.disabled = false;
   });
 
   // ---------- toggling the widget ----------
