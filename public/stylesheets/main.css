@@ -122,7 +122,6 @@ body {
   border-radius: 5px;
   width: 250px;
   max-height: 500px;
-	padding: 10px;
 	right: -100px;
   top: 50%;
   transform: translate(50%, -50%);
@@ -132,6 +131,11 @@ body {
 
 .active-sockets-toggle {
 	cursor: pointer;
+	padding: 10px;
+}
+
+.active-sockets {
+	padding: 20px;
 }
 
 /* ---------- new-camera-widget ---------- */

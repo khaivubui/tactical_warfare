@@ -1,6 +1,7 @@
 export default socket => {
   socket.on('currentSocket', data => {
     window.currentSocket = data;
+    document.querySelector('.current-socket').innerHTML = data.displayName;
   });
 
 
