@@ -1,6 +1,8 @@
 <link rel="stylesheet" href="stylesheets/main.css">
 <link rel="stylesheet"
       href="stylesheets/font-awesome-4.7.0/css/font-awesome.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <script type="text/javascript" src="/babylon.js"></script>
 <script type="text/javascript" src="/bundle.js"></script>
 
@@ -34,21 +36,36 @@
   <button class="auth-widget-toggle">Sign In</button>
 </div>
 
+<div class="active-sockets-widget">
+  <button class="active-sockets-toggle">
+    <
+  </button>
+  <div class="active-sockets">
+    <div class="current-socket">
     </div>
-    <button class="camera-widget-toggle"></button>
+    <div class="other-active-sockets">
+      Online Now: <br>
+    </div>
   </div>
+</div>
 
-  <div class="camera-rotation">
-    <i class="fa fa-arrows" aria-hidden="true"></i>
+<div class="challenge-received">
+  <div class="challenge-message">
   </div>
+  <div class="challenge-response-options">
+  </div>
+</div>
 
-  <div class="camera-zoom">
-    <div class="zoom-in">
-      <i class="fa fa-search-plus" aria-hidden="true"></i>
-    </div>
-    <div class="zoom-out">
-      <i class="fa fa-search-minus" aria-hidden="true"></i>
-    </div>
+<div class="camera-rotation">
+  <i class="fa fa-arrows" aria-hidden="true"></i>
+</div>
+
+<div class="camera-zoom">
+  <div class="zoom-in">
+    <i class="fa fa-search-plus" aria-hidden="true"></i>
+  </div>
+  <div class="zoom-out">
+    <i class="fa fa-search-minus" aria-hidden="true"></i>
   </div>
 </div>
 
@@ -71,38 +88,3 @@
 <div class="game">
   <canvas id="render-canvas"></canvas>
 </div>
-
-<script>
-  const authWidget = document.querySelector('.auth-widget');
-  const authWidgetToggle = document.querySelector('.auth-widget-toggle');
-  authWidget.style.top = '-120px';
-
-  authWidgetToggle.addEventListener(
-    'click',
-    () => {
-      if (authWidget.style.top === '50%') {
-        authWidget.style.top = '-120px';
-        authWidgetToggle.innerHTML = 'Sign In';
-      } else {
-        authWidget.style.top = '50%';
-        authWidgetToggle.innerHTML = 'Play now';
-      }
-    }
-  )
-
-  // const cameraWidget = document.querySelector('.camera-widget');
-  // const cameraWidgetToggle = document.querySelector('.camera-widget-toggle');
-  //
-  // cameraWidgetToggle.addEventListener(
-  //   'click',
-  //   () => {
-  //     if (!cameraWidget.style.left || cameraWidget.style.left === '-170px') {
-  //       cameraWidget.style.left = '20px';
-  //       cameraWidgetToggle.innerHTML = '<';
-  //     } else {
-  //       cameraWidget.style.left = '-170px';
-  //       cameraWidgetToggle.innerHTML = '>';
-  //     }
-  //   }
-  // )
-</script>
