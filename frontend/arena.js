@@ -19,6 +19,7 @@ export default class Arena{
     this.ground.mesh.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/c_scale,w_500/v1507742957/ground_sqrwle.jpg", scene);
     this.ground.mesh.material.diffuseTexture.uScale = 5.0;
     this.ground.mesh.material.diffuseTexture.vScale = 5.0;
+    this.ground.mesh.material.specularPower = 8000;
 
     this._wallMesh = new BABYLON.Mesh.CreateBox("centerWall",
       groundWidth, scene);
@@ -90,7 +91,7 @@ export default class Arena{
     this._ceiling.position.y += sideWallHeight;
     this._ceiling.rotate(BABYLON.Axis.X, Math.PI * 1.5, BABYLON.Space.WORLD);
     this._ceiling.scaling.y = 1 + wallThickness / groundWidth;
-    
+
     // Sky material
     // this._ceiling.material = new BABYLON.StandardMaterial("texture3", scene);
     // this._ceiling.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507743624/sky_t3kgtr.jpg", scene);
