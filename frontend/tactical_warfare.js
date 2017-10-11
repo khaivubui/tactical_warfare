@@ -36,7 +36,7 @@ const createScene = function () {
       scene.render();
     });
     scene.socket = socket;
-    
+
     return scene;
 };
 
@@ -48,4 +48,6 @@ const startGame = function startGame(){
 };
 document.addEventListener("DOMContentLoaded", startGame);
 document.addEventListener("DOMContentLoaded", authStuff);
-document.addEventListener("DOMContentLoaded", webSockets);
+document.addEventListener(
+  "DOMContentLoaded", () => webSockets(socket)
+);
