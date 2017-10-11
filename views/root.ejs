@@ -4,20 +4,39 @@
 <script type="text/javascript" src="/babylon.js"></script>
 <script type="text/javascript" src="/bundle.js"></script>
 
-<div id="window-upper-half">
-  <div class="auth-widget">
-    <h1>Tactical Warfare</h1>
-    <button class="auth-widget-toggle">Sign In</button>
+<div class="auth-widget">
+  <div>
+  <h1>Tactical Warfare</h1>
+    <form id="register-form">
+      <label>Username:
+      <input type="text" placeholder="Username..."/>
+      </label>
+      <br/>
+      <label>Password:
+      <input type="password"/>
+      </label>
+      <br/>
+      <input type="submit" value="Register"/>
+    </form>
+    <form id="signin-form">
+      <label>Username:
+      <input type="text" placeholder="Username..."/>
+      </label>
+      <br/>
+      <label>Password:
+      <input type="password"/>
+      </label>
+      <br/>
+      <input type="submit" value="Sign In"/>
+    </form>
+    <span id="register-button">Register</span> | <span id="signin-button">Sign In</span>
   </div>
-  <div class="game">
-    <canvas id="render-canvas"></canvas>
-  </div>
-  <!-- <div class="camera-widget">
-    <div class="camera-actions">
+  <button class="auth-widget-toggle">Sign In</button>
+</div>
 
     </div>
-    <button class="camera-widget-toggle">></button>
-  </div> -->
+    <button class="camera-widget-toggle"></button>
+  </div>
 
   <div class="camera-rotation">
     <i class="fa fa-arrows" aria-hidden="true"></i>

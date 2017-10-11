@@ -71,7 +71,7 @@ body {
   height: 100%;
 }
 
-/* ---------- auth-ui ---------- */
+/* ---------- auth-widget ---------- */
 
 .auth-widget{
   position: absolute;
@@ -101,6 +101,12 @@ body {
   font-size: 1em;
   border: none;
   background: transparent;
+}
+
+#register-form, #signin-form {
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 1s;
 }
 
 /* ---------- camera-widget ---------- */
@@ -165,9 +171,6 @@ body {
 	height: 50px;
 }
 /*-------------------------------tank/move controls-------------------*/
-.hidden{
-	display: none;
-}
 .bottom-options{
 	width: 25%;
 	justify-content: space-around;
