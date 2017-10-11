@@ -68,20 +68,24 @@ export const webSockets = () => {
     challengeResponseOptions.appendChild(yesButton);
     challengeResponseOptions.appendChild(noButton);
 
-    const challengeReceived =
+    const challengeReceivedWidget =
     document.querySelector('.challenge-received');
 
-    yesButton.addEventListener('click', () => {
+    const closeWidget = () => {
+      challengeReceivedWidget.style['max-height'] = '0px';
+      challengeResponseOptions.removeChild(yesButton);
+      challengeResponseOptions.removeChild(noButton);
+    };
 
+    yesButton.addEventListener('click', () => {
+      closeWidget();
     });
 
     noButton.addEventListener('click', () => {
-      challengeReceived.style['max-height'] = '0px';
-      challengeResponseOptions.removeChild(yesButton);
-      challengeResponseOptions.removeChild(noButton);
+      closeWidget();
     });
 
-    challengeReceived.style['max-height'] = '200px';
+    challengeReceivedWidget.style['max-height'] = '200px';
   });
 
   // ---------- toggling the widget ----------

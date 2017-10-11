@@ -170,7 +170,7 @@ body {
 	width: 200px;
 	box-shadow: 1px 1px 10px #333;
 	border-radius: 2px;
-	background: #EDC9AF;
+	background: white;
 	transition: max-height 1s;
 	z-index: 1000;
 }
