@@ -141,6 +141,17 @@ body {
 
 .current-socket {
 	border-bottom: 1px solid #AAA;
+	padding-bottom: 10px;
+	font-size: 1.2em;
+}
+
+.other-active-sockets {
+	padding-top: 10px;
+}
+
+.other-active-sockets span {
+	display: inline-block;
+	margin-top: 10px;
 }
 
 /* ---------- new-camera-widget ---------- */
