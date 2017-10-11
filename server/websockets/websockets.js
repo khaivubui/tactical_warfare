@@ -28,6 +28,13 @@ module.exports = io => {
       );
     });
 
+    // handling challenge accepted and start game
+    socket.on('challengeAccepted', (player1Id, player2Id) => {
+      console.log(
+        `Starting game between ${player1Id} and ${player2Id}`
+      );
+    });
+
     // remove itself from all other socket lists
     socket.on('disconnect', reason => {
       socket.broadcast.emit('removeActiveSocket', activeSockets[socket.id]);

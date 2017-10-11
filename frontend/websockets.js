@@ -79,6 +79,7 @@ export const webSockets = () => {
 
     yesButton.addEventListener('click', () => {
       closeWidget();
+      socket.emit('challengeAccepted', socket.id, challenger.id);
     });
 
     noButton.addEventListener('click', () => {
