@@ -4,6 +4,8 @@ module.exports = io => {
   const activeSockets = {};
 
   io.on('connection', socket => {
+    io.to(socket.id).emit('activeSockets', activeSockets);
+
     // Automatically assign a random name to the socket
     activeSockets[socket.id] = {
       opponentSocketId: null,
