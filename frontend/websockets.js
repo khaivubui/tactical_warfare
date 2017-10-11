@@ -15,7 +15,7 @@ export const webSockets = () => {
     challengeButton.classList.add('challenge-button');
     challengeButton.innerHTML = 'challenge';
     challengeButton.addEventListener('click', e => {
-      socket.emit('challenge', data.id);
+      socket.emit('challengeSent', data.id);
     });
 
     activeSocket.appendChild(challengeButton);
@@ -43,6 +43,12 @@ export const webSockets = () => {
   socket.on('removeActiveSocket', data => {
     const activeSocket = document.getElementById(data.id);
     otherActiveSockets.removeChild(activeSocket);
+  });
+
+  // ---------- challengeReceived ----------
+
+  socket.on('challengeReceived', challengerId => {
+    console.log(document.getElementById(challengerId));
   });
 
   // ---------- toggling the widget ----------
