@@ -6,6 +6,7 @@ export const webSockets = () => {
   const otherActiveSockets =
   document.querySelector('.other-active-sockets');
 
+  // helper for appending online user to list
   otherActiveSockets.appendActiveSocket = data => {
     const activeSocket = document.createElement('span');
     activeSocket.innerHTML = data.displayName;
@@ -14,8 +15,12 @@ export const webSockets = () => {
     const challengeButton = document.createElement('button');
     challengeButton.classList.add('challenge-button');
     challengeButton.innerHTML = 'challenge';
+
+    // handler for clicking 'challenge'
     challengeButton.addEventListener('click', e => {
       socket.emit('challengeSent', data.id);
+      challengeButton.innerHTML = 'challenge sent';
+      challengeButton.disabled = true;
     });
 
     activeSocket.appendChild(challengeButton);
