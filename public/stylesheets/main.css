@@ -132,6 +132,7 @@ body {
 .active-sockets-toggle {
 	cursor: pointer;
 	padding: 10px;
+	border-right: 1px solid #AAA;
 }
 
 .active-sockets {
