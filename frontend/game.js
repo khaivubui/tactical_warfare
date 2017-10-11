@@ -1,6 +1,7 @@
 import Arena from "./arena.js";
 import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
-
+const TANK_MASS = 27000; //kg
+const BOMB_MASS = 1; //kg
 export const createDemoGame = (scene) => {
   BABYLON.SceneLoader.ImportMesh(
     "tank_body",
