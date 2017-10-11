@@ -10,23 +10,24 @@ export const webSockets = () => {
   const otherActiveSockets =
   document.querySelector('.other-active-sockets');
 
+  otherActiveSockets.appendActiveSocket = data => {
+    const activeSocket = document.createElement('span');
+    activeSocket.innerHTML = data.displayName;
+    activeSocket.id = data.id;
+    otherActiveSockets.appendChild(activeSocket);
+  };
+
   socket.on('activeSockets', data => {
     window.activeSockets = data;
     const activeSocketIds = Object.keys(data);
 
     activeSocketIds.forEach(socketId => {
-      const activeSocket = document.createElement('span');
-      activeSocket.innerHTML = data[socketId].displayName;
-      activeSocket.id = socketId;
-      otherActiveSockets.appendChild(activeSocket);
+      otherActiveSockets.appendActiveSocket(data[socketId]);
     });
   });
 
   socket.on('newActiveSocket', data => {
-    const activeSocket = document.createElement('span');
-    activeSocket.innerHTML = data.displayName;
-    activeSocket.id = data.id;
-    otherActiveSockets.appendChild(activeSocket);
+    otherActiveSockets.appendActiveSocket(data);
   });
 
   socket.on('removeActiveSocket', data => {
