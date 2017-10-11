@@ -109,32 +109,87 @@ body {
 	transition: max-height 1s;
 }
 
-/* ---------- camera-widget ---------- */
+/* ---------- active-sockets-widget ---------- */
 
-/*.camera-widget {
+.active-sockets-widget {
   position: absolute;
   display: flex;
-  flex-direction: row;
+	flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  background: #EDC9AF;
+	background: rgba(256, 256, 256, 0.9);
   box-shadow: 1px 1px 10px #333;
   border-radius: 5px;
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  max-height: 500px;
+	right: -100px;
   top: 50%;
-  left: -170px;
-  transform: translate(0, -50%);
-  transition: left 0.8s;
+  transform: translate(50%, -50%);
+  transition: right 0.8s;
+	z-index: 50;
 }
 
-.camera-widget-toggle {
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  height: 200px;
-  width: 30px;
-}*/
+.active-sockets-toggle {
+	cursor: pointer;
+	padding: 10px;
+	border-right: 1px solid #AAA;
+}
+
+.active-sockets {
+	padding: 20px;
+}
+
+.current-socket {
+	border-bottom: 1px solid #AAA;
+	padding-bottom: 10px;
+	font-size: 1.2em;
+}
+
+.other-active-sockets {
+	padding-top: 10px;
+}
+
+.other-active-sockets span {
+	display: inline-block;
+	margin-top: 10px;
+}
+
+/* ---------- challenge-received ---------- */
+
+.challenge-received {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	max-height: 0;
+	overflow: hidden;
+	width: 200px;
+	box-shadow: 1px 1px 10px #333;
+	border-radius: 2px;
+	background: white;
+	transition: max-height 1s;
+	z-index: 1000;
+}
+
+.challenge-message {
+	margin: 20px 20px 0px 20px;
+}
+
+.challenge-response-options {
+	display: flex;
+	padding: 10px 20px;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.challenge-response-options button {
+	height: 25px;
+	width: 75px;
+}
 
 /* ---------- new-camera-widget ---------- */
 

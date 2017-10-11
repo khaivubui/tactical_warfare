@@ -22,6 +22,7 @@
     "cors": "*",
     "ejs": "^2.5.7",
     "express": "^4.16.1",
+    "faker": "^4.1.0",
     "jsonwebtoken": "*",
     "mongoose": "^4.12.1",
     "node-sass": "^4.5.3",

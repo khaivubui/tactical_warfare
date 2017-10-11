@@ -47,4 +47,22 @@ export default () => {
         window.currentUser = response.data;
     });
   });
+
+  // Toggling the auth ui
+  const authWidget = document.querySelector('.auth-widget');
+  const authWidgetToggle = document.querySelector('.auth-widget-toggle');
+  authWidget.style.top = '-120px';
+
+  authWidgetToggle.addEventListener(
+    'click',
+    () => {
+      if (authWidget.style.top === '50%') {
+        authWidget.style.top = '-120px';
+        authWidgetToggle.innerHTML = 'Sign In';
+      } else {
+        authWidget.style.top = '50%';
+        authWidgetToggle.innerHTML = 'Play now';
+      }
+    }
+  );
 };
