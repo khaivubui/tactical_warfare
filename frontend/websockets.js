@@ -56,8 +56,32 @@ export const webSockets = () => {
     document.querySelector('.challenge-message').innerHTML =
     `${challenger.displayName} has challenged you to a tank duel`;
 
-    document.querySelector('.challenge-received')
-            .style['max-height'] = '200px';
+    const yesButton = document.createElement('button');
+    yesButton.innerHTML = "Let's do it!";
+
+    const noButton = document.createElement('button');
+    noButton.innerHTML = 'Nah!';
+
+    const challengeResponseOptions =
+    document.querySelector('.challenge-response-options');
+
+    challengeResponseOptions.appendChild(yesButton);
+    challengeResponseOptions.appendChild(noButton);
+
+    const challengeReceived =
+    document.querySelector('.challenge-received');
+
+    yesButton.addEventListener('click', () => {
+
+    });
+
+    noButton.addEventListener('click', () => {
+      challengeReceived.style['max-height'] = '0px';
+      challengeResponseOptions.removeChild(yesButton);
+      challengeResponseOptions.removeChild(noButton);
+    });
+
+    challengeReceived.style['max-height'] = '200px';
   });
 
   // ---------- toggling the widget ----------
