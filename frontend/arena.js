@@ -21,6 +21,15 @@ export default class Arena{
     this._wallMesh.position.y += wallHeight /2;
     window.wallMesh = this._wallMesh;
 
+    // CenterWall material
+    this._wallMesh.material = new BABYLON.StandardMaterial("texture1", scene);
+    // this._wallMesh.material.diffuseColor = new BABYLON.Color3(1.0, 0.2, 0.7);
+    this._wallMesh.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507740979/centerBrickWall_gbn3su.png", scene)
+    this._wallMesh.material.diffuseTexture.uScale = 10.0;
+    this._wallMesh.material.diffuseTexture.vScale = 2.0;
+
+
+
 
     // Create side walls
     this._sidewall0 = new BABYLON.Mesh.CreatePlane("sidewall0",
@@ -55,9 +64,26 @@ export default class Arena{
     this._sidewall3.position.x += - groundWidth / 2;
     this._sidewall3.position.z += 0;
 
+
+    // SideWall material
+    const materialSideWalls = new BABYLON.StandardMaterial("texture2", scene);
+    this._sidewall0.material = materialSideWalls
+    this._sidewall1.material = materialSideWalls;
+    this._sidewall2.material = materialSideWalls;
+    this._sidewall3.material = materialSideWalls;
+
+    this._sidewall0.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507741682/sideWalls_nkckv9.jpg", scene);
+    this._sidewall1.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507741682/sideWalls_nkckv9.jpg", scene);
+    this._sidewall2.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507741682/sideWalls_nkckv9.jpg", scene);
+    this._sidewall3.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507741682/sideWalls_nkckv9.jpg", scene);
+
+    this._sidewall0.material.diffuseTexture.uScale = 10.0;
+    this._sidewall0.material.diffuseTexture.vScale = 2.0;
+
     this._ceiling = new BABYLON.Mesh.CreatePlane("ceiling",
       groundWidth, scene);
     this._ceiling.position.y += sideWallHeight;
     this._ceiling.rotate(BABYLON.Axis.X, Math.PI * 1.5, BABYLON.Space.WORLD);
+
   }
 }
