@@ -114,18 +114,19 @@ body {
 .active-sockets-widget {
   position: absolute;
   display: flex;
+	flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background: #EDC9AF;
   box-shadow: 1px 1px 10px #333;
   border-radius: 5px;
-  width: 300px;
+  width: 250px;
   max-height: 500px;
-	padding: 20px;
+	padding: 10px;
+	right: -100px;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transition: left 0.8s;
+  transform: translate(50%, -50%);
+  transition: right 0.8s;
 	z-index: 50;
 }
 
