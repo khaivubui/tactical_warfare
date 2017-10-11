@@ -13,6 +13,13 @@ export default class Arena{
       wallWidth = DEFAULT_WALL_WIDTH, sideWallHeight = SIDE_WALL_HEIGHT){
     this.ground = new Ground(scene, cellSize, cellCount, wallThickness);
     const groundWidth = this.ground.getGroundWidth();
+
+    // Ground material
+    this.ground.mesh.material = new BABYLON.StandardMaterial("texture1", scene);
+    this.ground.mesh.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/c_scale,w_500/v1507742957/ground_sqrwle.jpg", scene);
+    this.ground.mesh.material.diffuseTexture.uScale = 5.0;
+    this.ground.mesh.material.diffuseTexture.vScale = 5.0;
+
     this._wallMesh = new BABYLON.Mesh.CreateBox("centerWall",
       groundWidth, scene);
     this._wallMesh.scaling.z = wallThickness / groundWidth;
@@ -27,8 +34,6 @@ export default class Arena{
     this._wallMesh.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507740979/centerBrickWall_gbn3su.png", scene)
     this._wallMesh.material.diffuseTexture.uScale = 10.0;
     this._wallMesh.material.diffuseTexture.vScale = 2.0;
-
-
 
 
     // Create side walls
