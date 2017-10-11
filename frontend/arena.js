@@ -22,7 +22,7 @@ export default class Arena{
     window.wallMesh = this._wallMesh;
 
 
-    // Create side walls 
+    // Create side walls
     this._sidewall0 = new BABYLON.Mesh.CreatePlane("sidewall0",
       groundWidth, scene);
     this._sidewall0.scaling.y = sideWallHeight/groundWidth;
@@ -54,5 +54,10 @@ export default class Arena{
     this._sidewall3.position.y += sideWallHeight / 2;
     this._sidewall3.position.x += - groundWidth / 2;
     this._sidewall3.position.z += 0;
+
+    this._ceiling = new BABYLON.Mesh.CreatePlane("ceiling",
+      groundWidth, scene);
+    this._ceiling.position.y += sideWallHeight;
+    this._ceiling.rotate(BABYLON.Axis.X, Math.PI * 1.5, BABYLON.Space.WORLD);
   }
 }
