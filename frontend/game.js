@@ -49,13 +49,10 @@ export class Game{
     );
   }
   startGame(){
-    this.startListeningForMoveOptions();
+    this._startListeningForMoveOptions();
   }
-  startListeningForMoveOptions(){
-    this.players[this.currentPlayerIdx].startListeningForMoveOptions(this.receiveMoveType);
-  }
-  stopListeningForMoveOptions(){
-
+  _startListeningForMoveOptions(){
+    this.players[this.currentPlayerIdx].startListeningForMoveOptions(this._receiveMoveType);
   }
   startListeningForPosition(){
     this.players[this.currentPlayerIdx].startListeningForPosition(
@@ -65,7 +62,7 @@ export class Game{
     this.players[this.currentPlayerIdx].startListeningForAttack(
       this.receiveAttack);
   }
-  receiveMoveType(type){
+  _receiveMoveType(type){
     switch(type){
       case "position":
         this.startListeningForPosition();
@@ -77,20 +74,17 @@ export class Game{
   }
   receiveMovePosition(position){
     this.players[this.currentPlayerIdx].tank.position = position;
-    this.switchPlayer();
-    this.startListeningForMoveOptions();
+    this._switchPlayer();
+    this._startListeningForMoveOptions();
   }
-  receiveAttack(xRot, yRot){
+  _receiveAttack(xRot, yRot){
 
   }
-  startListeningForTrajectory(){
-
-  }
-  stopListeningForTrajectory(){
+  _startListeningForTrajectory(){
 
   }
 
-  switchPlayer(){
+  _switchPlayer(){
     if(++this.currentPlayerIdx > this.players.length -1){
       this.currentPlayerIdx = 0;
     }

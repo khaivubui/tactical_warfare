@@ -170,16 +170,13 @@ var Game = exports.Game = function () {
   }, {
     key: "startGame",
     value: function startGame() {
-      this.startListeningForMoveOptions();
+      this._startListeningForMoveOptions();
     }
   }, {
-    key: "startListeningForMoveOptions",
-    value: function startListeningForMoveOptions() {
-      this.players[this.currentPlayerIdx].startListeningForMoveOptions(this.receiveMoveType);
+    key: "_startListeningForMoveOptions",
+    value: function _startListeningForMoveOptions() {
+      this.players[this.currentPlayerIdx].startListeningForMoveOptions(this._receiveMoveType);
     }
-  }, {
-    key: "stopListeningForMoveOptions",
-    value: function stopListeningForMoveOptions() {}
   }, {
     key: "startListeningForPosition",
     value: function startListeningForPosition() {
@@ -191,8 +188,8 @@ var Game = exports.Game = function () {
       this.players[this.currentPlayerIdx].startListeningForAttack(this.receiveAttack);
     }
   }, {
-    key: "receiveMoveType",
-    value: function receiveMoveType(type) {
+    key: "_receiveMoveType",
+    value: function _receiveMoveType(type) {
       switch (type) {
         case "position":
           this.startListeningForPosition();
@@ -206,21 +203,18 @@ var Game = exports.Game = function () {
     key: "receiveMovePosition",
     value: function receiveMovePosition(position) {
       this.players[this.currentPlayerIdx].tank.position = position;
-      this.switchPlayer();
-      this.startListeningForMoveOptions();
+      this._switchPlayer();
+      this._startListeningForMoveOptions();
     }
   }, {
-    key: "receiveAttack",
-    value: function receiveAttack(xRot, yRot) {}
+    key: "_receiveAttack",
+    value: function _receiveAttack(xRot, yRot) {}
   }, {
-    key: "startListeningForTrajectory",
-    value: function startListeningForTrajectory() {}
+    key: "_startListeningForTrajectory",
+    value: function _startListeningForTrajectory() {}
   }, {
-    key: "stopListeningForTrajectory",
-    value: function stopListeningForTrajectory() {}
-  }, {
-    key: "switchPlayer",
-    value: function switchPlayer() {
+    key: "_switchPlayer",
+    value: function _switchPlayer() {
       if (++this.currentPlayerIdx > this.players.length - 1) {
         this.currentPlayerIdx = 0;
       }
@@ -480,6 +474,8 @@ var AIMING_CAMERA_HEIGHT = 1;
 var AIMING_MAX_X_ROT = 0.9;
 var AIMING_MIN_X_ROT = -0.5;
 
+var TANK_OPTIONS_WIDTH = 200;
+
 var Player = exports.Player = function () {
   function Player(tank) {
     _classCallCheck(this, Player);
@@ -488,11 +484,6 @@ var Player = exports.Player = function () {
   }
 
   _createClass(Player, [{
-    key: "startListeningForMoveOptions",
-    value: function startListeningForMoveOptions(onDoneCallback) {
-      onDoneCallback("attack");
-    }
-  }, {
     key: "startListeningForAttack",
     value: function startListeningForAttack(onDoneCallback) {
       onDoneCallback(0, 0);
@@ -512,6 +503,11 @@ var DemoPlayer = exports.DemoPlayer = function (_Player) {
   }
 
   _createClass(DemoPlayer, [{
+    key: "startListeningForMoveOptions",
+    value: function startListeningForMoveOptions(onDoneCallback) {
+      onDoneCallback("attack");
+    }
+  }, {
     key: "startListeningForPosition",
     value: function startListeningForPosition(onDoneCallback) {
       onDoneCallback(this.tank.position);
@@ -557,6 +553,7 @@ var LocalPlayer = exports.LocalPlayer = function (_Player3) {
     _this3.handleAimingMouseDrag = _this3.handleAimingMouseDrag.bind(_this3);
     _this3.handleAimingMouseDown = _this3.handleAimingMouseDown.bind(_this3);
     _this3.handleAimingMouseUp = _this3.handleAimingMouseUp.bind(_this3);
+    _this3._stopListeningForPosition = _this3._stopListeningForPosition.bind(_this3);
 
     var childMeshes = _this3.tank.getChildMeshes();
     _this3._rotXMesh = null;
@@ -572,10 +569,55 @@ var LocalPlayer = exports.LocalPlayer = function (_Player3) {
   }
 
   _createClass(LocalPlayer, [{
+    key: "_handleMoveOption",
+    value: function _handleMoveOption(onDoneCallback) {
+      var _this4 = this;
+
+      return function (type) {
+        return function (e) {
+          _this4._stopListeningForMoveOptions();
+          onDoneCallback(type);
+        };
+      };
+    }
+  }, {
+    key: "_stopListeningForMoveOptions",
+    value: function _stopListeningForMoveOptions() {
+      var turnOptions = document.getElementById('turn-options');
+      var attack = document.getElementById('attack-button');
+      var move = document.getElementById('move-button');
+      var forfeit = document.getElementById('forfeit-button');
+      turnOptions.maxWidth = '0';
+      attack.onclick = null;
+      move.onClick = null;
+      forfeit.onClick = null;
+    }
+  }, {
+    key: "_startListeningForMoveOptions",
+    value: function _startListeningForMoveOptions(onDoneCallback) {
+      var turnOptions = document.getElementById('turn-options');
+      var attack = document.getElementById('attack-button');
+      var move = document.getElementById('move-button');
+      var forfeit = document.getElementById('forfeit-button');
+      turnOptions.maxWidth = TANK_OPTIONS_WIDTH + "px";
+      attack.onclick = this._handleMoveOption(onDoneCallback)("attack");
+      move.onClick = this._handleMoveOption(onDoneCallback)("position");
+      forfeit.onClick = this._handleMoveOption(onDoneCallback)("forfeit");
+    }
+  }, {
+    key: "_stopListeningForPosition",
+    value: function _stopListeningForPosition(onDoneCallback) {
+      return function (e) {
+        var positionOptions = document.getElementById('position-options');
+        positionOptions.maxWidth = '0px';
+      };
+    }
+  }, {
     key: "startListeningForPosition",
     value: function startListeningForPosition(onDoneCallback) {
-
-      this.arena.ground.startListeningForPosition(onDoneCallback);
+      var positionOptions = document.getElementById('position-options');
+      positionOptions.maxWidth = TANK_OPTIONS_WIDTH + "px";
+      this.arena.ground.startListeningForPosition(this._stopListeningForPosition(onDoneCallback));
       //socket.emit
     }
   }, {
@@ -594,21 +636,40 @@ var LocalPlayer = exports.LocalPlayer = function (_Player3) {
     value: function startListeningForAttack(onDoneCallback) {
       this.scene.activeCamera.inputs.clear();
       var camera = this.scene.activeCamera;
-
-      this.previousCameraTarget = camera.target;
-      this.previousCameraRadius = camera.radius;
       camera.radius = AIMING_CAMERA_RADIUS;
       var canvas = document.getElementById("render-canvas");
       var rotationWidget = document.querySelector(".camera-rotation");
       this.originalRotationWidgetMouseDown = rotationWidget.onmousedown;
       rotationWidget.onmousedown = this.handleAimingMouseDown;
+
       this._positionAimingCamera();
     }
   }, {
+    key: "_storeCameraState",
+    value: function _storeCameraState() {
+      var camera = this.scene.activeCamera;
+      this.storedCameraTarget = camera.target;
+      this.storedCameraRadius = camera.radius;
+      this.storedCameraAlpha = camera.alpha;
+      this.storedCameraBeta = camera.beta;
+    }
+  }, {
+    key: "_restoreCameraState",
+    value: function _restoreCameraState() {}
+  }, {
     key: "stopListeningForAttack",
-    value: function stopListeningForAttack() {
-      var rotationWidget = document.querySelector(".camera-rotation");
-      rotationWidget.onmousedown = this.originalRotationWidgetMouseDown;
+    value: function stopListeningForAttack(onDoneCallback) {
+      var _this5 = this;
+
+      return function (e) {
+        var rotationWidget = document.querySelector(".camera-rotation");
+        _this5.scene.activeCamera.target = _this5.storedCameraTarget;
+        _this5.scene.activeCamera.radious = _this5.storedCameraRadius;
+        _this5.scene.activeCamera.restoreState();
+        rotationWidget.onmousedown = _this5.originalRotationWidgetMouseDown;
+
+        onDoneCallback(_this5._rotXMesh.rotation.x, _this5._rotYMesh.rotation.y);
+      };
     }
   }, {
     key: "handleAimingMouseDrag",
