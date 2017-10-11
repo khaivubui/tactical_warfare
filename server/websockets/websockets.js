@@ -8,6 +8,7 @@ module.exports = io => {
 
     // Automatically assign a random name to the socket
     activeSockets[socket.id] = {
+      id: socket.id,
       opponentSocketId: null,
       displayName:
       `${faker.name.firstName()} the ${faker.commerce.productName()}`

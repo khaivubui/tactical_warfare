@@ -17,6 +17,7 @@ export const webSockets = () => {
     activeSocketIds.forEach(socketId => {
       const activeSocket = document.createElement('span');
       activeSocket.innerHTML = data[socketId].displayName;
+      activeSocket.id = socketId;
       otherActiveSockets.appendChild(activeSocket);
     });
   });
@@ -24,11 +25,13 @@ export const webSockets = () => {
   socket.on('newActiveSocket', data => {
     const activeSocket = document.createElement('span');
     activeSocket.innerHTML = data.displayName;
+    activeSocket.id = data.id;
     otherActiveSockets.appendChild(activeSocket);
   });
 
   socket.on('removeActiveSocket', data => {
-
+    const activeSocket = document.getElementById(data.id);
+    otherActiveSockets.removeChild(activeSocket);
   });
 
 
