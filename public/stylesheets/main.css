@@ -97,6 +97,14 @@ body {
 	align-items: center;
 }
 
+.auth-main input {
+	margin-top: 10px;
+}
+
+.auth-main input[type=submit] {
+	margin-bottom: 10px;
+}
+
 .auth-widget h1 {
   font-size: 2em;
   margin-top: 20px;
@@ -109,6 +117,10 @@ body {
 }
 
 #register-form, #signin-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 	max-height: 0;
 	overflow: hidden;
 	transition: max-height 1s;
