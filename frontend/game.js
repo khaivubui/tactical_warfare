@@ -30,7 +30,9 @@ export class Game{
     this.scene = scene;
     this.arena = arena;
     this.receiveMovePosition = this.receiveMovePosition.bind(this);
-    this.receiveMoveType = this.receiveMoveType.bind(this);
+    this._receiveMoveType = this._receiveMoveType.bind(this);
+    this._receiveAttack = this._receiveAttack.bind(this);
+    this._startListeningForMoveOptions = this._startListeningForMoveOptions.bind(this);
     this.initialPositionTanks();
   }
   initialPositionTanks(){
@@ -56,11 +58,14 @@ export class Game{
   }
   startListeningForPosition(){
     this.players[this.currentPlayerIdx].startListeningForPosition(
-      this.receiveMovePosition);
+      this.receiveMovePosition, this._startListeningForMoveOptions);
+  }
+  _stopListeningForPosition(){
+
   }
   startListeningForAttack(){
     this.players[this.currentPlayerIdx].startListeningForAttack(
-      this.receiveAttack);
+      this._receiveAttack, this._startListeningForMoveOptions);
   }
   _receiveMoveType(type){
     switch(type){
@@ -78,7 +83,8 @@ export class Game{
     this._startListeningForMoveOptions();
   }
   _receiveAttack(xRot, yRot){
-
+    this._switchPlayer();
+    this._startListeningForMoveOptions();
   }
   _startListeningForTrajectory(){
 
