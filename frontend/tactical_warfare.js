@@ -1,6 +1,8 @@
 import {Game, createDemoGame} from "./game.js";
 import authStuff from "./auth_stuff/auth_stuff.js";
 import { webSockets, socket } from './websockets';
+import disableMobileScrolling from
+'./mobile_friendliness/mobile_scroll';
 
 const createScene = function () {
   const canvas = document.getElementById("render-canvas");
@@ -48,3 +50,4 @@ const startGame = function startGame(){
 document.addEventListener("DOMContentLoaded", startGame);
 document.addEventListener("DOMContentLoaded", authStuff);
 document.addEventListener("DOMContentLoaded", webSockets);
+document.addEventListener("DOMContentLoaded", disableMobileScrolling);
