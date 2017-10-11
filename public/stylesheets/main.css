@@ -139,6 +139,10 @@ body {
 	padding: 20px;
 }
 
+.current-socket {
+	border-bottom: 1px solid #AAA;
+}
+
 /* ---------- new-camera-widget ---------- */
 
 .camera-rotation {

@@ -1,7 +1,30 @@
 export default socket => {
   socket.on('currentSocket', data => {
-    window.currentSocket = data;
     document.querySelector('.current-socket').innerHTML = data.displayName;
+  });
+
+  const otherActiveSockets =
+  document.querySelector('.other-active-sockets');
+
+  socket.on('activeSockets', data => {
+    window.activeSockets = data;
+    const activeSocketIds = Object.keys(data);
+
+    activeSocketIds.forEach(socketId => {
+      const activeSocket = document.createElement('span');
+      activeSocket.innerHTML = data[socketId].displayName;
+      otherActiveSockets.appendChild(activeSocket);
+    });
+  });
+
+  socket.on('newActiveSocket', data => {
+    const activeSocket = document.createElement('span');
+    activeSocket.innerHTML = data.displayName;
+    otherActiveSockets.appendChild(activeSocket);
+  });
+
+  socket.on('removeActiveSocket', data => {
+    
   });
 
 

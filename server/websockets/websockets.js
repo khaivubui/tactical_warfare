@@ -20,6 +20,7 @@ module.exports = io => {
     socket.broadcast.emit('newActiveSocket', activeSockets[socket.id]);
 
     socket.on('disconnect', reason => {
+      socket.broadcast.emit('removeActiveSocket', activeSockets[socket.id]);
       delete activeSockets[socket.id];
     });
   });
