@@ -3,19 +3,21 @@ import io from 'socket.io-client';
 export const socket = io();
 
 export const webSockets = () => {
-  socket.on('currentSocket', data => {
-    document.querySelector('.current-socket').innerHTML = data.displayName;
-  });
-
   const otherActiveSockets =
   document.querySelector('.other-active-sockets');
 
   otherActiveSockets.appendActiveSocket = data => {
     const activeSocket = document.createElement('span');
-    activeSocket.innerHTML = data.displayName;
+    activeSocket.innerHTML =
+    `${data.displayName} <button>Challenge</button>`;
     activeSocket.id = data.id;
     otherActiveSockets.appendChild(activeSocket);
   };
+
+  // socket event handlers for updating the list of online users
+  socket.on('currentSocket', data => {
+    document.querySelector('.current-socket').innerHTML = data.displayName;
+  });
 
   socket.on('activeSockets', data => {
     window.activeSockets = data;
@@ -35,7 +37,7 @@ export const webSockets = () => {
     otherActiveSockets.removeChild(activeSocket);
   });
 
-
+  // ---------- toggling the widget ----------
   const activeSocketsToggle =
   document.querySelector('.active-sockets-toggle');
   const activeSocketsWidget =
