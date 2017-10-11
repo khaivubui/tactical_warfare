@@ -130,6 +130,10 @@ body {
 	z-index: 50;
 }
 
+.active-sockets-toggle {
+	cursor: pointer;
+}
+
 /* ---------- new-camera-widget ---------- */
 
 .camera-rotation {

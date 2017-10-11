@@ -13,8 +13,10 @@ export default socket => {
   activeSocketsToggle.addEventListener('click', () => {
     if (activeSocketsWidget.style.right === "-100px") {
       activeSocketsWidget.style.right = '50%';
+      activeSocketsToggle.innerHTML = '>';
     } else {
       activeSocketsWidget.style.right = "-100px";
+      activeSocketsToggle.innerHTML = '<';
     }
   });
 };
