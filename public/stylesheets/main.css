@@ -117,7 +117,7 @@ body {
 	flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  background: #EDC9AF;
+	background: rgba(256, 256, 256, 0.9);
   box-shadow: 1px 1px 10px #333;
   border-radius: 5px;
   width: 250px;
