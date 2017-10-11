@@ -4471,6 +4471,11 @@ var Ground = function () {
       document.getElementById("render-canvas").onclick = this._handleConfirmPosition(onDoneCallback);
     }
   }, {
+    key: "cancelListeningForPosition",
+    value: function cancelListeningForPosition() {
+      this._stopListeningForPosition();
+    }
+  }, {
     key: "_getCellIndices",
     value: function _getCellIndices(globalCoordinates) {
       var xIndex = Math.floor((globalCoordinates.x + this.cellCount * this.cellSize / 2) / this.cellSize);
@@ -4520,6 +4525,16 @@ var Ground = function () {
       }
     }
   }, {
+    key: "_stopListeningForPosition",
+    value: function _stopListeningForPosition() {
+      document.getElementById('render-canvas').removeEventListener("mousemove", this._handleListeningForPosition);
+      document.getElementById('render-canvas').onclick = null;
+      if (this.cursor) {
+        this.cursor.dispose();
+        this.cursor = null;
+      }
+    }
+  }, {
     key: "_handleConfirmPosition",
     value: function _handleConfirmPosition(onDoneCallback) {
       var _this2 = this;
@@ -4532,11 +4547,9 @@ var Ground = function () {
           var indices = _this2._getCellIndices(pickResult.pickedPoint);
           if (indices[1] >= 0) {
             _this2.cursor.setDisplayPosition(_this2.cellIndicesToGlobalCoordinates(indices));
-            document.getElementById('render-canvas').removeEventListener("mousemove", _this2._handleListeningForPosition);
-            document.getElementById('render-canvas').onclick = null;
+
             var gridPosition = _this2.cursor.gridPosition();
-            _this2.cursor.dispose();
-            _this2.cursor = null;
+            _this2._stopListeningForPosition();
             onDoneCallback(gridPosition);
           }
         }
@@ -4641,7 +4654,6 @@ var Player = exports.Player = function () {
   _createClass(Player, [{
     key: "startListeningForAttack",
     value: function startListeningForAttack(onDoneCallback) {
-      debugger;
       onDoneCallback(0, 0);
     }
   }]);
@@ -4751,7 +4763,6 @@ var LocalPlayer = exports.LocalPlayer = function (_Player3) {
   }, {
     key: "startListeningForMoveOptions",
     value: function startListeningForMoveOptions(onDoneCallback) {
-      debugger;
       this._maximizeTankOptions('turn-options');
       var attack = document.getElementById('attack-button');
       var move = document.getElementById('move-button');
@@ -4761,22 +4772,33 @@ var LocalPlayer = exports.LocalPlayer = function (_Player3) {
       forfeit.onclick = this._handleMoveOption(onDoneCallback)("forfeit");
     }
   }, {
-    key: "_stopListeningForPosition",
-    value: function _stopListeningForPosition(onDoneCallback) {
+    key: "_handleConfirmPosition",
+    value: function _handleConfirmPosition(onDoneCallback) {
       var _this5 = this;
 
       return function (position) {
-        _this5._minimizeTankOptions('position-options');
+        _this5._stopListeningForPosition();
         onDoneCallback(position);
       };
     }
   }, {
+    key: "_stopListeningForPosition",
+    value: function _stopListeningForPosition() {
+      this._minimizeTankOptions('position-options');
+    }
+  }, {
     key: "startListeningForPosition",
     value: function startListeningForPosition(onDoneCallback, onCancelledCallback) {
+      var _this6 = this;
+
       this._maximizeTankOptions('position-options');
-      var cancel = document.querySelector(".cancel-button");
-      cancel.onclick = onCancelledCallback;
-      this.arena.ground.startListeningForPosition(this._stopListeningForPosition(onDoneCallback));
+      var cancel = document.querySelector("#position-options .cancel-button");
+      cancel.onclick = function () {
+        _this6._stopListeningForPosition();
+        _this6.arena.ground.cancelListeningForPosition();
+        onCancelledCallback();
+      };
+      this.arena.ground.startListeningForPosition(this._handleConfirmPosition(onDoneCallback));
       //socket.emit
     }
   }, {
@@ -4805,15 +4827,16 @@ var LocalPlayer = exports.LocalPlayer = function (_Player3) {
   }, {
     key: "startListeningForAttack",
     value: function startListeningForAttack(onDoneCallback, onCancelledCallback) {
-      var _this6 = this;
+      var _this7 = this;
 
       this._maximizeTankOptions('attack-options');
       var camera = this.scene.activeCamera;
       var canvas = document.getElementById("render-canvas");
       var rotationWidget = document.querySelector(".camera-rotation");
-      var cancel = document.querySelector(".cancel-button");
+      var cancel = document.querySelector("#attack-options .cancel-button");
       cancel.onclick = function () {
-        _this6._stopListeningForAttack();onCancelledCallback();
+        _this7._stopListeningForAttack();
+        onCancelledCallback();
       };
       this.originalRotationWidgetMouseDown = rotationWidget.onmousedown;
       rotationWidget.onmousedown = this.handleAimingMouseDown;

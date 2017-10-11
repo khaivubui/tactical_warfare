@@ -11,7 +11,6 @@ export class Player{
     this.tank = tank;
   }
   startListeningForAttack(onDoneCallback){
-    debugger;
     onDoneCallback(0,0);
   }
 }
@@ -81,7 +80,6 @@ export class LocalPlayer extends Player{
   }
 
   startListeningForMoveOptions(onDoneCallback){
-    debugger;
     this._maximizeTankOptions('turn-options');
     const attack = document.getElementById('attack-button');
     const move = document.getElementById('move-button');
@@ -90,17 +88,24 @@ export class LocalPlayer extends Player{
     move.onclick = this._handleMoveOption(onDoneCallback)("position");
     forfeit.onclick = this._handleMoveOption(onDoneCallback)("forfeit");
   }
-  _stopListeningForPosition(onDoneCallback){
+  _handleConfirmPosition(onDoneCallback){
     return position =>{
-      this._minimizeTankOptions('position-options');
+      this._stopListeningForPosition();
       onDoneCallback(position);
     }
   }
+  _stopListeningForPosition(){
+    this._minimizeTankOptions('position-options');
+  }
   startListeningForPosition(onDoneCallback, onCancelledCallback){
     this._maximizeTankOptions('position-options');
-    const cancel = document.querySelector(".cancel-button");
-    cancel.onclick = onCancelledCallback;
-    this.arena.ground.startListeningForPosition(this._stopListeningForPosition(
+    const cancel = document.querySelector("#position-options .cancel-button");
+    cancel.onclick =()=>{
+      this._stopListeningForPosition();
+      this.arena.ground.cancelListeningForPosition();
+      onCancelledCallback();
+    }
+    this.arena.ground.startListeningForPosition(this._handleConfirmPosition(
       onDoneCallback));
     //socket.emit
   }
@@ -126,8 +131,11 @@ export class LocalPlayer extends Player{
     const camera = this.scene.activeCamera;
     const canvas = document.getElementById("render-canvas");
     const rotationWidget = document.querySelector(".camera-rotation");
-    const cancel = document.querySelector(".cancel-button");
-    cancel.onclick = ()=>{this._stopListeningForAttack(); onCancelledCallback();}
+    const cancel = document.querySelector("#attack-options .cancel-button");
+    cancel.onclick = ()=>{
+      this._stopListeningForAttack();
+       onCancelledCallback();
+     }
     this.originalRotationWidgetMouseDown = rotationWidget.onmousedown;
     rotationWidget.onmousedown  = this.handleAimingMouseDown;
     this._storeCameraState();

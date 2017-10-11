@@ -24,6 +24,9 @@ export default class Ground{
     document.getElementById("render-canvas").onclick =
       this._handleConfirmPosition(onDoneCallback);
   }
+  cancelListeningForPosition(){
+    this._stopListeningForPosition();
+  }
   _getCellIndices(globalCoordinates){
     const xIndex = Math.floor(
       (globalCoordinates.x +
@@ -70,6 +73,15 @@ export default class Ground{
       }
     }
   }
+  _stopListeningForPosition(){
+    document.getElementById('render-canvas').removeEventListener("mousemove",
+      this._handleListeningForPosition);
+    document.getElementById('render-canvas').onclick = null;
+    if(this.cursor){
+      this.cursor.dispose();
+      this.cursor = null;
+    }
+  }
   _handleConfirmPosition(onDoneCallback){
     return e=>{
       const pickResult = this.scene.pick(e.clientX, e.clientY, mesh => {
@@ -81,12 +93,9 @@ export default class Ground{
           this.cursor.setDisplayPosition(
             this.cellIndicesToGlobalCoordinates(indices)
           );
-          document.getElementById('render-canvas').removeEventListener("mousemove",
-            this._handleListeningForPosition);
-          document.getElementById('render-canvas').onclick = null;
+
           const gridPosition = this.cursor.gridPosition();
-          this.cursor.dispose();
-          this.cursor = null;
+          this._stopListeningForPosition();
           onDoneCallback(gridPosition);
         }
       }
