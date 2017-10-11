@@ -1,12 +1,12 @@
 const faker = require('faker');
 
 module.exports = io => {
-  const activeSockets = {};
+  const activeSockets = {}; // used to store all active sockets
 
   io.on('connection', socket => {
     io.to(socket.id).emit('activeSockets', activeSockets);
 
-    // Automatically assign a random name to the socket
+    // add newly connected socket to the store with a random name
     activeSockets[socket.id] = {
       id: socket.id,
       opponentSocketId: null,
