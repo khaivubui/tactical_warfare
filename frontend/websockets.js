@@ -9,15 +9,16 @@ export const webSockets = () => {
   otherActiveSockets.appendActiveSocket = data => {
     const activeSocket = document.createElement('span');
     activeSocket.innerHTML = data.displayName;
+    activeSocket.id = data.id;
 
     const challengeButton = document.createElement('button');
     challengeButton.classList.add('challenge-button');
-    challengeButton.id = data.id;
     challengeButton.innerHTML = 'challenge';
+    challengeButton.addEventListener('click', e => {
+      socket.emit('challenge', data.id);
+    });
 
     activeSocket.appendChild(challengeButton);
-    activeSocket.id = data.id;
-
     otherActiveSockets.appendChild(activeSocket);
   };
 
