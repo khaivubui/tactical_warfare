@@ -89,6 +89,11 @@ export default class Arena{
       groundWidth, scene);
     this._ceiling.position.y += sideWallHeight;
     this._ceiling.rotate(BABYLON.Axis.X, Math.PI * 1.5, BABYLON.Space.WORLD);
+    this._ceiling.scaling.y = 1 + wallThickness / groundWidth;
+    
+    // Sky material
+    // this._ceiling.material = new BABYLON.StandardMaterial("texture3", scene);
+    // this._ceiling.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507743624/sky_t3kgtr.jpg", scene);
 
   }
 }
