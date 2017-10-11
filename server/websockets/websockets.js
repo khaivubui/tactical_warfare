@@ -16,7 +16,7 @@ module.exports = io => {
 
     socket.on('disconnect', reason => {
       console.log(`${socket.id} disconnected because ${reason}`);
-      // remove
+      delete activeSockets[socket.id];
     });
   });
 };
