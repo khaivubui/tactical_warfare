@@ -30,9 +30,14 @@ module.exports = io => {
 
     // handling challenge accepted and start game
     socket.on('challengeAccepted', (player1Id, player2Id) => {
-      console.log(
-        `Starting game between ${player1Id} and ${player2Id}`
-      );
+      activeSockets[player1Id].opponentSocketId = player2Id;
+      activeSockets[player2Id].opponentSocketId = player1Id;
+
+      [player1Id, player2Id].forEach(playerId => {
+        io.to(playerId).emit(
+          'startGame'
+        );
+      });
     });
 
     // remove itself from all other socket lists
