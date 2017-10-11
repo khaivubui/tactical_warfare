@@ -111,7 +111,7 @@ body {
 
 /* ---------- online-users-widget ---------- */
 
-.online-users-widget {
+.active-sockets-widget {
   position: absolute;
   display: flex;
   align-items: center;
