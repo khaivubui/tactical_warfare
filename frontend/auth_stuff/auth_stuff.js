@@ -6,6 +6,7 @@ export default () => {
   const registerButton = document.querySelector('#register-button');
   const signinButton = document.querySelector('#signin-button');
 
+  // toggling register form
   registerButton.addEventListener('click', () => {
     if (registerButton.style.color === 'rgb(41, 128, 185)') {
       registerForm.style['max-height'] = '0px';
@@ -17,6 +18,8 @@ export default () => {
       signinButton.style.color = '#333';
     }
   });
+
+  // toggling signin form
   signinButton.addEventListener('click', () => {
     if (signinButton.style.color === 'rgb(41, 128, 185)') {
       signinForm.style['max-height'] = '0px';
@@ -45,7 +48,6 @@ export default () => {
       });
   });
 
-
   signinForm.addEventListener('submit', e => {
     e.preventDefault();
     const username = document.querySelector(
@@ -62,7 +64,7 @@ export default () => {
     });
   });
 
-  // Toggling the auth ui
+  // Toggling the auth widget
   const authWidget = document.querySelector('.auth-widget');
   const authWidgetToggle = document.querySelector('.auth-widget-toggle');
   authWidget.style.top = '-120px';
