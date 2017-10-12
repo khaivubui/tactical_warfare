@@ -40,12 +40,6 @@ app.set("view engine", "ejs");
 // CORS Middleware
 app.use(cors());
 
-// Passport Middleware
-app.use(passport.initialize());
-app.use(passport.session());
-
-require('./config/passport')(passport);
-
 // middlewares
 app.use(express.static(`${__dirname}/../public`));
 app.use(bodyParser.json());

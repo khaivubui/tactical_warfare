@@ -45,6 +45,7 @@ export default () => {
       '/users/register',
       { username, password }
     ).then(response => {
+      
     });
   });
 
@@ -61,7 +62,7 @@ export default () => {
       '/users/authenticate',
       { username, password }
     ).then(response => {
-        window.currentUser = response.data;
+
     });
   });
 
