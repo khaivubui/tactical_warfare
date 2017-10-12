@@ -6,6 +6,7 @@ const AIMING_MAX_X_ROT = 0.9;
 const AIMING_MIN_X_ROT = - 0.5;
 
 const TANK_OPTIONS_WIDTH = 200;
+
 export class Player{
   constructor(tank){
     this.tank = tank;
