@@ -92,9 +92,11 @@ export default class Arena{
     this._ceiling.scaling.y = 1 + wallThickness / groundWidth;
 
     // Sky material
-    // this._ceiling.material = new BABYLON.StandardMaterial("texture3", scene);
-    // this._ceiling.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507743624/sky_t3kgtr.jpg", scene);
+    this._ceiling.material = new BABYLON.StandardMaterial("texture3", scene);
+    this._ceiling.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507779445/ceiling6_fwju0g.jpg", scene);
 
+    this._ceiling.material.diffuseTexture.uScale = 10.0;
+    this._ceiling.material.diffuseTexture.vScale = 10.0;
 
 
 
