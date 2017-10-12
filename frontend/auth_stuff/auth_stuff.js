@@ -41,11 +41,12 @@ export default () => {
       '#register-form input[type=password]'
     ).value;
 
-    axios.post('/users/register', { username, password })
-      .then(response => {
-        console.log(response);
-        window.currentUser = response.data.username;
-      });
+    axios.post(
+      '/users/register',
+      { username, password }
+    ).then(response => {
+      window.currentUser = response.data.username;
+    });
   });
 
   signinForm.addEventListener('submit', e => {
@@ -57,9 +58,10 @@ export default () => {
       '#signin-form input[type=password]'
     ).value;
 
-    axios.post('/users/authenticate', { username, password })
-      .then(response => {
-        console.log(response);
+    axios.post(
+      '/users/authenticate',
+      { username, password }
+    ).then(response => {
         window.currentUser = response.data;
     });
   });
