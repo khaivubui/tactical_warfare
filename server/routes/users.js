@@ -66,13 +66,13 @@ router.post('/authenticate', (req, res, next) => {
 
 // Profile
 // (protected route because of passport.authenticate('jwt', {session:false}))
-router.get(
-  '/profile',
-  passport.authenticate('jwt', {session:false}),
-  (req, res, next) => {
-    res.json({user: req.user});
-  }
-);
+// router.get(
+//   '/profile',
+//   passport.authenticate('jwt', {session:false}),
+//   (req, res, next) => {
+//     res.json({user: req.user});
+//   }
+// );
 
 
 module.exports = router;
