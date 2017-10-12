@@ -6,7 +6,7 @@ const config = require('../config/database');
 
 
 // User Schema
-const UserSchema = mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   username: {
     type: 'String',
     required: true,
