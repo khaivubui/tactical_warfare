@@ -60,7 +60,10 @@ const setupAssetsManager = function setupAssetsManager(scene){
     tankTask.onSuccess = task => (scene.tankMesh = task.loadedMeshes[0]);
   const bombTask = assetsManager.addMeshTask("bombTask", "bomb",
     "models/projectiles/bomb/", "bomb.babylon");
-    bombTask.onSuccess = task => (scene.bombMesh = task.loadedMeshes[0]);
+    bombTask.onSuccess = task => {
+      scene.bombMesh = task.loadedMeshes[0];
+      scene.bombMesh.setEnabled(false);
+    };
   return assetsManager;
 
 }

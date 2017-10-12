@@ -1,7 +1,9 @@
 import Arena from "./arena.js";
 import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
+import {Bomb} from "./projectile/projectile";
 const TANK_MASS = 27000; //kg
 const BOMB_MASS = 1; //kg
+const DEFAULT_FIRING_IMPULSE = 50;
 const TANK_CANNON_LENGTH = 1;
 export const createDemoGame = (scene) => {
       const tank1 = scene.tankMesh;
@@ -34,6 +36,7 @@ export class Game{
     this._receiveMoveType = this._receiveMoveType.bind(this);
     this._receiveAttack = this._receiveAttack.bind(this);
     this._startListeningForMoveOptions = this._startListeningForMoveOptions.bind(this);
+    this._receiveAttackFinished = this._receiveAttackFinished.bind(this);
     this.initialPositionTanks();
     this.bombsCreatedSinceStart = 0;
   }
@@ -86,11 +89,6 @@ export class Game{
     this._switchPlayer();
     this._startListeningForMoveOptions();
   }
-  _receiveAttack(xRot, yRot){
-    this._handleAttack(xRot,yRot);
-    this._switchPlayer();
-    this._startListeningForMoveOptions();
-  }
 
   _switchPlayer(){
     if(++this.currentPlayerIdx > this.players.length -1){
@@ -98,13 +96,29 @@ export class Game{
     }
   }
 
-  _handleAttack(xRot,yRot){
-    // const tank = this.players[this.currentPlayerIdx];
-    // const tankCannonMatrix = tank.getChildMeshes()[2].worldMatrixFromCache;
-    // const bombOffsetLocal = new BABYLON.Vector3(0,0, TANK_CANNON_LENGTH);
-    // const bombMatrix = BABYLON.Vector3.TransformCoordinates(bombOffsetLocal,
-    //   tankCannonMatrix);
-    // let bombRotation, bombLocation;
-    // const Bomb = new Bomb(this.scene,bombMatrix.getPosition(), bombMatrix.getRotation());
+  _receiveAttack(matrix){
+    const bombScale = new BABYLON.Vector3.Zero();
+    const bombRot = new BABYLON.Quaternion.Identity();
+    const bombPos = new BABYLON.Vector3.Zero();
+    matrix.decompose(bombScale, bombRot, bombPos)
+    const rotationComponent = matrix.getRotationMatrix();
+    const impulseVector = new BABYLON.Vector3.TransformCoordinates(
+      new BABYLON.Vector3(0,0, -DEFAULT_FIRING_IMPULSE),
+      rotationComponent
+    );
+    //vector3 TransformCoordinates(ve, mat)
+    if(this.bombsCreatedSinceStart === undefined){
+      this.bombsCreatedSinceStart = 0;
+    }
+    else{
+      ++this.bombsCreatedSinceStart;
+    }
+    const bomb = new Bomb(this,bombPos,
+      bombRot.toEulerAngles());
+    bomb.fire(impulseVector, this._receiveAttackFinished);
+  }
+  _receiveAttackFinished(){
+    this._switchPlayer();
+    this._startListeningForMoveOptions();
   }
 }
