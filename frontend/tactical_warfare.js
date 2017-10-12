@@ -19,6 +19,7 @@ const createScene = function () {
       new BABYLON.Vector3(0, 0, 0),
       scene
     );
+    camera.upperBetaLimit = Math.PI/2 - 0.1;
     camera.attachControl(canvas);
     const light = new BABYLON.HemisphericLight(
       "light1",
@@ -50,9 +51,20 @@ const createScene = function () {
       });
         const game = createDemoGame(scene);
         game.startGame();
+        socket.on('startGame',()=>{
+            stopGame(game);
+            startGame();
+        });
     }
     assetsManager.load();
 };
+const startGame = scene => () =>{
+  const game = createOnlineGame();
+  game.startGame();
+}
+const stopGame = game => {
+  game.stopGame();
+}
 const setupAssetsManager = function setupAssetsManager(scene){
   const assetsManager = new BABYLON.AssetsManager(scene);
   const tankTask = assetsManager.addMeshTask("tankTask", "tank_body",

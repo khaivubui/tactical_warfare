@@ -1,3 +1,5 @@
+import {storeCameraState, restoreCameraState} from './game_utils/camera_utils';
+
 const AIMING_CAMERA_ROT_SPEED = 0.05;
 const AIMING_CAMERA_RADIUS = 2;
 const AIMING_CAMERA_HEIGHT = 1;
@@ -11,9 +13,13 @@ const TANK_CANNON_LENGTH = 1.8;
 export class Player{
   constructor(tank){
     this.tank = tank;
+    this.health = 100;
   }
   startListeningForAttack(onDoneCallback){
     onDoneCallback(new BABYLON.Matrix.Identity());
+  }
+  receiveDamage(amount){
+    this.health -= amount;
   }
 }
 
@@ -148,6 +154,7 @@ export class LocalPlayer extends Player{
     this.originalRotationWidgetMouseDown = rotationWidget.onmousedown;
     rotationWidget.onmousedown  = this.handleAimingMouseDown;
     this._storeCameraState();
+    this._setUpAimingCamera();
     this._positionAimingCamera();
   }
   _calculateProjectileMatrix(){
@@ -161,24 +168,24 @@ export class LocalPlayer extends Player{
     const rotationWidget = document.querySelector(".camera-rotation");
       rotationWidget.onmousedown   = this.originalRotationWidgetMouseDown;
   }
+  _setUpAimingCamera(){
+    const camera = this.scene.activeCamera;
+    camera.lowerAlphaLimit = null;
+    camera.upperAlphaLimit = null;
+    camera.lowerBetaLimit = null;
+    camera.upperBetaLimit = null;
+    camera.radius = AIMING_CAMERA_RADIUS;
+    camera.detachControl(this.previousCameraState.inputs.attachedElement);
+  }
   _storeCameraState(){
     const camera = this.scene.activeCamera;
-    this.storedCameraAttachedElement = camera.inputs.attachedElement;
-    this.storedCameraTarget = camera.target;
-    this.storedCameraRadius = camera.radius;
-    this.storedCameraAlpha = camera.alpha;
-    this.storedCameraBeta = camera.beta;
-    camera.radius = AIMING_CAMERA_RADIUS;
-    camera.detachControl(this.storedCameraAttachedElement);
+    this.previousCameraState = storeCameraState(camera);
   }
   _restoreCameraState(){
     const camera = this.scene.activeCamera;
-    camera.target = this.storedCameraTarget;
-    camera.radius = this.storedCameraRadius;
-    camera.alpha = this.storedCameraAlpha;
-    camera.beta = this.storedCameraBeta;
+    restoreCameraState(camera, this.previousCameraState);
     const canvas = document.getElementById("render-canvas");
-    camera.attachControl(this.storedCameraAttachedElement);
+    camera.attachControl(this.previousCameraState.inputs.attachedElement);
   }
   handleAimingMouseDrag(e){
     const deltaX = e.screenX - this.previousMouseX;
