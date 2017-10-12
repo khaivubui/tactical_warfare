@@ -40,6 +40,11 @@ module.exports = io => {
       });
     });
 
+    // handling challenge refused
+    socket.on('challengeDenied', (denierId, challengerId) => {
+      io.to(challengerId).emit('challengeDenied', denierId);
+    });
+
     // remove itself from all other socket lists
     socket.on('disconnect', reason => {
       socket.broadcast.emit('removeActiveSocket', activeSockets[socket.id]);
