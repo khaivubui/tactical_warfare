@@ -11,6 +11,13 @@ export const createDemoGame = (scene) => {
       const Player1 = new LocalPlayer(tank1, scene, arena);
       const Player2 = new DemoPlayer(tank2);
 
+      // debugger
+
+      tank1.physicsImpostor = new BABYLON.PhysicsImpostor(tank1, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 1}, scene);
+
+      tank2.physicsImpostor = new BABYLON.PhysicsImpostor(tank2, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 1}, scene);
+
+
       const game = new Game(scene, [Player1, Player2], arena );
 
       game.startGame();
@@ -36,6 +43,8 @@ export class Game{
     const globalCoordinates = this.arena.ground.cellIndicesToGlobalCoordinates(
       [midX, midZ]
     );
+
+
 
     this.players[this.myPlayerIdx].tank.position = globalCoordinates;
 

@@ -13,6 +13,14 @@ export default class Arena{
       wallWidth = DEFAULT_WALL_WIDTH, sideWallHeight = SIDE_WALL_HEIGHT){
     this.ground = new Ground(scene, cellSize, cellCount, wallThickness);
     const groundWidth = this.ground.getGroundWidth();
+
+    // Ground material
+    this.ground.mesh.material = new BABYLON.StandardMaterial("texture1", scene);
+    this.ground.mesh.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/c_scale,w_500/v1507742957/ground_sqrwle.jpg", scene);
+    this.ground.mesh.material.diffuseTexture.uScale = 5.0;
+    this.ground.mesh.material.diffuseTexture.vScale = 5.0;
+    this.ground.mesh.material.specularColor = new BABYLON.Color3(0.1,0.1,0.1);
+
     this._wallMesh = new BABYLON.Mesh.CreateBox("centerWall",
       groundWidth, scene);
     this._wallMesh.scaling.z = wallThickness / groundWidth;
@@ -20,6 +28,12 @@ export default class Arena{
     this._wallMesh.scaling.x = wallWidth;
     this._wallMesh.position.y += wallHeight /2;
     window.wallMesh = this._wallMesh;
+
+    // CenterWall material
+    this._wallMesh.material = new BABYLON.StandardMaterial("texture1", scene);
+    this._wallMesh.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507740979/centerBrickWall_gbn3su.png", scene)
+    this._wallMesh.material.diffuseTexture.uScale = 10.0;
+    this._wallMesh.material.diffuseTexture.vScale = 2.0;
 
 
     // Create side walls
@@ -55,9 +69,57 @@ export default class Arena{
     this._sidewall3.position.x += - groundWidth / 2;
     this._sidewall3.position.z += 0;
 
+
+    // SideWall material
+    const materialSideWalls = new BABYLON.StandardMaterial("texture2", scene);
+    this._sidewall0.material = materialSideWalls
+    this._sidewall1.material = materialSideWalls;
+    this._sidewall2.material = materialSideWalls;
+    this._sidewall3.material = materialSideWalls;
+
+    this._sidewall0.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507741682/sideWalls_nkckv9.jpg", scene);
+    this._sidewall1.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507741682/sideWalls_nkckv9.jpg", scene);
+    this._sidewall2.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507741682/sideWalls_nkckv9.jpg", scene);
+    this._sidewall3.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507741682/sideWalls_nkckv9.jpg", scene);
+
+    this._sidewall0.material.diffuseTexture.uScale = 10.0;
+    this._sidewall0.material.diffuseTexture.vScale = 2.0;
+
     this._ceiling = new BABYLON.Mesh.CreatePlane("ceiling",
       groundWidth, scene);
     this._ceiling.position.y += sideWallHeight;
     this._ceiling.rotate(BABYLON.Axis.X, Math.PI * 1.5, BABYLON.Space.WORLD);
+    this._ceiling.scaling.y = 1 + wallThickness / groundWidth;
+
+    // Sky material
+    // this._ceiling.material = new BABYLON.StandardMaterial("texture3", scene);
+    // this._ceiling.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507743624/sky_t3kgtr.jpg", scene);
+
+
+
+
+    // Physics Engine
+
+    const testSphere = BABYLON.Mesh.CreateSphere('sphere1', 16,2,scene);
+    testSphere.position.y = 6;
+    testSphere.position.x = 1;
+    testSphere.position.z = - 1;
+
+    testSphere.physicsImpostor = new BABYLON.PhysicsImpostor(testSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 10, friction: 1, restitution: 1}, scene);
+
+    this.ground.mesh.physicsImpostor = new BABYLON.PhysicsImpostor(this.ground.mesh, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 1, restitution: 0.8}, scene);
+
+    this._wallMesh.physicsImpostor = new BABYLON.PhysicsImpostor(this._wallMesh,
+    BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.5, restitution: 1}, scene);
+
+    this._sidewall0.physicsImpostor = new BABYLON.PhysicsImpostor(this._sidewall0, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.8, restitution: 0.8}, scene);
+
+    this._sidewall1.physicsImpostor = new BABYLON.PhysicsImpostor(this._sidewall1, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.8, restitution: 0.8}, scene);
+
+    this._sidewall2.physicsImpostor = new BABYLON.PhysicsImpostor(this._sidewall2, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.8, restitution: 0.8}, scene);
+
+    this._sidewall3.physicsImpostor = new BABYLON.PhysicsImpostor(this._sidewall3, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.8, restitution: 0.8}, scene);
+
+
   }
 }

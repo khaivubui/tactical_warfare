@@ -1,11 +1,15 @@
 import {Game, createDemoGame} from "./game.js";
 import authStuff from "./auth_stuff/auth_stuff.js";
-import webSockets from './websockets';
+import { webSockets, socket } from './websockets';
+import disableMobileScrolling from
+'./mobile_friendliness/mobile_scroll';
 
 const createScene = function () {
   const canvas = document.getElementById("render-canvas");
     const engine = new BABYLON.Engine(canvas, true);
     const scene = new BABYLON.Scene(engine);
+    // Enable physics engine
+    scene.enablePhysics();
 
     const camera = new BABYLON.ArcRotateCamera(
       "camera1",
@@ -22,18 +26,27 @@ const createScene = function () {
       scene
     );
 
-    light.intensity = 0.7;
+    const lightPointSky = new BABYLON.DirectionalLight("Dir0", new BABYLON.Vector3(0, 1, 0), scene);
+
+    light.intensity = 0.8;
+    lightPointSky.intensity = 0.5;
 
     window.addEventListener('resize', () => {
       engine.resize();
     });
 
+    engine.runRenderLoop( () => {
+      scene.render();
+    });
+    scene.socket = socket;
 
+    return scene;
+};
 
     const assetsManager = setupAssetsManager(scene);
     assetsManager.onFinish = (param) =>{
       engine.hideLoadingUI();
-      
+
       engine.runRenderLoop( () => {
         window.scene = scene;
         scene.render();
@@ -57,3 +70,4 @@ const setupAssetsManager = function setupAssetsManager(scene){
 document.addEventListener("DOMContentLoaded", createScene);
 document.addEventListener("DOMContentLoaded", authStuff);
 document.addEventListener("DOMContentLoaded", webSockets);
+document.addEventListener("DOMContentLoaded", disableMobileScrolling);
