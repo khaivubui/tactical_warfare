@@ -9,10 +9,14 @@ export default () => {
   registerButton.addEventListener('click', () => {
     registerForm.style['max-height'] = '200px';
     signinForm.style['max-height'] = '0px';
+    registerButton.style.color = '#2980b9';
+    signinButton.style.color = '#333';
   });
   signinButton.addEventListener('click', () => {
     registerForm.style['max-height'] = '0px';
     signinForm.style['max-height'] = '200px';
+    signinButton.style.color = '#2980b9';
+    registerButton.style.color = '#333';
   });
 
   registerForm.addEventListener('submit', e => {
