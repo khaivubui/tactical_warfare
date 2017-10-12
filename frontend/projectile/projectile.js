@@ -18,10 +18,7 @@ export class Bomb extends Projectile{
     super(game, pos, rot);
     this.game = game;
     this.scene = scene;
-    this.bombSound = new BABYLON.Sound("bomb", "http://res.cloudinary.com/foolishhunger/video/upload/v1507789642/time_bomb_sound_h1twf8.mp3", this.scene, () => {
-      this.bombSound.play();
-    }
-    );
+
       this._mesh = game.scene.bombMesh.createInstance(`bomb${scene.bombsCreatedSinceStart}`);
       this._mesh.position = pos;
       this._mesh.rotation = rot;
@@ -31,7 +28,10 @@ export class Bomb extends Projectile{
   }
   fire(impulseVector, onDoneCallback){
     super.fire(impulseVector);
-    this.bombSound();
+    const bombSound = new BABYLON.Sound("bomb", "http://res.cloudinary.com/foolishhunger/video/upload/v1507789642/time_bomb_sound_h1twf8.mp3", this.scene, () => {
+      bombSound.play();
+    }
+    );
     setTimeout(()=>{
       this._explode();
       onDoneCallback();
