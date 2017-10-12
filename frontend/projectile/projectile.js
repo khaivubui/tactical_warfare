@@ -53,7 +53,7 @@ export class Bomb extends Projectile{
     let diffVector, magnitudeSquared;
     this._mesh.dispose();
     this.impostor.dispose();
-    new Explosion(this.game).start(()=>{
+    new Explosion(this.game, this._mesh.position).start(()=>{
       restoreCameraState(this.game.scene.activeCamera,
         this.previousCameraState);
       onDoneCallback();
