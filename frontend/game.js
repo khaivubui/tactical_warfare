@@ -3,7 +3,7 @@ import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
 import {Bomb} from "./projectile/projectile";
 const TANK_MASS = 27000; //kg
 const BOMB_MASS = 1; //kg
-const DEFAULT_FIRING_IMPULSE = 50;
+const DEFAULT_FIRING_IMPULSE = 20;
 const TANK_CANNON_LENGTH = 1;
 export const createDemoGame = (scene) => {
       const tank1 = scene.tankMesh;
@@ -39,6 +39,7 @@ export class Game{
     this._receiveAttackFinished = this._receiveAttackFinished.bind(this);
     this.initialPositionTanks();
     this.bombsCreatedSinceStart = 0;
+    this.explosionsCreatedSinceStart = 0;
   }
   initialPositionTanks(){
     const midX = Math.floor(this.arena.ground.cellCount / 2);
@@ -107,12 +108,6 @@ export class Game{
       rotationComponent
     );
     //vector3 TransformCoordinates(ve, mat)
-    if(this.bombsCreatedSinceStart === undefined){
-      this.bombsCreatedSinceStart = 0;
-    }
-    else{
-      ++this.bombsCreatedSinceStart;
-    }
     const bomb = new Bomb(this,bombPos,
       bombRot.toEulerAngles());
     bomb.fire(impulseVector, this._receiveAttackFinished);
