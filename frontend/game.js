@@ -114,7 +114,7 @@ export class Game{
       ++this.bombsCreatedSinceStart;
     }
     const bomb = new Bomb(this,bombPos,
-      bombRot.toEulerAngles());
+      bombRot.toEulerAngles(), this.scene);
     bomb.fire(impulseVector, this._receiveAttackFinished);
   }
   _receiveAttackFinished(){
