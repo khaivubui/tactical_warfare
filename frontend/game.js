@@ -36,6 +36,7 @@ export class Game{
     this._receiveMoveType = this._receiveMoveType.bind(this);
     this._receiveAttack = this._receiveAttack.bind(this);
     this._startListeningForMoveOptions = this._startListeningForMoveOptions.bind(this);
+    this._receiveAttackFinished = this._receiveAttackFinished.bind(this);
     this.initialPositionTanks();
     this.bombsCreatedSinceStart = 0;
   }
@@ -106,8 +107,18 @@ export class Game{
       rotationComponent
     );
     //vector3 TransformCoordinates(ve, mat)
-    const bomb = new Bomb(this.scene,bombPos,
+    if(this.bombsCreatedSinceStart === undefined){
+      this.bombsCreatedSinceStart = 0;
+    }
+    else{
+      ++this.bombsCreatedSinceStart;
+    }
+    const bomb = new Bomb(this,bombPos,
       bombRot.toEulerAngles());
-    bomb.fire(impulseVector);
+    bomb.fire(impulseVector, this._receiveAttackFinished);
+  }
+  _receiveAttackFinished(){
+    this._switchPlayer();
+    this._startListeningForMoveOptions();
   }
 }
