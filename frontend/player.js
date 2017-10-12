@@ -1,3 +1,5 @@
+import {storeCameraState, restoreCameraState} from './game_utils/camera_utils';
+
 const AIMING_CAMERA_ROT_SPEED = 0.05;
 const AIMING_CAMERA_RADIUS = 2;
 const AIMING_CAMERA_HEIGHT = 1;
@@ -6,12 +8,18 @@ const AIMING_MAX_X_ROT = 0.9;
 const AIMING_MIN_X_ROT = - 0.5;
 
 const TANK_OPTIONS_WIDTH = 200;
+const TANK_CANNON_LENGTH = 1.8;
+
 export class Player{
   constructor(tank){
     this.tank = tank;
+    this.health = 100;
   }
   startListeningForAttack(onDoneCallback){
-    onDoneCallback(0,0);
+    onDoneCallback(new BABYLON.Matrix.Identity());
+  }
+  receiveDamage(amount){
+    this.health -= amount;
   }
 }
 
@@ -19,9 +27,11 @@ export class DemoPlayer extends Player{
   constructor(tank){
     super(tank);
   }
+
   startListeningForMoveOptions(onDoneCallback){
-    onDoneCallback("attack");
+    onDoneCallback("position");
   }
+
   startListeningForPosition(onDoneCallback){
     onDoneCallback(this.tank.position);
   }
@@ -47,6 +57,8 @@ export class LocalPlayer extends Player{
     this.handleAimingMouseDown = this.handleAimingMouseDown.bind(this);
     this.handleAimingMouseUp = this.handleAimingMouseUp.bind(this);
     this._stopListeningForPosition = this._stopListeningForPosition.bind(this);
+    this._handleZoomIn = this._handleZoomIn.bind(this);
+    this._handleZoomOut = this._handleZoomOut.bind(this);
 
     const childMeshes = this.tank.getChildMeshes();
     this._rotXMesh = null;
@@ -84,10 +96,15 @@ export class LocalPlayer extends Player{
     const attack = document.getElementById('attack-button');
     const move = document.getElementById('move-button');
     const forfeit = document.getElementById('forfeit-button');
+    const zoomin = document.querySelector(".zoom-in");
+    const zoomout = document.querySelector(".zoom-out");
     attack.onclick = this._handleMoveOption(onDoneCallback)("attack");
     move.onclick = this._handleMoveOption(onDoneCallback)("position");
     forfeit.onclick = this._handleMoveOption(onDoneCallback)("forfeit");
+    zoomin.onclick = this._handleZoomIn();
+    zoomout.onclick = this._handleZoomOut();
   }
+
   _handleConfirmPosition(onDoneCallback){
     return position =>{
       this._stopListeningForPosition();
@@ -131,15 +148,27 @@ export class LocalPlayer extends Player{
     const camera = this.scene.activeCamera;
     const canvas = document.getElementById("render-canvas");
     const rotationWidget = document.querySelector(".camera-rotation");
+    const fire = document.getElementById("fire-button");
     const cancel = document.querySelector("#attack-options .cancel-button");
     cancel.onclick = ()=>{
       this._stopListeningForAttack();
        onCancelledCallback();
      }
+    fire.onclick = () =>{
+      this._stopListeningForAttack();
+      onDoneCallback(this._calculateProjectileMatrix());
+    }
     this.originalRotationWidgetMouseDown = rotationWidget.onmousedown;
     rotationWidget.onmousedown  = this.handleAimingMouseDown;
     this._storeCameraState();
+    this._setUpAimingCamera();
     this._positionAimingCamera();
+
+  }
+  _calculateProjectileMatrix(){
+      const tankCannonMatrix = this._rotXMesh.worldMatrixFromCache;
+      const bombOffsetLocal = new BABYLON.Matrix.Translation(0,0, -TANK_CANNON_LENGTH);
+      return bombOffsetLocal.multiply(tankCannonMatrix);
   }
   _stopListeningForAttack(){
     this._restoreCameraState();
@@ -147,24 +176,24 @@ export class LocalPlayer extends Player{
     const rotationWidget = document.querySelector(".camera-rotation");
       rotationWidget.onmousedown   = this.originalRotationWidgetMouseDown;
   }
+  _setUpAimingCamera(){
+    const camera = this.scene.activeCamera;
+    camera.lowerAlphaLimit = null;
+    camera.upperAlphaLimit = null;
+    camera.lowerBetaLimit = null;
+    camera.upperBetaLimit = null;
+    camera.radius = AIMING_CAMERA_RADIUS;
+    camera.detachControl(this.previousCameraState.inputs.attachedElement);
+  }
   _storeCameraState(){
     const camera = this.scene.activeCamera;
-    this.storedCameraAttachedElement = camera.inputs.attachedElement;
-    this.storedCameraTarget = camera.target;
-    this.storedCameraRadius = camera.radius;
-    this.storedCameraAlpha = camera.alpha;
-    this.storedCameraBeta = camera.beta;
-    camera.radius = AIMING_CAMERA_RADIUS;
-    camera.detachControl(this.storedCameraAttachedElement);
+    this.previousCameraState = storeCameraState(camera);
   }
   _restoreCameraState(){
     const camera = this.scene.activeCamera;
-    camera.target = this.storedCameraTarget;
-    camera.radius = this.storedCameraRadius;
-    camera.alpha = this.storedCameraAlpha;
-    camera.beta = this.storedCameraBeta;
+    restoreCameraState(camera, this.previousCameraState);
     const canvas = document.getElementById("render-canvas");
-    camera.attachControl(this.storedCameraAttachedElement);
+    camera.attachControl(this.previousCameraState.inputs.attachedElement);
   }
   handleAimingMouseDrag(e){
     const deltaX = e.screenX - this.previousMouseX;
@@ -191,4 +220,19 @@ export class LocalPlayer extends Player{
     window.onmousemove = null;
     window.onmouseup = null;
   }
+
+  _handleZoomIn(){
+    return e => {
+      if (this.scene.activeCamera.radius > 0) {
+        this.scene.activeCamera.radius -= 3;
+      }
+    };
+  }
+
+  _handleZoomOut(){
+    return e => {
+      this.scene.activeCamera.radius += 3;
+    };
+  }
+
 }
