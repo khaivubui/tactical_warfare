@@ -99,12 +99,12 @@ export class Game{
   }
 
   _handleAttack(xRot,yRot){
-    const tank = this.players[this.currentPlayerIdx];
-    const tankCannonMatrix = tank.getChildMeshes()[2].worldMatrixFromCache;
-    const bombOffsetLocal = new BABYLON.Vector3(0,0, TANK_CANNON_LENGTH);
-    const bombMatrix = BABYLON.Vector3.TransformCoordinates(bombOffsetLocal,
-      tankCannonMatrix);
-    let bombRotation, bombLocation;
-    const Bomb = new Bomb(this.scene,bombMatrix.getPosition(), bombMatrix.getRotation());
+    // const tank = this.players[this.currentPlayerIdx];
+    // const tankCannonMatrix = tank.getChildMeshes()[2].worldMatrixFromCache;
+    // const bombOffsetLocal = new BABYLON.Vector3(0,0, TANK_CANNON_LENGTH);
+    // const bombMatrix = BABYLON.Vector3.TransformCoordinates(bombOffsetLocal,
+    //   tankCannonMatrix);
+    // let bombRotation, bombLocation;
+    // const Bomb = new Bomb(this.scene,bombMatrix.getPosition(), bombMatrix.getRotation());
   }
 }

@@ -40,9 +40,6 @@ const createScene = function () {
     });
     scene.socket = socket;
 
-    return scene;
-};
-
     const assetsManager = setupAssetsManager(scene);
     assetsManager.onFinish = (param) =>{
       engine.hideLoadingUI();
