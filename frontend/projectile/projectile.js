@@ -17,14 +17,14 @@ export class Projectile {
 }
 
 export class Bomb extends Projectile{
-  constructor(game, pos, rot, scene){
+  constructor(game, pos, rot){
     super(game, pos, rot);
     this.game = game;
-      this._mesh = game.scene.bombMesh.createInstance(
-        `bomb${game.scene.bombsCreatedSinceStart++}`);
-      this._mesh.position = pos;
-      this._mesh.rotation = rot;
-      this._explode = this._explode.bind(this);
+    this._mesh = game.scene.bombMesh.createInstance(
+      `bomb${game.scene.bombsCreatedSinceStart++}`);
+    this._mesh.position = pos;
+    this._mesh.rotation = rot;
+    this._explode = this._explode.bind(this);
     this.impostor = new BABYLON.PhysicsImpostor(this._mesh,
       BABYLON.PhysicsImpostor.SphereImpostor, {mass: BOMB_MASS}, game.scene);
   }

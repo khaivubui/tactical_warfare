@@ -109,7 +109,7 @@ export class Game{
     );
     //vector3 TransformCoordinates(ve, mat)
     const bomb = new Bomb(this,bombPos,
-      bombRot.toEulerAngles(), this.scene);
+      bombRot.toEulerAngles());
     bomb.fire(impulseVector, this._receiveAttackFinished);
   }
   _receiveAttackFinished(){
