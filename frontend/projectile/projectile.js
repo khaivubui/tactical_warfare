@@ -18,10 +18,9 @@ export class Bomb extends Projectile{
     super(game, pos, rot);
     this.game = game;
     this.scene = scene;
-    this.bombSound = new BABYLON.Sound("bomb", "http://res.cloudinary.com/foolishhunger/video/upload/v1507789642/time_bomb_sound_h1twf8.mp3", scene,
-      () => {
-        this.bombSound.play();
-      }
+    this.bombSound = new BABYLON.Sound("bomb", "http://res.cloudinary.com/foolishhunger/video/upload/v1507789642/time_bomb_sound_h1twf8.mp3", this.scene, () => {
+      this.bombSound.play();
+    }
     );
       this._mesh = game.scene.bombMesh.createInstance(`bomb${scene.bombsCreatedSinceStart}`);
       this._mesh.position = pos;
@@ -31,8 +30,8 @@ export class Bomb extends Projectile{
       BABYLON.PhysicsImpostor.SphereImpostor, {mass: BOMB_MASS}, game.scene);
   }
   fire(impulseVector, onDoneCallback){
-    // this.bombSound();
     super.fire(impulseVector);
+    this.bombSound();
     setTimeout(()=>{
       this._explode();
       onDoneCallback();
