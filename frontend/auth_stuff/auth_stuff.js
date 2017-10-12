@@ -45,7 +45,6 @@ export default () => {
       '/users/register',
       { username, password }
     ).then(response => {
-      window.currentUser = response.data.username;
     });
   });
 
