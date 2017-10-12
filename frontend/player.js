@@ -19,9 +19,11 @@ export class DemoPlayer extends Player{
   constructor(tank){
     super(tank);
   }
+
   startListeningForMoveOptions(onDoneCallback){
     onDoneCallback("attack");
   }
+
   startListeningForPosition(onDoneCallback){
     onDoneCallback(this.tank.position);
   }

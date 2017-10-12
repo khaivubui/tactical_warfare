@@ -28,19 +28,32 @@ const createScene = function () {
       engine.resize();
     });
 
-    engine.runRenderLoop( () => {
-      scene.render();
-    });
-    return scene;
 
-};
 
-const startGame = function startGame(){
-  const scene = createScene();
-  window.scene = scene;
-  createDemoGame(scene);
-  //const tank_mesh = new sand_tank.Cube_001("tank1",scene, "");
+    const assetsManager = setupAssetsManager(scene);
+    assetsManager.onFinish = (param) =>{
+      engine.hideLoadingUI();
+      
+      engine.runRenderLoop( () => {
+        window.scene = scene;
+        scene.render();
+      });
+        const game = createDemoGame(scene);
+        game.startGame();
+    }
+    assetsManager.load();
 };
-document.addEventListener("DOMContentLoaded", startGame);
+const setupAssetsManager = function setupAssetsManager(scene){
+  const assetsManager = new BABYLON.AssetsManager(scene);
+  const tankTask = assetsManager.addMeshTask("tankTask", "tank_body",
+    "models/tanks/sand_tank/","sand_tank.babylon");
+    tankTask.onSuccess = task => (scene.tankMesh = task.loadedMeshes[0]);
+  const bombTask = assetsManager.addMeshTask("bombTask", "bomb",
+    "models/projectiles/bomb/", "bomb.babylon");
+    bombTask.onSuccess = task => (scene.bombMesh = task.loadedMeshes[0]);
+  return assetsManager;
+
+}
+document.addEventListener("DOMContentLoaded", createScene);
 document.addEventListener("DOMContentLoaded", authStuff);
 document.addEventListener("DOMContentLoaded", webSockets);
