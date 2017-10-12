@@ -57,6 +57,8 @@ export class LocalPlayer extends Player{
     this.handleAimingMouseDown = this.handleAimingMouseDown.bind(this);
     this.handleAimingMouseUp = this.handleAimingMouseUp.bind(this);
     this._stopListeningForPosition = this._stopListeningForPosition.bind(this);
+    this._handleZoomIn = this._handleZoomIn.bind(this);
+    this._handleZoomOut = this._handleZoomOut.bind(this);
 
     const childMeshes = this.tank.getChildMeshes();
     this._rotXMesh = null;
@@ -94,10 +96,15 @@ export class LocalPlayer extends Player{
     const attack = document.getElementById('attack-button');
     const move = document.getElementById('move-button');
     const forfeit = document.getElementById('forfeit-button');
+    const zoomin = document.querySelector(".zoom-in");
+    const zoomout = document.querySelector(".zoom-out");
     attack.onclick = this._handleMoveOption(onDoneCallback)("attack");
     move.onclick = this._handleMoveOption(onDoneCallback)("position");
     forfeit.onclick = this._handleMoveOption(onDoneCallback)("forfeit");
+    zoomin.onclick = this._handleZoomIn();
+    zoomout.onclick = this._handleZoomOut();
   }
+
   _handleConfirmPosition(onDoneCallback){
     return position =>{
       this._stopListeningForPosition();
@@ -156,6 +163,7 @@ export class LocalPlayer extends Player{
     this._storeCameraState();
     this._setUpAimingCamera();
     this._positionAimingCamera();
+
   }
   _calculateProjectileMatrix(){
       const tankCannonMatrix = this._rotXMesh.worldMatrixFromCache;
@@ -212,4 +220,19 @@ export class LocalPlayer extends Player{
     window.onmousemove = null;
     window.onmouseup = null;
   }
+
+  _handleZoomIn(){
+    return e => {
+      if (this.scene.activeCamera.radius > 0) {
+        this.scene.activeCamera.radius -= 3;
+      }
+    };
+  }
+
+  _handleZoomOut(){
+    return e => {
+      this.scene.activeCamera.radius += 3;
+    };
+  }
+
 }
