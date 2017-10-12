@@ -9,7 +9,7 @@ const config = require('../config/database');
 
 // Register
 router.post("/register", (req, res, next) => {
-  let newUser = new User({
+  const newUser = new User({
     username: req.body.username,
     password: req.body.password
   });
@@ -18,7 +18,11 @@ router.post("/register", (req, res, next) => {
     if (err) {
       res.json({success: false, msg:'Failed to register user'});
     } else {
-      res.json({success: true, msg:'User registered', username: newUser.username});
+      res.json({
+        success: true,
+        msg:'User registered',
+        username: newUser.username
+      });
     }
   });
 });
