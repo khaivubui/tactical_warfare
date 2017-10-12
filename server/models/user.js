@@ -7,8 +7,16 @@ const config = require('../config/database');
 
 // User Schema
 const UserSchema = mongoose.Schema({
-  username: { type: 'String', required: true },
-  password: { type: 'String', required: true }
+  username: {
+    type: 'String',
+    required: true,
+    trim: true,
+    unique: true
+  },
+  password: {
+    type: 'String',
+    required: true
+  }
 });
 
 
