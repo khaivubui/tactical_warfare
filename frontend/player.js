@@ -6,13 +6,14 @@ const AIMING_MAX_X_ROT = 0.9;
 const AIMING_MIN_X_ROT = - 0.5;
 
 const TANK_OPTIONS_WIDTH = 200;
+const TANK_CANNON_LENGTH = 1.8;
 
 export class Player{
   constructor(tank){
     this.tank = tank;
   }
   startListeningForAttack(onDoneCallback){
-    onDoneCallback(0,0);
+    onDoneCallback(new BABYLON.Matrix.Identity());
   }
 }
 
@@ -22,7 +23,7 @@ export class DemoPlayer extends Player{
   }
 
   startListeningForMoveOptions(onDoneCallback){
-    onDoneCallback("attack");
+    onDoneCallback("position");
   }
 
   startListeningForPosition(onDoneCallback){
@@ -141,16 +142,26 @@ export class LocalPlayer extends Player{
     const camera = this.scene.activeCamera;
     const canvas = document.getElementById("render-canvas");
     const rotationWidget = document.querySelector(".camera-rotation");
+    const fire = document.getElementById("fire-button");
     const cancel = document.querySelector("#attack-options .cancel-button");
     cancel.onclick = ()=>{
       this._stopListeningForAttack();
        onCancelledCallback();
      }
+    fire.onclick = () =>{
+      this._stopListeningForAttack();
+      onDoneCallback(this._calculateProjectileMatrix());
+    }
     this.originalRotationWidgetMouseDown = rotationWidget.onmousedown;
     rotationWidget.onmousedown  = this.handleAimingMouseDown;
     this._storeCameraState();
     this._positionAimingCamera();
 
+  }
+  _calculateProjectileMatrix(){
+      const tankCannonMatrix = this._rotXMesh.worldMatrixFromCache;
+      const bombOffsetLocal = new BABYLON.Matrix.Translation(0,0, -TANK_CANNON_LENGTH);
+      return bombOffsetLocal.multiply(tankCannonMatrix);
   }
   _stopListeningForAttack(){
     this._restoreCameraState();
