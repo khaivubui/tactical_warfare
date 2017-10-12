@@ -3,7 +3,6 @@
 const express = require("express");
 const router = express.Router();
 const User = require('../models/user');
-const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 
@@ -70,16 +69,5 @@ router.post('/authenticate', (req, res, next) => {
     });
   });
 });
-
-// Profile
-// (protected route because of passport.authenticate('jwt', {session:false}))
-// router.get(
-//   '/profile',
-//   passport.authenticate('jwt', {session:false}),
-//   (req, res, next) => {
-//     res.json({user: req.user});
-//   }
-// );
-
 
 module.exports = router;
