@@ -1,14 +1,10 @@
 import Arena from "./arena.js";
 import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
-
+const TANK_MASS = 27000; //kg
+const BOMB_MASS = 1; //kg
+const TANK_CANNON_LENGTH = 1;
 export const createDemoGame = (scene) => {
-  BABYLON.SceneLoader.ImportMesh(
-    "tank_body",
-    "models/tanks/sand_tank/",
-    "sand_tank.babylon",
-    scene,
-    newMeshes => {
-      const tank1 = newMeshes[0];
+      const tank1 = scene.tankMesh;
       const tank2 = tank1.clone("tank2");
       tank2.rotation.y = Math.PI;
       const arena = new Arena(scene);
@@ -25,8 +21,6 @@ export const createDemoGame = (scene) => {
       const game = new Game(scene, [Player1, Player2], arena );
 
       game.startGame();
-
-    });
 };
 
 export class Game{
@@ -41,8 +35,7 @@ export class Game{
     this._receiveAttack = this._receiveAttack.bind(this);
     this._startListeningForMoveOptions = this._startListeningForMoveOptions.bind(this);
     this.initialPositionTanks();
-
-
+    this.bombsCreatedSinceStart = 0;
   }
   initialPositionTanks(){
     const midX = Math.floor(this.arena.ground.cellCount / 2);
@@ -94,16 +87,24 @@ export class Game{
     this._startListeningForMoveOptions();
   }
   _receiveAttack(xRot, yRot){
+    this._handleAttack(xRot,yRot);
     this._switchPlayer();
     this._startListeningForMoveOptions();
-  }
-  _startListeningForTrajectory(){
-
   }
 
   _switchPlayer(){
     if(++this.currentPlayerIdx > this.players.length -1){
       this.currentPlayerIdx = 0;
     }
+  }
+
+  _handleAttack(xRot,yRot){
+    // const tank = this.players[this.currentPlayerIdx];
+    // const tankCannonMatrix = tank.getChildMeshes()[2].worldMatrixFromCache;
+    // const bombOffsetLocal = new BABYLON.Vector3(0,0, TANK_CANNON_LENGTH);
+    // const bombMatrix = BABYLON.Vector3.TransformCoordinates(bombOffsetLocal,
+    //   tankCannonMatrix);
+    // let bombRotation, bombLocation;
+    // const Bomb = new Bomb(this.scene,bombMatrix.getPosition(), bombMatrix.getRotation());
   }
 }
