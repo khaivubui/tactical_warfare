@@ -228,7 +228,7 @@ export class LocalPlayer extends Player{
     cameraTarget.y += AIMING_CAMERA_HEIGHT;
     camera.target = cameraTarget;
     camera.radius = AIMING_CAMERA_RADIUS;
-    camera.alpha = -1 *this._rotYMesh.rotation.y + Math.PI/2;
+    camera.alpha = -1* this._rotYMesh.rotation.y - Math.PI/2;
     camera.beta = this._rotXMesh.rotation.x + Math.PI/2;
   }
   _maximizeTankOptions(id){
