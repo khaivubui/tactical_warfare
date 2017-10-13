@@ -155,7 +155,7 @@ body {
   justify-content: space-between;
 	background: rgba(256, 256, 256, 0.9);
   box-shadow: 1px 1px 10px #333;
-  border-radius: 5px;
+  border-radius: 5px 0px 0px 5px;
   max-width: 250px;
 	right: 0;
   top: 50%;
