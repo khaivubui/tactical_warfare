@@ -292,7 +292,7 @@ body {
 }
 /*-------------------------------tank/move controls-------------------*/
 #bottom-options{
-	width: 25%;
+	width: 200px;
 	justify-content: flex-start;
 	align-items: center;
 	background: rgba(256, 256, 256, 0.8);
@@ -309,6 +309,17 @@ body {
 }
 
 
-.bottom-options > div:hover{
+.turn-option {
 	cursor: pointer;
+	padding: 5px;
+}
+
+#attack-button:hover, #move-button:hover {
+	background: #27ae60;
+	color: white;
+}
+
+#forfeit-button:hover {
+	background: #e74c3c;
+	color: white;
 }
