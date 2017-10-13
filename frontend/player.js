@@ -1,4 +1,5 @@
 import {storeCameraState, restoreCameraState} from './game_utils/camera_utils';
+import {socket} from "./websockets";
 
 const AIMING_CAMERA_ROT_SPEED = 0.05;
 const AIMING_CAMERA_RADIUS = 2;
@@ -14,12 +15,33 @@ export class Player{
   constructor(tank){
     this.tank = tank;
     this.health = 100;
+
+    const childMeshes = this.tank.getChildMeshes();
+    this._rotXMesh = null;
+    this._rotYMesh = null;
+    let name;
+    for(let i = 0; i < childMeshes.length; ++i){
+      name = childMeshes[i].name;
+      name = name.split(".");
+      name = name[name.length-1];
+      if(name === "tank_rot_x"){
+        this._rotXMesh = childMeshes[i];
+      }
+      else if (name === "tank_rot_y"){
+        this._rotYMesh = childMeshes[i];
+      }
+    }
   }
   startListeningForAttack(onDoneCallback){
     onDoneCallback(new BABYLON.Matrix.Identity());
   }
   receiveDamage(amount){
     this.health -= amount;
+  }
+
+  resetCannon(){
+    this._rotXMesh.rotation.x = 0;
+    this._rotYMesh.rotation.y = this.tank.rotation.y;
   }
 }
 
@@ -51,19 +73,75 @@ export class DemoPlayer extends Player{
   startListeningForPosition(onDoneCallback){
     onDoneCallback(this.tank.position);
   }
-};
+}
 
 export class SocketPlayer extends Player{
   constructor(tank){
     super(tank);
+    this._rotateOpponentPos = this._rotateOpponentPos.bind(this);
+    this._rotateOpponentAttack = this._rotateOpponentAttack.bind(this);
+    this.stopListeningForPosition = this.stopListeningForPosition.bind(this);
+    this.stopListeningForMoveOptions = this.stopListeningForMoveOptions.bind(this);
+    this.stopListeningForAttack = this.stopListeningForAttack.bind(this);
   }
-  startListeningForPosition(onDoneCallback){
-    //socket.on
+
+  startListeningForPosition(onDoneCallback, onCancelledCallback){
+    socket.on("position", pos =>{
+      onDoneCallback(this._rotateOpponentPos(pos));
+      this.stopListeningForPosition();
+    });
+    socket.on("cancel", () => {
+      onCancelledCallback();
+      this.stopListeningForPosition();
+    }
+  );
   }
+
+  stopListeningForPosition() {
+    socket.off("position");
+    socket.off("cancel");
+  }
+
   startListeningForMoveOptions(onDoneCallback){
-    onDoneCallback("position");
-    const oppHealth = document.querySelector("#opp-health");
-    oppHealth.innerHTML = `Opponent Health: ${this.health}`;
+    socket.on("moveType", type=>{
+      onDoneCallback(type);
+      this.stopListeningForMoveOptions();
+    });
+  }
+
+  stopListeningForMoveOptions(){
+    socket.off("moveType");
+  }
+
+
+  startListeningForAttack(onDoneCallback, onCancelledCallback){
+    socket.on("attack", matrix=> {
+      onDoneCallback(this._rotateOpponentAttack(matrix));
+      this.stopListeningForAttack();
+    }
+    );
+    socket.on("cancel", () => {
+      onCancelledCallback();
+      this.stopListeningForAttack();
+    });
+  }
+
+  stopListeningForAttack(){
+    socket.off("attack");
+    socket.off("cancel");
+  }
+
+
+  _rotateOpponentPos(pos){
+    return BABYLON.Vector3.TransformCoordinates(pos,
+      BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI));
+  }
+  _rotateOpponentAttack(matrix){
+    const mat = new BABYLON.Matrix.Identity();
+    mat.m = matrix.m;
+    return mat.multiply(
+      BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y,Math.PI)
+    );
   }
 }
 
@@ -81,22 +159,13 @@ export class LocalPlayer extends Player{
     this._handleZoomIn = this._handleZoomIn.bind(this);
     this._handleZoomOut = this._handleZoomOut.bind(this);
 
-    const childMeshes = this.tank.getChildMeshes();
-    this._rotXMesh = null;
-    this._rotYMesh = null;
-    for(let i = 0; i < childMeshes.length; ++i){
-      if(childMeshes[i].name === "tank_rot_x"){
-        this._rotXMesh = childMeshes[i];
-      }
-      else if (childMeshes[i].name === "tank_rot_y"){
-        this._rotYMesh = childMeshes[i];
-      }
-    }
+
   }
 
   _handleMoveOption(onDoneCallback){
     return type => e => {
       this._stopListeningForMoveOptions();
+      socket.emit('moveType', type);
       onDoneCallback(type);
     };
   }
@@ -131,20 +200,24 @@ export class LocalPlayer extends Player{
   _handleConfirmPosition(onDoneCallback){
     return position =>{
       this._stopListeningForPosition();
+      socket.emit("position", position);
       onDoneCallback(position);
-    }
+    };
   }
+
   _stopListeningForPosition(){
     this._minimizeTankOptions('position-options');
   }
+
   startListeningForPosition(onDoneCallback, onCancelledCallback){
     this._maximizeTankOptions('position-options');
     const cancel = document.querySelector("#position-options .cancel-button");
     cancel.onclick =()=>{
       this._stopListeningForPosition();
       this.arena.ground.cancelListeningForPosition();
+      socket.emit("cancel");
       onCancelledCallback();
-    }
+    };
     this.arena.ground.startListeningForPosition(this._handleConfirmPosition(
       onDoneCallback));
     //socket.emit
@@ -155,7 +228,7 @@ export class LocalPlayer extends Player{
     cameraTarget.y += AIMING_CAMERA_HEIGHT;
     camera.target = cameraTarget;
     camera.radius = AIMING_CAMERA_RADIUS;
-    camera.alpha = -1 *this._rotYMesh.rotation.y + Math.PI/2;
+    camera.alpha = -1* this._rotYMesh.rotation.y - Math.PI/2;
     camera.beta = this._rotXMesh.rotation.x + Math.PI/2;
   }
   _maximizeTankOptions(id){
@@ -175,12 +248,15 @@ export class LocalPlayer extends Player{
     const cancel = document.querySelector("#attack-options .cancel-button");
     cancel.onclick = ()=>{
       this._stopListeningForAttack();
+       socket.emit("cancel");
        onCancelledCallback();
-     }
+     };
     fire.onclick = () =>{
       this._stopListeningForAttack();
-      onDoneCallback(this._calculateProjectileMatrix());
-    }
+      const projectileMatrix = this._calculateProjectileMatrix();
+      socket.emit("attack", projectileMatrix);
+      onDoneCallback(projectileMatrix);
+    };
     this.originalRotationWidgetMouseDown = rotationWidget.onmousedown;
     rotationWidget.onmousedown  = this.handleAimingMouseDown;
     this._storeCameraState();
@@ -199,6 +275,7 @@ export class LocalPlayer extends Player{
     const rotationWidget = document.querySelector(".camera-rotation");
       rotationWidget.onmousedown   = this.originalRotationWidgetMouseDown;
   }
+
   _setUpAimingCamera(){
     const camera = this.scene.activeCamera;
     camera.lowerAlphaLimit = null;

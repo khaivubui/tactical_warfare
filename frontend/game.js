@@ -6,23 +6,38 @@ const BOMB_MASS = 1; //kg
 const DEFAULT_FIRING_IMPULSE = 20;
 const TANK_CANNON_LENGTH = 1;
 export const createDemoGame = (scene) => {
-      const tank1 = scene.tankMesh;
-      const tank2 = tank1.clone("tank2");
-      tank2.rotation.y = Math.PI;
+      const localTank = scene.tankMesh;
+      const socketTank = localTank.clone("socketTank");
+      socketTank.rotation.y = Math.PI;
       const arena = new Arena(scene);
-      const Player1 = new LocalPlayer(tank1, scene, arena);
-      const Player2 = new DemoPlayer(tank2);
+      const Player1 = new LocalPlayer(localTank, scene, arena);
+      const Player2 = new DemoPlayer(socketTank);
+      scene.localTank = localTank;
+      scene.socketTank = socketTank;
 
-      // debugger
+      localTank.physicsImpostor = new BABYLON.PhysicsImpostor(localTank,
+         BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 1},
+          scene);
 
-      tank1.physicsImpostor = new BABYLON.PhysicsImpostor(tank1, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 1}, scene);
-
-      tank2.physicsImpostor = new BABYLON.PhysicsImpostor(tank2, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 1}, scene);
-
-
+      socketTank.physicsImpostor = new BABYLON.PhysicsImpostor(socketTank,
+         BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 1},
+         scene);
       const game = new Game(scene, [Player1, Player2], arena );
 
-      game.startGame();
+      return game;
+};
+
+export const startOnlineGame = (game, isFirst) => {
+  game.reset();
+  if(isFirst){
+    game.players[0] = new LocalPlayer(game.scene.localTank,game.scene, game.arena);
+    game.players[1] = new SocketPlayer(game.scene.socketTank);
+  }
+  else{
+    game.players[0] = new SocketPlayer(game.scene.socketTank);
+    game.players[1] =  new LocalPlayer(game.scene.localTank,game.scene, game.arena);
+  }
+  game.startGame();
 };
 
 export class Game{
@@ -40,6 +55,12 @@ export class Game{
     this.initialPositionTanks();
     this.bombsCreatedSinceStart = 0;
     this.explosionsCreatedSinceStart = 0;
+
+  }
+  reset(){
+    this.currentPlayerIdx = 0;
+    this.initialPositionTanks();
+    this.players[0].health = 100;
   }
   initialPositionTanks(){
     const midX = Math.floor(this.arena.ground.cellCount / 2);
@@ -57,6 +78,9 @@ export class Game{
     this.players[otherPlayerIdx].tank.position = BABYLON.Vector3.TransformCoordinates(
       globalCoordinates, matrix
     );
+    for(let i = 0; i < this.players.length; ++i){
+      this.players[i].resetCannon();
+    }
   }
   startGame(){
     this._startListeningForMoveOptions();
@@ -95,6 +119,11 @@ export class Game{
     if(++this.currentPlayerIdx > this.players.length -1){
       this.currentPlayerIdx = 0;
     }
+    // if (this.currentPlayerIdx === 0) {
+    //   this.currentPlayerIdx = 1;
+    // } else {
+    //   this.currentPlayerIdx = 0;
+    // }
   }
 
   _receiveAttack(matrix){
