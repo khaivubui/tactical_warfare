@@ -67,17 +67,25 @@ export default () => {
   const authMain = document.querySelector('.auth-main');
   const authWidgetToggle = document.querySelector('.auth-widget-toggle');
 
+  const openAuthWidget = () => {
+    authWidget.style.top = '50%';
+    authMain.style['max-height'] = '277px';
+    authWidgetToggle.innerHTML = 'Play now';
+  };
+
+  const closeAuthWidget = () => {
+    authWidget.style.top = '15px';
+    authMain.style['max-height'] = '0px';
+    authWidgetToggle.innerHTML = 'Sign In';
+  };
+
   authWidgetToggle.addEventListener(
     'click',
     () => {
       if (authWidget.style.top === '50%') {
-        authWidget.style.top = '15px';
-        authMain.style['max-height'] = '0px';
-        authWidgetToggle.innerHTML = 'Sign In';
+        closeAuthWidget();
       } else {
-        authWidget.style.top = '50%';
-        authMain.style['max-height'] = '277px';
-        authWidgetToggle.innerHTML = 'Play now';
+        openAuthWidget();
       }
     }
   );
