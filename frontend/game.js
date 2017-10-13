@@ -18,10 +18,16 @@ export const createDemoGame = (scene) => {
       localTank.physicsImpostor = new BABYLON.PhysicsImpostor(localTank,
          BABYLON.PhysicsImpostor.BoxImpostor, {mass: 2, restitution: 0},
           scene);
+      localTank.scaling.y = 0.9;
+      localTank.scaling.x = 0.9;
+      localTank.scaling.z = 0.9;
 
       socketTank.physicsImpostor = new BABYLON.PhysicsImpostor(socketTank,
          BABYLON.PhysicsImpostor.BoxImpostor, {mass: 2, restitution: 0},
          scene);
+      socketTank.scaling.y = 0.9;
+      socketTank.scaling.x = 0.9;
+      socketTank.scaling.z = 0.9;
       const game = new Game(scene, [Player1, Player2], arena );
 
       return game;
