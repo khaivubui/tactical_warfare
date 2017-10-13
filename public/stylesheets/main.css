@@ -348,6 +348,9 @@ body {
 
 .cancel-button, .turn-option, #health {
 	padding: 5px 20px;
+}
+
+.cancel-button, .turn-option {
 	cursor: pointer;
 }
 
