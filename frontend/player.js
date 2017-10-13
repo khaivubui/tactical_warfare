@@ -98,7 +98,7 @@ export class LocalPlayer extends Player{
     return type => e => {
       this._stopListeningForMoveOptions();
       onDoneCallback(type);
-    }
+    };
   }
 
   _stopListeningForMoveOptions(){

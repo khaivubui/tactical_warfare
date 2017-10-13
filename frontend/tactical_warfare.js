@@ -14,8 +14,8 @@ const createScene = function () {
     const camera = new BABYLON.ArcRotateCamera(
       "camera1",
       -1,
-      0.8,
-      15,
+      1.4,
+      25,
       new BABYLON.Vector3(0, 0, 0),
       scene
     );
