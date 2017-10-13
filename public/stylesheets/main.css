@@ -238,6 +238,7 @@ body {
 }
 
 .zoom-in, .zoom-out {
+	font-size: 1.4em;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -245,6 +246,13 @@ body {
 	border-radius: 5px;
 	width: 50px;
 	height: 50px;
+	cursor: pointer;
+}
+
+.zoom-in:hover, .zoom-out:hover {
+	background: white;
+	border: white;
+	color: #27ae60;
 }
 /*-------------------------------tank/move controls-------------------*/
 #bottom-options{

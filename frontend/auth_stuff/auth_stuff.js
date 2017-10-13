@@ -7,24 +7,24 @@ export default () => {
   const signinButton = document.querySelector('#signin-button');
 
   registerButton.addEventListener('click', () => {
-    if (registerButton.style.color === 'rgb(41, 128, 185)') {
+    if (registerButton.style.color === 'rgb(39, 174, 96)') {
       registerForm.style['max-height'] = '0px';
       registerButton.style.color = '#333';
     } else {
       registerForm.style['max-height'] = '200px';
       signinForm.style['max-height'] = '0px';
-      registerButton.style.color = '#2980b9';
+      registerButton.style.color = '#27ae60';
       signinButton.style.color = '#333';
     }
   });
   signinButton.addEventListener('click', () => {
-    if (signinButton.style.color === 'rgb(41, 128, 185)') {
+    if (signinButton.style.color === 'rgb(39, 174, 96)') {
       signinForm.style['max-height'] = '0px';
       signinButton.style.color = '#333';
     } else {
       registerForm.style['max-height'] = '0px';
       signinForm.style['max-height'] = '200px';
-      signinButton.style.color = '#2980b9';
+      signinButton.style.color = '#27ae60';
       registerButton.style.color = '#333';
     }
   });
