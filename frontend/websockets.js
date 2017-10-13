@@ -1,5 +1,7 @@
 import io from 'socket.io-client';
 
+import { closeAuthWidget } from './auth_stuff/auth_stuff';
+
 export const socket = io();
 
 export const webSockets = () => {
@@ -109,17 +111,30 @@ export const webSockets = () => {
   document.querySelector('.active-sockets-widget');
   activeSocketsWidget.style.right = "16px";
 
+  const openActiveSocketsWidget = () => {
+    activeSockets.style['max-width'] = '250px';
+    activeSocketsWidget.style.right = '50%';
+    activeSocketsToggle.innerHTML = '>';
+  };
+
+  const closeActiveSocketsWidget = () => {
+    activeSockets.style['max-width'] = '0px';
+    activeSocketsWidget.style.right = "16px";
+    activeSocketsToggle.innerHTML = '<';
+  };
+
   activeSocketsToggle.addEventListener('click', () => {
     if (activeSocketsWidget.style.right === "16px") {
-      // activeSocketsWidget.style['max-height'] = '500px';
-      activeSockets.style['max-width'] = '250px';
-      activeSocketsWidget.style.right = '50%';
-      activeSocketsToggle.innerHTML = '>';
+      openActiveSocketsWidget();
     } else {
-      // activeSocketsWidget.style['max-height'] = '37px';
-      activeSockets.style['max-width'] = '0px';
-      activeSocketsWidget.style.right = "16px";
-      activeSocketsToggle.innerHTML = '<';
+      closeActiveSocketsWidget();
     }
+  });
+
+  // ---------- startGame toggling widget ----------
+
+  socket.on('startGame', () => {
+    closeActiveSocketsWidget();
+    closeAuthWidget();
   });
 };
