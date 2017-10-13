@@ -9,7 +9,8 @@ const createScene = function () {
     const engine = new BABYLON.Engine(canvas, true);
     const scene = new BABYLON.Scene(engine);
     // Enable physics engine
-    scene.enablePhysics();
+    const gravityVector = new BABYLON.Vector3(0,-1.5,0);
+    scene.enablePhysics(gravityVector);
 
     const camera = new BABYLON.ArcRotateCamera(
       "camera1",
