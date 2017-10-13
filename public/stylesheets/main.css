@@ -199,7 +199,8 @@ body {
 	margin: 0 20px 20px 20px;
 	width: 180px;
 	max-height: 400px;
-	overflow: scroll;
+	min-height: 40px;
+	overflow: auto;
 }
 
 .other-active-sockets span {
