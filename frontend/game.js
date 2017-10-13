@@ -16,12 +16,18 @@ export const createDemoGame = (scene) => {
       scene.socketTank = socketTank;
 
       localTank.physicsImpostor = new BABYLON.PhysicsImpostor(localTank,
-         BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 1},
+         BABYLON.PhysicsImpostor.BoxImpostor, {mass: 2, restitution: 0},
           scene);
+      localTank.scaling.y = 0.9;
+      localTank.scaling.x = 0.9;
+      localTank.scaling.z = 0.9;
 
       socketTank.physicsImpostor = new BABYLON.PhysicsImpostor(socketTank,
-         BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 1},
+         BABYLON.PhysicsImpostor.BoxImpostor, {mass: 2, restitution: 0},
          scene);
+      socketTank.scaling.y = 0.9;
+      socketTank.scaling.x = 0.9;
+      socketTank.scaling.z = 0.9;
       const game = new Game(scene, [Player1, Player2], arena );
 
       return game;
@@ -74,12 +80,13 @@ export class Game{
 
 
     this.players[this.myPlayerIdx].tank.position = globalCoordinates;
-
+    this.players[this.myPlayerIdx].tank.position.y += 0.1;
     const otherPlayerIdx = this.myPlayerIdx === 0 ? 1 : 0;
     const matrix = BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI);
     this.players[otherPlayerIdx].tank.position = BABYLON.Vector3.TransformCoordinates(
       globalCoordinates, matrix
     );
+    this.players[otherPlayerIdx].tank.position.y += 0.1;
     for(let i = 0; i < this.players.length; ++i){
       this.players[i].resetCannon();
     }
@@ -118,14 +125,11 @@ export class Game{
   }
 
   _switchPlayer(){
-    if(++this.currentPlayerIdx > this.players.length -1){
+    if (this.currentPlayerIdx === 0) {
+      this.currentPlayerIdx = 1;
+    } else {
       this.currentPlayerIdx = 0;
     }
-    // if (this.currentPlayerIdx === 0) {
-    //   this.currentPlayerIdx = 1;
-    // } else {
-    //   this.currentPlayerIdx = 0;
-    // }
   }
 
   _receiveAttack(matrix){

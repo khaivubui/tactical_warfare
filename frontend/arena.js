@@ -104,7 +104,7 @@ export default class Arena{
     this.ground.mesh.physicsImpostor = new BABYLON.PhysicsImpostor(this.ground.mesh, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 1, restitution: 0.8}, scene);
 
     this._wallMesh.physicsImpostor = new BABYLON.PhysicsImpostor(this._wallMesh,
-    BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.5, restitution: 1}, scene);
+    BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.5, restitution: 0.8}, scene);
 
     this._sidewall0.physicsImpostor = new BABYLON.PhysicsImpostor(this._sidewall0, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.8, restitution: 0.8}, scene);
 
