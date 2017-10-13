@@ -90,7 +90,11 @@ export class SocketPlayer extends Player{
       onDoneCallback(this._rotateOpponentPos(pos));
       this.stopListeningForPosition();
     });
-    socket.on("cancel", onCancelledCallback);
+    socket.on("cancel", () => {
+      onCancelledCallback();
+      this.stopListeningForPosition();
+    }
+  );
   }
 
   stopListeningForPosition() {
@@ -111,13 +115,20 @@ export class SocketPlayer extends Player{
 
 
   startListeningForAttack(onDoneCallback, onCancelledCallback){
-    socket.on("attack", matrix=>(onDoneCallback(
-      this._rotateOpponentAttack(matrix))));
-    socket.on("cancel", onCancelledCallback);
+    socket.on("attack", matrix=> {
+      onDoneCallback(this._rotateOpponentAttack(matrix));
+      this.stopListeningForAttack();
+    }
+    );
+    socket.on("cancel", () => {
+      onCancelledCallback();
+      this.stopListeningForAttack();
+    });
   }
-  stopListeningForAttack(onDoneCallback, onCancelledCallback){
-    socket.on("attack", () => {});
-    socket.on("cancel", () => {});
+
+  stopListeningForAttack(){
+    socket.off("attack");
+    socket.off("cancel");
   }
 
 
