@@ -3,6 +3,7 @@ const faker = require('faker');
 module.exports = io => {
   const activeSockets = {}; // used to store all active sockets
 
+
   io.on('connection', socket => {
     io.to(socket.id).emit('activeSockets', activeSockets);
 
@@ -50,5 +51,16 @@ module.exports = io => {
       socket.broadcast.emit('removeActiveSocket', activeSockets[socket.id]);
       delete activeSockets[socket.id];
     });
+
+    //--------------------------------------------- the game
+    const sendToOpponent = message =>(
+      socket.on(message, data => {
+        io.to(activeSockets[socket.id].opponentSocketId).emit(message, data);
+      })
+    );
+    const gameplayMessages = ["position", "moveType", "attack", "cancel"];
+    for(let i = 0; i< gameplayMessages.length; ++i){
+      sendToOpponent(gameplayMessages[i]);
+    }
   });
 };

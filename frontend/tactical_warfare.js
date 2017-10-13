@@ -1,4 +1,4 @@
-import {Game, createDemoGame} from "./game.js";
+import {Game, createDemoGame, startOnlineGame} from "./game.js";
 import authStuff from "./auth_stuff/auth_stuff.js";
 import { webSockets, socket } from './websockets';
 import disableMobileScrolling from
@@ -52,8 +52,8 @@ const createScene = function () {
         const game = createDemoGame(scene);
         game.startGame();
         socket.on('startGame',()=>{
-            stopGame(game);
-            startGame();
+            debugger;
+            startOnlineGame(game);
         });
     }
     assetsManager.load();

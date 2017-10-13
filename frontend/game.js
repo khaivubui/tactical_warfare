@@ -13,16 +13,22 @@ export const createDemoGame = (scene) => {
       const Player1 = new LocalPlayer(tank1, scene, arena);
       const Player2 = new DemoPlayer(tank2);
 
-      // debugger
+      tank1.physicsImpostor = new BABYLON.PhysicsImpostor(tank1,
+         BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 1},
+          scene);
 
-      tank1.physicsImpostor = new BABYLON.PhysicsImpostor(tank1, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 1}, scene);
-
-      tank2.physicsImpostor = new BABYLON.PhysicsImpostor(tank2, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 1}, scene);
-
-
+      tank2.physicsImpostor = new BABYLON.PhysicsImpostor(tank2,
+         BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 1},
+         scene);
       const game = new Game(scene, [Player1, Player2], arena );
 
       game.startGame();
+};
+
+export const startOnlineGame = game => {
+  game.reset();
+  game.players[1] = new SocketPlayer(game.players[1].tank);
+  game.startGame();
 };
 
 export class Game{
@@ -40,6 +46,11 @@ export class Game{
     this.initialPositionTanks();
     this.bombsCreatedSinceStart = 0;
     this.explosionsCreatedSinceStart = 0;
+
+  }
+  reset(){
+    initialPositionTanks();
+    this.players[0].health = 100;
   }
   initialPositionTanks(){
     const midX = Math.floor(this.arena.ground.cellCount / 2);
@@ -57,6 +68,9 @@ export class Game{
     this.players[otherPlayerIdx].tank.position = BABYLON.Vector3.TransformCoordinates(
       globalCoordinates, matrix
     );
+    for(let i = 0; i < this.players.length; ++i){
+      this.players[i].resetCannon();
+    }
   }
   startGame(){
     this._startListeningForMoveOptions();

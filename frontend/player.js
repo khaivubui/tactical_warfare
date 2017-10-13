@@ -1,4 +1,5 @@
 import {storeCameraState, restoreCameraState} from './game_utils/camera_utils';
+import {socket} from "./websockets";
 
 const AIMING_CAMERA_ROT_SPEED = 0.05;
 const AIMING_CAMERA_RADIUS = 2;
@@ -14,12 +15,33 @@ export class Player{
   constructor(tank){
     this.tank = tank;
     this.health = 100;
+
+    const childMeshes = this.tank.getChildMeshes();
+    this._rotXMesh = null;
+    this._rotYMesh = null;
+    let name;
+    for(let i = 0; i < childMeshes.length; ++i){
+      name = childMeshes[i].name;
+      name = name.split(".");
+      name = name[name.length-1];
+      if(name === "tank_rot_x"){
+        this._rotXMesh = childMeshes[i];
+      }
+      else if (name === "tank_rot_y"){
+        this._rotYMesh = childMeshes[i];
+      }
+    }
   }
   startListeningForAttack(onDoneCallback){
     onDoneCallback(new BABYLON.Matrix.Identity());
   }
   receiveDamage(amount){
     this.health -= amount;
+  }
+
+  resetCannon(){
+    this._rotXMesh.rotation.x = 0;
+    this._rotYMesh.rotation.y = this.tank.rotation.y;
   }
 }
 
@@ -40,9 +62,31 @@ export class DemoPlayer extends Player{
 export class SocketPlayer extends Player{
   constructor(tank){
     super(tank);
+    this._rotateOpponentPos = this._rotateOpponentPos.bind(this);
+    this._rotateOpponentAttack = this._rotateOpponentAttack.bind(this);
   }
-  startListeningForPosition(onDoneCallback){
-    //socket.on
+  startListeningForPosition(onDoneCallback, onCancelledCallback){
+    socket.on("position", pos =>{
+      onDoneCallback(this._rotateOpponentPos(pos));
+    });
+    socket.on("cancel", onCancelledCallback);
+  }
+  startListeningForMoveOptions(onDoneCallback){
+    socket.on("moveType", type=>(onDoneCallback(type)));
+  }
+  startListeningForAttack(onDoneCallback, onCancelledCallback){
+    socket.on("attack", matrix=>(onDoneCallback(
+      this._rotateOpponentAttack(matrix))));
+    socket.on("cancel", onCancelledCallback);
+  }
+  _rotateOpponentPos(pos){
+    return Vector3.TransformCoordinates(
+      BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI), pos);
+  }
+  _rotateOpponentAttack(matrix){
+    return BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y,Math.PI, pos).multiply(
+      matrix
+    );
   }
 }
 
@@ -58,17 +102,7 @@ export class LocalPlayer extends Player{
     this.handleAimingMouseUp = this.handleAimingMouseUp.bind(this);
     this._stopListeningForPosition = this._stopListeningForPosition.bind(this);
 
-    const childMeshes = this.tank.getChildMeshes();
-    this._rotXMesh = null;
-    this._rotYMesh = null;
-    for(let i = 0; i < childMeshes.length; ++i){
-      if(childMeshes[i].name === "tank_rot_x"){
-        this._rotXMesh = childMeshes[i];
-      }
-      else if (childMeshes[i].name === "tank_rot_y"){
-        this._rotYMesh = childMeshes[i];
-      }
-    }
+
   }
 
   _handleMoveOption(onDoneCallback){
@@ -101,6 +135,7 @@ export class LocalPlayer extends Player{
   _handleConfirmPosition(onDoneCallback){
     return position =>{
       this._stopListeningForPosition();
+      socket.emit("position", position);
       onDoneCallback(position);
     }
   }
@@ -113,6 +148,7 @@ export class LocalPlayer extends Player{
     cancel.onclick =()=>{
       this._stopListeningForPosition();
       this.arena.ground.cancelListeningForPosition();
+      socket.emit("cancel");
       onCancelledCallback();
     }
     this.arena.ground.startListeningForPosition(this._handleConfirmPosition(
@@ -145,11 +181,14 @@ export class LocalPlayer extends Player{
     const cancel = document.querySelector("#attack-options .cancel-button");
     cancel.onclick = ()=>{
       this._stopListeningForAttack();
+       socket.emit("cancel");
        onCancelledCallback();
      }
     fire.onclick = () =>{
       this._stopListeningForAttack();
-      onDoneCallback(this._calculateProjectileMatrix());
+      const projectileMatrix = this._calculateProjectileMatrix();
+      socket.emit("attack", projectileMatrix);
+      onDoneCallback(projectileMatrix);
     }
     this.originalRotationWidgetMouseDown = rotationWidget.onmousedown;
     rotationWidget.onmousedown  = this.handleAimingMouseDown;
@@ -168,6 +207,7 @@ export class LocalPlayer extends Player{
     const rotationWidget = document.querySelector(".camera-rotation");
       rotationWidget.onmousedown   = this.originalRotationWidgetMouseDown;
   }
+
   _setUpAimingCamera(){
     const camera = this.scene.activeCamera;
     camera.lowerAlphaLimit = null;
