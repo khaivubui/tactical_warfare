@@ -64,17 +64,19 @@ export default () => {
 
   // Toggling the auth ui
   const authWidget = document.querySelector('.auth-widget');
+  const authMain = document.querySelector('.auth-main');
   const authWidgetToggle = document.querySelector('.auth-widget-toggle');
-  authWidget.style.top = '-120px';
 
   authWidgetToggle.addEventListener(
     'click',
     () => {
       if (authWidget.style.top === '50%') {
-        authWidget.style.top = '-120px';
+        authWidget.style.top = '15px';
+        authMain.style['max-height'] = '0px';
         authWidgetToggle.innerHTML = 'Sign In';
       } else {
         authWidget.style.top = '50%';
+        authMain.style['max-height'] = '277px';
         authWidgetToggle.innerHTML = 'Play now';
       }
     }

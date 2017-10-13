@@ -81,9 +81,8 @@ body {
   border-radius: 5px;
   width: 100%;
   max-width: 500px;
-  height: 300px;
   left: 50%;
-  top: -120px;
+  top: 15px;
   transform: translate(-50%, -50%);
   transition: top 0.8s;
 	z-index: 100;
@@ -95,6 +94,10 @@ body {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	height: 277px;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.7s;
 }
 
 .auth-main input {
@@ -115,6 +118,7 @@ body {
   border: none;
   background: transparent;
 	cursor: pointer;
+	height: 30px;
 }
 
 .auth-widget-toggle:hover {
