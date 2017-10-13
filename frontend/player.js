@@ -73,41 +73,62 @@ export class DemoPlayer extends Player{
   startListeningForPosition(onDoneCallback){
     onDoneCallback(this.tank.position);
   }
-};
+}
 
 export class SocketPlayer extends Player{
   constructor(tank){
     super(tank);
     this._rotateOpponentPos = this._rotateOpponentPos.bind(this);
     this._rotateOpponentAttack = this._rotateOpponentAttack.bind(this);
+    this.stopListeningForPosition = this.stopListeningForPosition.bind(this);
+    this.stopListeningForMoveOptions = this.stopListeningForMoveOptions.bind(this);
+    this.stopListeningForAttack = this.stopListeningForAttack.bind(this);
   }
+
   startListeningForPosition(onDoneCallback, onCancelledCallback){
     socket.on("position", pos =>{
       onDoneCallback(this._rotateOpponentPos(pos));
+      this.stopListeningForPosition();
     });
     socket.on("cancel", onCancelledCallback);
   }
-  startListeningForMoveOptions(onDoneCallback){
-    socket.on("moveType", type=>(onDoneCallback(type)));
+
+  stopListeningForPosition() {
+    socket.off("position");
+    socket.off("cancel");
   }
+
+  startListeningForMoveOptions(onDoneCallback){
+    socket.on("moveType", type=>{
+      onDoneCallback(type);
+      this.stopListeningForMoveOptions();
+    });
+  }
+
+  stopListeningForMoveOptions(){
+    socket.off("moveType");
+  }
+
+
   startListeningForAttack(onDoneCallback, onCancelledCallback){
     socket.on("attack", matrix=>(onDoneCallback(
       this._rotateOpponentAttack(matrix))));
     socket.on("cancel", onCancelledCallback);
   }
+  stopListeningForAttack(onDoneCallback, onCancelledCallback){
+    socket.on("attack", () => {});
+    socket.on("cancel", () => {});
+  }
+
+
   _rotateOpponentPos(pos){
-    return Vector3.TransformCoordinates(
-      BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI), pos);
+    return BABYLON.Vector3.TransformCoordinates(pos,
+      BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI));
   }
   _rotateOpponentAttack(matrix){
-    return BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y,Math.PI, pos).multiply(
+    return BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y,Math.PI).multiply(
       matrix
     );
-  }
-  startListeningForMoveOptions(onDoneCallback){
-    onDoneCallback("position");
-    const oppHealth = document.querySelector("#opp-health");
-    oppHealth.innerHTML = `Opponent Health: ${this.health}`;
   }
 }
 
@@ -131,8 +152,9 @@ export class LocalPlayer extends Player{
   _handleMoveOption(onDoneCallback){
     return type => e => {
       this._stopListeningForMoveOptions();
+      socket.emit('moveType', type);
       onDoneCallback(type);
-    }
+    };
   }
 
   _stopListeningForMoveOptions(){
@@ -167,11 +189,13 @@ export class LocalPlayer extends Player{
       this._stopListeningForPosition();
       socket.emit("position", position);
       onDoneCallback(position);
-    }
+    };
   }
+
   _stopListeningForPosition(){
     this._minimizeTankOptions('position-options');
   }
+
   startListeningForPosition(onDoneCallback, onCancelledCallback){
     this._maximizeTankOptions('position-options');
     const cancel = document.querySelector("#position-options .cancel-button");
@@ -180,7 +204,7 @@ export class LocalPlayer extends Player{
       this.arena.ground.cancelListeningForPosition();
       socket.emit("cancel");
       onCancelledCallback();
-    }
+    };
     this.arena.ground.startListeningForPosition(this._handleConfirmPosition(
       onDoneCallback));
     //socket.emit
@@ -213,14 +237,13 @@ export class LocalPlayer extends Player{
       this._stopListeningForAttack();
        socket.emit("cancel");
        onCancelledCallback();
-     }
+     };
     fire.onclick = () =>{
       this._stopListeningForAttack();
       const projectileMatrix = this._calculateProjectileMatrix();
-      debugger;
       socket.emit("attack", projectileMatrix);
       onDoneCallback(projectileMatrix);
-    }
+    };
     this.originalRotationWidgetMouseDown = rotationWidget.onmousedown;
     rotationWidget.onmousedown  = this.handleAimingMouseDown;
     this._storeCameraState();

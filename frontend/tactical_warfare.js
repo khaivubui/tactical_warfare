@@ -60,13 +60,7 @@ const createScene = function () {
 
     assetsManager.load();
 };
-// const startGame = scene => () =>{
-//   const game = OnlineGame();
-//   game.startGame();
-// }
-// const stopGame = game => {
-//   game.stopGame();
-// }
+
 const setupAssetsManager = function setupAssetsManager(scene){
   const assetsManager = new BABYLON.AssetsManager(scene);
   const tankTask = assetsManager.addMeshTask("tankTask", "tank_body",
