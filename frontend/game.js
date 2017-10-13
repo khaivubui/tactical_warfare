@@ -22,12 +22,19 @@ export const createDemoGame = (scene) => {
          scene);
       const game = new Game(scene, [Player1, Player2], arena );
 
-      game.startGame();
+      return game;
 };
 
-export const startOnlineGame = game => {
+export const startOnlineGame = (game, isFirst) => {
   game.reset();
-  game.players[1] = new SocketPlayer(game.players[1].tank);
+  if(isFirst){
+    game.players[0] = new LocalPlayer(game.players[0].tank);
+    game.players[1] = new SocketPlayer(game.players[1].tank);
+  }
+  else{
+    game.players[0] = new SocketPlayer(game.plaers[0].tank);
+    game.players[1] =  new LocalPlayer(game.players[0].tank);
+  }
   game.startGame();
 };
 
@@ -49,7 +56,8 @@ export class Game{
 
   }
   reset(){
-    initialPositionTanks();
+    this.currentPlayerIdx = 0;
+    this.initialPositionTanks();
     this.players[0].health = 100;
   }
   initialPositionTanks(){

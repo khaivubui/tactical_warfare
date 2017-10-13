@@ -46,22 +46,22 @@ const createScene = function () {
     const assetsManager = setupAssetsManager(scene);
     assetsManager.onFinish = (param) =>{
       engine.hideLoadingUI();
-
+      const game = createDemoGame(scene);
+      game.startGame();
+      socket.on('startGame', isFirst=>{
+          startOnlineGame(game, isFirst);
+      });
       engine.runRenderLoop( () => {
         window.scene = scene;
         scene.render();
       });
-        const game = createDemoGame(scene);
-        game.startGame();
-        socket.on('startGame',()=>{
-            debugger;
-            startOnlineGame(game);
-        });
+
     }
+
     assetsManager.load();
 };
 // const startGame = scene => () =>{
-//   const game = createOnlineGame();
+//   const game = OnlineGame();
 //   game.startGame();
 // }
 // const stopGame = game => {
