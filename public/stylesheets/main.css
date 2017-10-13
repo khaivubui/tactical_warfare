@@ -338,27 +338,26 @@ body {
   border-radius: 5px;
 	position: absolute;
 	bottom: 0;
+	padding: 10px 0;
 }
 #bottom-options > div{
-	margin: 20px;
 	max-width: 0px;
 	transition: max-width 0.5s;
 	overflow: hidden;
 }
 
-.cancel-button {
-	padding: 5px;
+.cancel-button, .turn-option, #health {
+	padding: 5px 20px;
 	cursor: pointer;
+}
+
+#health {
+	width: 122px;
 }
 
 .cancel-button:hover {
 	color: white;
 	background: gray;
-}
-
-.turn-option {
-	cursor: pointer;
-	padding: 5px;
 }
 
 .turn-option:hover {
