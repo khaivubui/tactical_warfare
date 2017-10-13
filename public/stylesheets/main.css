@@ -114,6 +114,11 @@ body {
   font-size: 1em;
   border: none;
   background: transparent;
+	cursor: pointer;
+}
+
+.auth-widget-toggle:hover {
+	color: #27ae60;
 }
 
 #register-form, #signin-form {
@@ -128,6 +133,10 @@ body {
 
 #register-button, #signin-button {
 	cursor: pointer;
+}
+
+#register-button:hover, #signin-button:hover {
+	color: #27ae60;
 }
 
 /* ---------- active-sockets-widget ---------- */
