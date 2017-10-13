@@ -64,6 +64,8 @@ export class Game{
 
   }
   reset(){
+    const turnOptions = document.getElementById('turn-options');
+    turnOptions.style["max-width"] = 0;
     this.currentPlayerIdx = 0;
     this.initialPositionTanks();
     this.players[0].health = 100;
