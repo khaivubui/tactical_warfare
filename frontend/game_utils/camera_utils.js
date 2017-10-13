@@ -8,7 +8,9 @@ export const storeCameraState = camera =>({
   lowerAlphaLimit: camera.lowerAlphaLimit,
   upperAlphaLimit: camera.upperAlphaLimit,
   lowerBetaLimit: camera.lowerBetaLimit,
-  upperBetaLimit: camera.upperBetaLimit
+  upperBetaLimit: camera.upperBetaLimit,
+  lowerRadiusLimit: camera.lowerRadiusLimit,
+  upperRadiusLimit: camera.upperRadiusLimit
 });
 
 export const restoreCameraState = (camera, state) => {
@@ -21,4 +23,6 @@ export const restoreCameraState = (camera, state) => {
   camera.lowerAlphaLimit = state.lowerAlphaLimit;
   camera.lowerBetaLimit = state.lowerBetaLimit;
   camera.upperBetaLimit = state.upperBetaLimit;
+  camera.lowerRadiusLimit = state.lowerRadiusLimit;
+  camera.upperRadiusLimit = state.upperRadiusLimit;
 }
