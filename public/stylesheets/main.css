@@ -170,17 +170,18 @@ body {
 }
 
 .active-sockets {
-	padding: 20px;
 }
 
 .current-socket {
 	border-bottom: 1px solid #AAA;
 	padding-bottom: 10px;
+	margin: 20px 20px 0 20px;
 	font-size: 1.2em;
 }
 
 .other-active-sockets {
 	padding-top: 10px;
+	margin: 0 20px 20px 20px;
 }
 
 .other-active-sockets span {
