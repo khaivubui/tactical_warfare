@@ -157,9 +157,9 @@ body {
   box-shadow: 1px 1px 10px #333;
   border-radius: 5px;
   max-width: 250px;
-	right: 16px;
+	right: 0;
   top: 50%;
-  transform: translate(50%, -50%);
+  transform: translate(0, -50%);
   transition: right 0.8s;
 	/*transition: max-height 0.8s;*/
 	z-index: 50;
