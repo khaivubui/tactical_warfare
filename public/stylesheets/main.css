@@ -356,6 +356,7 @@ body {
 
 #health {
 	width: 122px;
+	cursor: default;
 }
 
 .cancel-button:hover {
