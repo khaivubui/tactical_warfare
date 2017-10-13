@@ -1,5 +1,7 @@
 import io from 'socket.io-client';
 
+import { closeAuthWidget } from './auth_stuff/auth_stuff';
+
 export const socket = io();
 
 export const webSockets = () => {
@@ -133,5 +135,6 @@ export const webSockets = () => {
 
   socket.on('startGame', () => {
     closeActiveSocketsWidget();
+    closeAuthWidget();
   });
 };
