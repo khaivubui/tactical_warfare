@@ -329,6 +329,7 @@ body {
 }
 /*-------------------------------tank/move controls-------------------*/
 #bottom-options{
+	display: flex;
 	width: 200px;
 	justify-content: flex-start;
 	align-items: center;
