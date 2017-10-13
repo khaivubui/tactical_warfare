@@ -16,7 +16,7 @@ export default class Arena{
 
     // Ground material
     this.ground.mesh.material = new BABYLON.StandardMaterial("texture1", scene);
-    this.ground.mesh.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/c_scale,w_500/v1507742957/ground_sqrwle.jpg", scene);
+    this.ground.mesh.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/c_scale,w_361/v1507915046/ground2_wkrjnw.jpg", scene);
     this.ground.mesh.material.diffuseTexture.uScale = 5.0;
     this.ground.mesh.material.diffuseTexture.vScale = 5.0;
     this.ground.mesh.material.specularColor = new BABYLON.Color3(0.1,0.1,0.1);

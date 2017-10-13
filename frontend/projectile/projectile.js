@@ -51,7 +51,7 @@ export class Bomb extends Projectile{
     camera.radius = 12;
     camera.lockedTarget = this._mesh;
     camera.alpha = this._initialCameraAlpha(impulseVector);
-    camera.beta = Math.PI/2;
+    camera.beta = Math.PI/4;
   }
   _initialCameraAlpha(impulseVector){
     const impulseNormalized = BABYLON.Vector3.Normalize(impulseVector);
