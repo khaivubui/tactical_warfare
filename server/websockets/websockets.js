@@ -35,6 +35,7 @@ module.exports = io => {
       activeSockets[player2Id].opponentSocketId = player1Id;
 
       [player1Id, player2Id].forEach(playerId => {
+        console.log('sdfdasfdas');
         io.to(playerId).emit(
           'startGame'
         );

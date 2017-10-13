@@ -52,19 +52,18 @@ const createScene = function () {
         const game = createDemoGame(scene);
         game.startGame();
         socket.on('startGame',()=>{
-            debugger;
             startOnlineGame(game);
         });
     }
     assetsManager.load();
 };
-const startGame = scene => () =>{
-  const game = createOnlineGame();
-  game.startGame();
-}
-const stopGame = game => {
-  game.stopGame();
-}
+// const startGame = scene => () =>{
+//   const game = OnlineGame();
+//   game.startGame();
+// }
+// const stopGame = game => {
+//   game.stopGame();
+// }
 const setupAssetsManager = function setupAssetsManager(scene){
   const assetsManager = new BABYLON.AssetsManager(scene);
   const tankTask = assetsManager.addMeshTask("tankTask", "tank_body",
