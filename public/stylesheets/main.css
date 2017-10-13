@@ -207,6 +207,27 @@ body {
 	margin-top: 10px;
 }
 
+.challenge-button {
+	display: block;
+	height: 20px;
+	border: 1px solid #333;
+	border-radius: 2px;
+	background: transparent;
+	cursor: pointer;
+}
+
+.challenge-button:hover {
+	color: white;
+	background: #27ae60;
+	border: 1px solid #27ae60;
+}
+
+.challenge-button[disabled] {
+	color: #AAA;
+	background: transparent;
+	border: 1px solid #AAA;
+}
+
 /* ---------- challenge-received ---------- */
 
 .challenge-received {
@@ -242,6 +263,20 @@ body {
 .challenge-response-options button {
 	height: 25px;
 	width: 75px;
+	background: transparent;
+	border: 1px solid #333;
+	border-radius: 2px;
+	cursor: pointer;
+}
+
+.challenge-response-options button:hover {
+	color: white;
+	border: 1px solid #27ae60;
+	background: #27ae60;
+}
+
+.challenge-response-options button:last-child {
+	margin-left: 10px;
 }
 
 /* ---------- new-camera-widget ---------- */
@@ -288,7 +323,7 @@ body {
 
 .zoom-in:hover, .zoom-out:hover {
 	background: white;
-	border: white;
+	border: white solid 1px;
 	color: #27ae60;
 }
 /*-------------------------------tank/move controls-------------------*/
