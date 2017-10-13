@@ -263,6 +263,20 @@ body {
 .challenge-response-options button {
 	height: 25px;
 	width: 75px;
+	background: transparent;
+	border: 1px solid #333;
+	border-radius: 2px;
+	cursor: pointer;
+}
+
+.challenge-response-options button:hover {
+	color: white;
+	border: 1px solid #27ae60;
+	background: #27ae60;
+}
+
+.challenge-response-options button:last-child {
+	margin-left: 10px;
 }
 
 /* ---------- new-camera-widget ---------- */
