@@ -1,5 +1,5 @@
 import Arena from "./arena.js";
-import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
+import {Player, OpponentPlayer, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
 import {Bomb} from "./projectile/projectile";
 const TANK_MASS = 27000; //kg
 const BOMB_MASS = 1; //kg
