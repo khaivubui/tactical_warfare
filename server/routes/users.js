@@ -18,9 +18,13 @@ router.post("/register", (req, res, next) => {
       res.json({success: false, msg:'Failed to register user'});
     } else {
       const access = 'auth';
-      const token = jwt.sign({data: user}, config.secret);
+      const token = jwt.sign(
+        {_id: user._id.toHexString()},
+        config.secret
+      );
+
       user.tokens.push({ access, token });
-      
+
       user.save().then(() => {
         res.json({
           success: true,
@@ -53,17 +57,23 @@ router.post('/authenticate', (req, res, next) => {
         throw error;
       }
       if (isMatch) {
-        const token = jwt.sign({data: user}, config.secret, {
-          expiresIn: 604800 // 1 week in seconds
-        });
+        const access = 'auth';
+        const token = jwt.sign(
+          {_id: user._id.toHexString()},
+          config.secret
+        );
 
-        res.json({
-          success: true,
-          token,
-          user: {
-            id: user._id,
-            username: user.username
-          }
+        user.tokens.push({ access, token });
+
+        user.save().then(() => {
+          res.json({
+            success: true,
+            token,
+            user: {
+              id: user._id,
+              username: user.username
+            }
+          });
         });
       } else {
         return res.json({success: false, msg: 'Wrong password'});
