@@ -33,13 +33,8 @@ module.exports = io => {
     socket.on('challengeAccepted', (player1Id, player2Id) => {
       activeSockets[player1Id].opponentSocketId = player2Id;
       activeSockets[player2Id].opponentSocketId = player1Id;
-
-      [player1Id, player2Id].forEach(playerId => {
-        console.log('sdfdasfdas');
-        io.to(playerId).emit(
-          'startGame'
-        );
-      });
+      io.to(player1Id).emit('startGame', true);
+      io.to(player2Id).emit('startGame', false);
     });
 
     // handling challenge refused
