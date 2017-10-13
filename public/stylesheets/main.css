@@ -81,9 +81,8 @@ body {
   border-radius: 5px;
   width: 100%;
   max-width: 500px;
-  height: 300px;
   left: 50%;
-  top: -120px;
+  top: 15px;
   transform: translate(-50%, -50%);
   transition: top 0.8s;
 	z-index: 100;
@@ -95,6 +94,10 @@ body {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	height: 277px;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.7s;
 }
 
 .auth-main input {
@@ -114,6 +117,14 @@ body {
   font-size: 1em;
   border: none;
   background: transparent;
+	cursor: pointer;
+	height: 30px;
+	width: 90px;
+}
+
+.auth-widget-toggle:hover {
+	background: #27ae60;
+	color: white;
 }
 
 #register-form, #signin-form {
@@ -130,6 +141,10 @@ body {
 	cursor: pointer;
 }
 
+#register-button:hover, #signin-button:hover {
+	color: #27ae60;
+}
+
 /* ---------- active-sockets-widget ---------- */
 
 .active-sockets-widget {
@@ -141,38 +156,76 @@ body {
 	background: rgba(256, 256, 256, 0.9);
   box-shadow: 1px 1px 10px #333;
   border-radius: 5px;
-  width: 250px;
+  max-width: 250px;
   max-height: 500px;
-	right: -100px;
+	overflow: scroll;
+	right: 16px;
   top: 50%;
   transform: translate(50%, -50%);
   transition: right 0.8s;
+	/*transition: max-height 0.8s;*/
 	z-index: 50;
 }
 
 .active-sockets-toggle {
 	cursor: pointer;
 	padding: 10px;
+	width: 32px;
 	border-right: 1px solid #AAA;
+	background: transparent;
+	border: none;
+	font-weight: 700;
+}
+
+.active-sockets-toggle:hover {
+	background: #27ae60;
+	color: white;
 }
 
 .active-sockets {
-	padding: 20px;
+	max-width: 0;
+	overflow: hidden;
+	transition: max-width 0.7s;
 }
 
 .current-socket {
 	border-bottom: 1px solid #AAA;
 	padding-bottom: 10px;
+	margin: 20px 20px 0 20px;
 	font-size: 1.2em;
+	width: 180px;
 }
 
 .other-active-sockets {
 	padding-top: 10px;
+	margin: 0 20px 20px 20px;
+	width: 180px;
 }
 
 .other-active-sockets span {
 	display: inline-block;
 	margin-top: 10px;
+}
+
+.challenge-button {
+	display: block;
+	height: 20px;
+	border: 1px solid #333;
+	border-radius: 2px;
+	background: transparent;
+	cursor: pointer;
+}
+
+.challenge-button:hover {
+	color: white;
+	background: #27ae60;
+	border: 1px solid #27ae60;
+}
+
+.challenge-button[disabled] {
+	color: #AAA;
+	background: transparent;
+	border: 1px solid #AAA;
 }
 
 /* ---------- challenge-received ---------- */
@@ -210,6 +263,20 @@ body {
 .challenge-response-options button {
 	height: 25px;
 	width: 75px;
+	background: transparent;
+	border: 1px solid #333;
+	border-radius: 2px;
+	cursor: pointer;
+}
+
+.challenge-response-options button:hover {
+	color: white;
+	border: 1px solid #27ae60;
+	background: #27ae60;
+}
+
+.challenge-response-options button:last-child {
+	margin-left: 10px;
 }
 
 /* ---------- new-camera-widget ---------- */
@@ -221,6 +288,11 @@ body {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	cursor: pointer;
+}
+
+.camera-rotation:hover {
+	color: #b3eecc;
 }
 
 .camera-zoom {
@@ -238,6 +310,7 @@ body {
 }
 
 .zoom-in, .zoom-out {
+	font-size: 1.4em;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -245,10 +318,17 @@ body {
 	border-radius: 5px;
 	width: 50px;
 	height: 50px;
+	cursor: pointer;
+}
+
+.zoom-in:hover, .zoom-out:hover {
+	background: white;
+	border: white solid 1px;
+	color: #27ae60;
 }
 /*-------------------------------tank/move controls-------------------*/
 #bottom-options{
-	width: 25%;
+	width: 200px;
 	justify-content: flex-start;
 	align-items: center;
 	background: rgba(256, 256, 256, 0.8);
@@ -265,6 +345,17 @@ body {
 }
 
 
-.bottom-options > div:hover{
+.turn-option {
 	cursor: pointer;
+	padding: 5px;
+}
+
+#attack-button:hover, #move-button:hover {
+	background: #27ae60;
+	color: white;
+}
+
+#forfeit-button:hover {
+	background: #e74c3c;
+	color: white;
 }
