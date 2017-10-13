@@ -104,16 +104,21 @@ export const webSockets = () => {
   // ---------- toggling the widget ----------
   const activeSocketsToggle =
   document.querySelector('.active-sockets-toggle');
+  const activeSockets = document.querySelector('.active-sockets');
   const activeSocketsWidget =
   document.querySelector('.active-sockets-widget');
-  activeSocketsWidget.style.right = "-100px";
+  activeSocketsWidget.style.right = "16px";
 
   activeSocketsToggle.addEventListener('click', () => {
-    if (activeSocketsWidget.style.right === "-100px") {
+    if (activeSocketsWidget.style.right === "16px") {
+      // activeSocketsWidget.style['max-height'] = '500px';
+      activeSockets.style['max-width'] = '250px';
       activeSocketsWidget.style.right = '50%';
       activeSocketsToggle.innerHTML = '>';
     } else {
-      activeSocketsWidget.style.right = "-100px";
+      // activeSocketsWidget.style['max-height'] = '37px';
+      activeSockets.style['max-width'] = '0px';
+      activeSocketsWidget.style.right = "16px";
       activeSocketsToggle.innerHTML = '<';
     }
   });
