@@ -19,6 +19,8 @@ const createScene = function () {
       new BABYLON.Vector3(0, 0, 0),
       scene
     );
+    camera.upperRadiusLimit = 45;
+    camera.lowerRadiusLimit = 5;
     camera.upperBetaLimit = Math.PI/2 - 0.1;
     camera.attachControl(canvas);
     const light = new BABYLON.HemisphericLight(

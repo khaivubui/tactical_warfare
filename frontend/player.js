@@ -45,6 +45,22 @@ export class Player{
   }
 }
 
+
+export class OpponentPlayer {
+  constructor(tank) {
+    this.tank = tank;
+    this.health = 100;
+  }
+  startListeningForMoveOptions(onDoneCallback) {
+    onDoneCallback("position");
+    const oppHealth = document.querySelector("#opp-health");
+    oppHealth.innerHTML = `Opponent Health: ${this.health}`;
+  }
+  receiveDamage(amount){
+    this.health -= amount;
+  }
+}
+
 export class DemoPlayer extends Player{
   constructor(tank){
     super(tank);
@@ -88,6 +104,11 @@ export class SocketPlayer extends Player{
       matrix
     );
   }
+  startListeningForMoveOptions(onDoneCallback){
+    onDoneCallback("position");
+    const oppHealth = document.querySelector("#opp-health");
+    oppHealth.innerHTML = `Opponent Health: ${this.health}`;
+  }
 }
 
 export class LocalPlayer extends Player{
@@ -101,6 +122,8 @@ export class LocalPlayer extends Player{
     this.handleAimingMouseDown = this.handleAimingMouseDown.bind(this);
     this.handleAimingMouseUp = this.handleAimingMouseUp.bind(this);
     this._stopListeningForPosition = this._stopListeningForPosition.bind(this);
+    this._handleZoomIn = this._handleZoomIn.bind(this);
+    this._handleZoomOut = this._handleZoomOut.bind(this);
 
 
   }
@@ -128,10 +151,17 @@ export class LocalPlayer extends Player{
     const attack = document.getElementById('attack-button');
     const move = document.getElementById('move-button');
     const forfeit = document.getElementById('forfeit-button');
+    const zoomin = document.querySelector(".zoom-in");
+    const zoomout = document.querySelector(".zoom-out");
+    const health = document.querySelector("#health");
     attack.onclick = this._handleMoveOption(onDoneCallback)("attack");
     move.onclick = this._handleMoveOption(onDoneCallback)("position");
     forfeit.onclick = this._handleMoveOption(onDoneCallback)("forfeit");
+    zoomin.onclick = this._handleZoomIn();
+    zoomout.onclick = this._handleZoomOut();
+    health.innerHTML = `Health: ${this.health}`;
   }
+
   _handleConfirmPosition(onDoneCallback){
     return position =>{
       this._stopListeningForPosition();
@@ -195,6 +225,7 @@ export class LocalPlayer extends Player{
     this._storeCameraState();
     this._setUpAimingCamera();
     this._positionAimingCamera();
+
   }
   _calculateProjectileMatrix(){
       const tankCannonMatrix = this._rotXMesh.worldMatrixFromCache;
@@ -252,4 +283,19 @@ export class LocalPlayer extends Player{
     window.onmousemove = null;
     window.onmouseup = null;
   }
+
+  _handleZoomIn(){
+    return e => {
+      if (this.scene.activeCamera.radius > 0) {
+        this.scene.activeCamera.radius -= 3;
+      }
+    };
+  }
+
+  _handleZoomOut(){
+    return e => {
+      this.scene.activeCamera.radius += 3;
+    };
+  }
+
 }

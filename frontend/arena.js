@@ -92,21 +92,15 @@ export default class Arena{
     this._ceiling.scaling.y = 1 + wallThickness / groundWidth;
 
     // Sky material
-    // this._ceiling.material = new BABYLON.StandardMaterial("texture3", scene);
-    // this._ceiling.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507743624/sky_t3kgtr.jpg", scene);
+    this._ceiling.material = new BABYLON.StandardMaterial("texture3", scene);
+    this._ceiling.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507779445/ceiling6_fwju0g.jpg", scene);
 
+    this._ceiling.material.diffuseTexture.uScale = 10.0;
+    this._ceiling.material.diffuseTexture.vScale = 10.0;
 
 
 
     // Physics Engine
-
-    const testSphere = BABYLON.Mesh.CreateSphere('sphere1', 16,2,scene);
-    testSphere.position.y = 6;
-    testSphere.position.x = 1;
-    testSphere.position.z = - 1;
-
-    testSphere.physicsImpostor = new BABYLON.PhysicsImpostor(testSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 10, friction: 1, restitution: 1}, scene);
-
     this.ground.mesh.physicsImpostor = new BABYLON.PhysicsImpostor(this.ground.mesh, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 1, restitution: 0.8}, scene);
 
     this._wallMesh.physicsImpostor = new BABYLON.PhysicsImpostor(this._wallMesh,
@@ -120,6 +114,6 @@ export default class Arena{
 
     this._sidewall3.physicsImpostor = new BABYLON.PhysicsImpostor(this._sidewall3, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.8, restitution: 0.8}, scene);
 
-
+    this._ceiling.physicsImpostor = new BABYLON.PhysicsImpostor(this._ceiling, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.8, restitution: 0.8}, scene);
   }
 }
