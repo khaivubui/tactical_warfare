@@ -30,6 +30,8 @@ export class Bomb extends Projectile{
   }
   fire(impulseVector, onDoneCallback){
     const camera = this.game.scene.activeCamera;
+    const aimArrow = document.querySelector(".camera-rotation");
+    aimArrow.style.visibility = "hidden";
     this.previousCameraState = storeCameraState(camera);
     this._setUpProjectileCamera(impulseVector);
     super.fire(impulseVector);
@@ -38,7 +40,10 @@ export class Bomb extends Projectile{
     }
     );
     setTimeout(()=>{
-      this._explode(onDoneCallback);
+      this._explode( () => {
+        aimArrow.style.visibility = "visible";
+        onDoneCallback();
+      });
     }, BOMB_TIME);
   }
   _setUpProjectileCamera(impulseVector){

@@ -23,6 +23,22 @@ export class Player{
   }
 }
 
+
+export class OpponentPlayer {
+  constructor(tank) {
+    this.tank = tank;
+    this.health = 100;
+  }
+  startListeningForMoveOptions(onDoneCallback) {
+    onDoneCallback("position");
+    const oppHealth = document.querySelector("#opp-health");
+    oppHealth.innerHTML = `Opponent Health: ${this.health}`;
+  }
+  receiveDamage(amount){
+    this.health -= amount;
+  }
+}
+
 export class DemoPlayer extends Player{
   constructor(tank){
     super(tank);
@@ -43,6 +59,11 @@ export class SocketPlayer extends Player{
   }
   startListeningForPosition(onDoneCallback){
     //socket.on
+  }
+  startListeningForMoveOptions(onDoneCallback){
+    onDoneCallback("position");
+    const oppHealth = document.querySelector("#opp-health");
+    oppHealth.innerHTML = `Opponent Health: ${this.health}`;
   }
 }
 
