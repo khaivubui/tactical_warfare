@@ -288,7 +288,7 @@ body {
 
 .zoom-in:hover, .zoom-out:hover {
 	background: white;
-	border: white;
+	border: white solid 1px;
 	color: #27ae60;
 }
 /*-------------------------------tank/move controls-------------------*/
