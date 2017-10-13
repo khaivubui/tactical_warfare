@@ -55,7 +55,11 @@ export class Bomb extends Projectile{
   }
   _initialCameraAlpha(impulseVector){
     const impulseNormalized = BABYLON.Vector3.Normalize(impulseVector);
-    return -1* Math.acos(BABYLON.Vector3.Dot(impulseNormalized,
+    const crossProduct = BABYLON.Vector3.Cross(impulseVector,
+       BABYLON.Vector3.Left());
+    const signFlip = (crossProduct.y > 0) ? 1 : -1;
+    console.log(signFlip);
+    return signFlip * Math.acos(BABYLON.Vector3.Dot(impulseNormalized,
       new BABYLON.Vector3.Left()));
   }
   _explode(onDoneCallback){

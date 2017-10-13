@@ -282,6 +282,7 @@ export class LocalPlayer extends Player{
     camera.upperAlphaLimit = null;
     camera.lowerBetaLimit = null;
     camera.upperBetaLimit = null;
+    camera.lowerRadiusLimit =0;
     camera.radius = AIMING_CAMERA_RADIUS;
     camera.detachControl(this.previousCameraState.inputs.attachedElement);
   }
