@@ -345,13 +345,22 @@ body {
 	overflow: hidden;
 }
 
+.cancel-button {
+	padding: 5px;
+	cursor: pointer;
+}
+
+.cancel-button:hover {
+	color: white;
+	background: gray;
+}
 
 .turn-option {
 	cursor: pointer;
 	padding: 5px;
 }
 
-#attack-button:hover, #move-button:hover {
+.turn-option:hover {
 	background: #27ae60;
 	color: white;
 }
