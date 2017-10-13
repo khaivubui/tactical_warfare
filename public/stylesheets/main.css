@@ -119,10 +119,12 @@ body {
   background: transparent;
 	cursor: pointer;
 	height: 30px;
+	width: 90px;
 }
 
 .auth-widget-toggle:hover {
-	color: #27ae60;
+	background: #27ae60;
+	color: white;
 }
 
 #register-form, #signin-form {
@@ -172,7 +174,6 @@ body {
 	border-right: 1px solid #AAA;
 	background: transparent;
 	border: none;
-	color: #27ae60;
 	font-weight: 700;
 }
 
