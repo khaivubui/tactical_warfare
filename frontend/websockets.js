@@ -109,22 +109,20 @@ export const webSockets = () => {
   const activeSockets = document.querySelector('.active-sockets');
   const activeSocketsWidget =
   document.querySelector('.active-sockets-widget');
-  activeSocketsWidget.style.right = "16px";
+  activeSockets.style['max-width'] = '0px';
 
   const openActiveSocketsWidget = () => {
     activeSockets.style['max-width'] = '250px';
-    activeSocketsWidget.style.right = '50%';
     activeSocketsToggle.innerHTML = '>';
   };
 
   const closeActiveSocketsWidget = () => {
     activeSockets.style['max-width'] = '0px';
-    activeSocketsWidget.style.right = "16px";
     activeSocketsToggle.innerHTML = '<';
   };
 
   activeSocketsToggle.addEventListener('click', () => {
-    if (activeSocketsWidget.style.right === "16px") {
+    if (activeSockets.style['max-width'] === '0px') {
       openActiveSocketsWidget();
     } else {
       closeActiveSocketsWidget();

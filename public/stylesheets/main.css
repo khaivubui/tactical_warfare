@@ -155,11 +155,11 @@ body {
   justify-content: space-between;
 	background: rgba(256, 256, 256, 0.9);
   box-shadow: 1px 1px 10px #333;
-  border-radius: 5px;
+  border-radius: 5px 0px 0px 5px;
   max-width: 250px;
-	right: 16px;
+	right: 0;
   top: 50%;
-  transform: translate(50%, -50%);
+  transform: translate(0, -50%);
   transition: right 0.8s;
 	/*transition: max-height 0.8s;*/
 	z-index: 50;
@@ -215,6 +215,7 @@ body {
 	border-radius: 2px;
 	background: transparent;
 	cursor: pointer;
+	margin-top: 5px;
 }
 
 .challenge-button:hover {
@@ -348,11 +349,15 @@ body {
 
 .cancel-button, .turn-option, #health {
 	padding: 5px 20px;
+}
+
+.cancel-button, .turn-option {
 	cursor: pointer;
 }
 
 #health {
 	width: 122px;
+	cursor: default;
 }
 
 .cancel-button:hover {
