@@ -215,6 +215,7 @@ body {
 	border-radius: 2px;
 	background: transparent;
 	cursor: pointer;
+	margin-top: 5px;
 }
 
 .challenge-button:hover {
