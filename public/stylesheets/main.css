@@ -170,6 +170,15 @@ body {
 	padding: 10px;
 	width: 32px;
 	border-right: 1px solid #AAA;
+	background: transparent;
+	border: none;
+	color: #27ae60;
+	font-weight: 700;
+}
+
+.active-sockets-toggle:hover {
+	background: #27ae60;
+	color: white;
 }
 
 .active-sockets {
