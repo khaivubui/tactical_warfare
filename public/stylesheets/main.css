@@ -157,8 +157,6 @@ body {
   box-shadow: 1px 1px 10px #333;
   border-radius: 5px;
   max-width: 250px;
-  max-height: 500px;
-	overflow: scroll;
 	right: 16px;
   top: 50%;
   transform: translate(50%, -50%);
@@ -200,6 +198,9 @@ body {
 	padding-top: 10px;
 	margin: 0 20px 20px 20px;
 	width: 180px;
+	max-height: 400px;
+	min-height: 40px;
+	overflow: auto;
 }
 
 .other-active-sockets span {
