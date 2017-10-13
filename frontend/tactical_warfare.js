@@ -9,7 +9,8 @@ const createScene = function () {
     const engine = new BABYLON.Engine(canvas, true);
     const scene = new BABYLON.Scene(engine);
     // Enable physics engine
-    scene.enablePhysics();
+    const gravityVector = new BABYLON.Vector3(0,-1.5,0);
+    scene.enablePhysics(gravityVector);
 
     const camera = new BABYLON.ArcRotateCamera(
       "camera1",
@@ -31,8 +32,8 @@ const createScene = function () {
 
     const lightPointSky = new BABYLON.DirectionalLight("Dir0", new BABYLON.Vector3(0, 1, 0), scene);
 
-    light.intensity = 0.8;
-    lightPointSky.intensity = 0.5;
+    light.intensity = 0.9;
+    lightPointSky.intensity = 0.7;
 
     window.addEventListener('resize', () => {
       engine.resize();
