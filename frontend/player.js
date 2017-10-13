@@ -137,8 +137,10 @@ export class SocketPlayer extends Player{
       BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI));
   }
   _rotateOpponentAttack(matrix){
-    return BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y,Math.PI).multiply(
-      matrix
+    const mat = new BABYLON.Matrix.Identity();
+    mat.m = matrix.m;
+    return mat.multiply(
+      BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y,Math.PI)
     );
   }
 }

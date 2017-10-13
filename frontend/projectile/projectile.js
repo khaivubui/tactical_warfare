@@ -33,7 +33,7 @@ export class Bomb extends Projectile{
     const aimArrow = document.querySelector(".camera-rotation");
     aimArrow.style.visibility = "hidden";
     this.previousCameraState = storeCameraState(camera);
-    this._setUpProjectileCamera(impulseVector);
+    //this._setUpProjectileCamera(impulseVector);
     super.fire(impulseVector);
     const bombSound = new BABYLON.Sound("bomb", "http://res.cloudinary.com/foolishhunger/video/upload/v1507789642/time_bomb_sound_h1twf8.mp3", this.game.scene, () => {
       bombSound.play();
