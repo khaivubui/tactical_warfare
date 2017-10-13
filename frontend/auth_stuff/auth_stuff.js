@@ -73,12 +73,14 @@ export default () => {
   const openWidget = () => {
     authWidget.style.top = '50%';
     authMain.style['max-height'] = '277px';
+    authWidget.style['border-radius'] = '20px';
     authWidgetToggle.innerHTML = 'Play now';
   };
 
   const closeWidget = () => {
     authWidget.style.top = '15px';
     authMain.style['max-height'] = '0px';
+    authWidget.style['border-radius'] = '0 0 20px 20px';
     authWidgetToggle.innerHTML = 'Sign In';
   };
 
