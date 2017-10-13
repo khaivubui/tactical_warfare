@@ -207,6 +207,27 @@ body {
 	margin-top: 10px;
 }
 
+.challenge-button {
+	display: block;
+	height: 20px;
+	border: 1px solid #333;
+	border-radius: 2px;
+	background: transparent;
+	cursor: pointer;
+}
+
+.challenge-button:hover {
+	color: white;
+	background: #27ae60;
+	border: 1px solid #27ae60;
+}
+
+.challenge-button[disabled] {
+	color: #AAA;
+	background: transparent;
+	border: 1px solid #AAA;
+}
+
 /* ---------- challenge-received ---------- */
 
 .challenge-received {
