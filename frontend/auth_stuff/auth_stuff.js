@@ -42,7 +42,7 @@ export default () => {
     ).value;
 
     axios.post('/users/register', { username, password })
-      .then(function(response) {
+      .then(response => {
         console.log(response);
         window.currentUser = response.data.username;
       });
@@ -59,7 +59,7 @@ export default () => {
     ).value;
 
     axios.post('/users/authenticate', { username, password })
-      .then(function(response) {
+      .then(response => {
         console.log(response);
         window.currentUser = response.data;
     });
@@ -70,30 +70,27 @@ export default () => {
   const authMain = document.querySelector('.auth-main');
   const authWidgetToggle = document.querySelector('.auth-widget-toggle');
 
-  const openWidget = () => {
+  openAuthWidget = () => {
     authWidget.style.top = '50%';
     authMain.style['max-height'] = '277px';
     authWidget.style['border-radius'] = '20px';
     authWidgetToggle.innerHTML = 'Play now';
   };
 
-  const closeWidget = () => {
+  closeAuthWidget = () => {
     authWidget.style.top = '15px';
     authMain.style['max-height'] = '0px';
     authWidget.style['border-radius'] = '0 0 20px 20px';
     authWidgetToggle.innerHTML = 'Sign In';
   };
 
-  openAuthWidget = openWidget;
-  closeAuthWidget = closeWidget;
-
   authWidgetToggle.addEventListener(
     'click',
     () => {
       if (authWidget.style.top === '50%') {
-        closeWidget();
+        closeAuthWidget();
       } else {
-        openWidget();
+        openAuthWidget();
       }
     }
   );
