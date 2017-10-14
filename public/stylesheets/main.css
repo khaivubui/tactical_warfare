@@ -78,7 +78,7 @@ body {
   justify-content: space-between;
   background: rgba(256, 256, 256, 0.9);
   box-shadow: 1px 1px 10px #333;
-  border-radius: 5px;
+  border-radius: 0 0 20px 20px;
   width: 100%;
   max-width: 500px;
   left: 50%;
@@ -155,7 +155,7 @@ body {
   justify-content: space-between;
 	background: rgba(256, 256, 256, 0.9);
   box-shadow: 1px 1px 10px #333;
-  border-radius: 5px 0px 0px 5px;
+  border-radius: 20px 0px 0px 20px;
   max-width: 250px;
 	right: 0;
   top: 50%;
@@ -336,7 +336,7 @@ body {
 	align-items: center;
 	background: rgba(256, 256, 256, 0.8);
   box-shadow: 1px 1px 10px #333;
-  border-radius: 5px;
+  border-radius: 0 20px 0 0;
 	position: absolute;
 	bottom: 0;
 	padding: 10px 0;
@@ -353,6 +353,7 @@ body {
 
 .cancel-button, .turn-option {
 	cursor: pointer;
+	width: 100px;
 }
 
 #health {
