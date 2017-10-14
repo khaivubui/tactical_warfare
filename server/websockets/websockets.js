@@ -12,7 +12,8 @@ module.exports = io => {
       id: socket.id,
       opponentSocketId: null,
       displayName:
-      `${faker.name.firstName()} the ${faker.commerce.productName()}`
+      // `${faker.name.firstName()} the ${faker.commerce.productName()}`
+      faker.commerce.productName()
     };
 
     // emit to the newly connected socket its information
