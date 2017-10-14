@@ -73,6 +73,9 @@ export class DemoPlayer extends Player{
   startListeningForPosition(onDoneCallback){
     onDoneCallback(this.tank.position);
   }
+  endTurn() {
+
+  }
 }
 
 export class SocketPlayer extends Player{
@@ -113,7 +116,6 @@ export class SocketPlayer extends Player{
     socket.off("moveType");
   }
 
-
   startListeningForAttack(onDoneCallback, onCancelledCallback){
     socket.on("attack", matrix=> {
       onDoneCallback(this._rotateOpponentAttack(matrix));
@@ -142,6 +144,12 @@ export class SocketPlayer extends Player{
     return mat.multiply(
       BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y,Math.PI)
     );
+  }
+
+  endTurn() {
+    this.stopListeningForMoveOptions();
+    this.stopListeningForAttack();
+    this.stopListeningForPosition();
   }
 }
 
@@ -292,9 +300,11 @@ export class LocalPlayer extends Player{
   }
   _restoreCameraState(){
     const camera = this.scene.activeCamera;
-    restoreCameraState(camera, this.previousCameraState);
-    const canvas = document.getElementById("render-canvas");
-    camera.attachControl(this.previousCameraState.inputs.attachedElement);
+    if (this.previousCameraState) {
+      restoreCameraState(camera, this.previousCameraState);
+      camera.attachControl(this.previousCameraState.inputs.attachedElement);
+    }
+    // const canvas = document.getElementById("render-canvas");
   }
   handleAimingMouseDrag(e){
     const deltaX = e.screenX - this.previousMouseX;
@@ -334,6 +344,13 @@ export class LocalPlayer extends Player{
     return e => {
       this.scene.activeCamera.radius += 3;
     };
+  }
+
+  // For end turn
+  endTurn(){
+    this._stopListeningForMoveOptions();
+    this._stopListeningForAttack();
+    this._stopListeningForPosition();
   }
 
 }

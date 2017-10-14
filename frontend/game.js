@@ -1,6 +1,7 @@
 import Arena from "./arena.js";
 import {Player, OpponentPlayer, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
 import {Bomb} from "./projectile/projectile";
+import {socket} from "./websockets";
 import { notifyTurn } from './websockets';
 
 const TANK_MASS = 27000; //kg
@@ -91,9 +92,15 @@ export class Game{
     this.initialPositionTanks();
     this.bombsCreatedSinceStart = 0;
     this.explosionsCreatedSinceStart = 0;
-
+    this._switchPlayer = this._switchPlayer.bind(this);
+    this._startTurn = this._startTurn.bind(this);
+    socket.on("switchPlayer", () => {
+      this._switchPlayer();
+      this._startTurn();
+    });
   }
   reset(){
+    clearTimeout(this.timeoutID);
     const turnOptions = document.getElementById('turn-options');
     turnOptions.style["max-width"] = 0;
     this.currentPlayerIdx = 0;
@@ -107,8 +114,6 @@ export class Game{
       [midX, midZ]
     );
 
-
-
     this.players[this.myPlayerIdx].tank.position = globalCoordinates;
     this.players[this.myPlayerIdx].tank.position.y = TANK_POS_HEIGHT;
     const otherPlayerIdx = this.myPlayerIdx === 0 ? 1 : 0;
@@ -121,9 +126,23 @@ export class Game{
       this.players[i].resetCannon();
     }
   }
+
   startGame(){
-    this._startListeningForMoveOptions();
+    this._startTurn();
   }
+
+  _startTurn() {
+    this._startListeningForMoveOptions();
+    const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
+    if (this.players[otherPlayer] instanceof SocketPlayer) {
+      this.timeoutID = setTimeout(() => {
+        socket.emit("switchPlayer");
+        this._switchPlayer();
+        this._startTurn();
+      }, 10000);
+    }
+  }
+
   _startListeningForMoveOptions(){
     this.players[this.currentPlayerIdx].startListeningForMoveOptions(this._receiveMoveType);
   }
@@ -131,9 +150,7 @@ export class Game{
     this.players[this.currentPlayerIdx].startListeningForPosition(
       this.receiveMovePosition, this._startListeningForMoveOptions);
   }
-  _stopListeningForPosition(){
 
-  }
   startListeningForAttack(){
     this.players[this.currentPlayerIdx].startListeningForAttack(
       this._receiveAttack, this._startListeningForMoveOptions);
@@ -149,23 +166,30 @@ export class Game{
     }
   }
   receiveMovePosition(position){
+    clearTimeout(this.timeoutID);
     this.players[this.currentPlayerIdx].tank.position = position;
+    // this.players[this.currentPlayerIdx].tank.rotation = new BABYLON.Vector3.Zero();
     this.players[this.currentPlayerIdx].tank.position.y =
       TANK_POS_HEIGHT;
     this._switchPlayer();
-    this._startListeningForMoveOptions();
+    this._startTurn();
   }
 
   _switchPlayer(){
-    if (this.currentPlayerIdx === 0) {
-      this.currentPlayerIdx = 1;
-    } else {
-      this.currentPlayerIdx = 0;
+    this.players[this.currentPlayerIdx].endTurn();
+    const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
+    if (!(this.players[otherPlayer] instanceof DemoPlayer)) {
+      if (this.currentPlayerIdx === 0) {
+        this.currentPlayerIdx = 1;
+      } else {
+        this.currentPlayerIdx = 0;
+      }
+      notifyTurn();
     }
-    notifyTurn();
   }
 
   _receiveAttack(matrix){
+    clearTimeout(this.timeoutID);
     const bombScale = new BABYLON.Vector3.Zero();
     const bombRot = new BABYLON.Quaternion.Identity();
     const bombPos = new BABYLON.Vector3.Zero();
@@ -175,13 +199,12 @@ export class Game{
       new BABYLON.Vector3(0,0, -DEFAULT_FIRING_IMPULSE),
       rotationComponent
     );
-    //vector3 TransformCoordinates(ve, mat)
     const bomb = new Bomb(this,bombPos,
       bombRot.toEulerAngles());
     bomb.fire(impulseVector, this._receiveAttackFinished);
   }
   _receiveAttackFinished(){
     this._switchPlayer();
-    this._startListeningForMoveOptions();
+    this._startTurn();
   }
 }
