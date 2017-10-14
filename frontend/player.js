@@ -1,5 +1,6 @@
 import {storeCameraState, restoreCameraState} from './game_utils/camera_utils';
 import {socket} from "./websockets";
+import {hideCameraRotation, showCameraRotation} from './ui/camera_rotation';
 
 const AIMING_CAMERA_ROT_SPEED = 0.05;
 const AIMING_CAMERA_RADIUS = 2;
@@ -248,6 +249,7 @@ export class LocalPlayer extends Player{
     options.style['max-width'] = '0';
   }
   startListeningForAttack(onDoneCallback, onCancelledCallback){
+    showCameraRotation();
     this._maximizeTankOptions('attack-options');
     const camera = this.scene.activeCamera;
     const canvas = document.getElementById("render-canvas");
@@ -278,6 +280,7 @@ export class LocalPlayer extends Player{
       return bombOffsetLocal.multiply(tankCannonMatrix);
   }
   _stopListeningForAttack(){
+    hideCameraRotation();
     this._restoreCameraState();
     this._minimizeTankOptions('attack-options');
     const rotationWidget = document.querySelector(".camera-rotation");
