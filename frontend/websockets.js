@@ -168,8 +168,16 @@ export const webSockets = () => {
 
   socket.on('chatMessage', data => {
     const chatMessage = document.createElement('span');
+    const sender = document.createElement('strong');
+    const message = document.createElement('span');
+
+    sender.innerHTML = `${data.sender}: `;
+    message.innerHTML = data.message;
+
     chatMessage.classList.add('chat-message');
-    chatMessage.innerHTML = `${data.sender}: ${data.message}`;
+    chatMessage.appendChild(sender);
+    chatMessage.appendChild(message);
+    
     chatLog.appendChild(chatMessage);
     chatLog.scrollTop = chatLog.scrollHeight;
   });

@@ -420,6 +420,10 @@ body {
 	margin-top: 5px;
 }
 
+.chat-message strong {
+	font-weight: 700;
+}
+
 .chat-input {
 	border: none;
 	background: transparent;
