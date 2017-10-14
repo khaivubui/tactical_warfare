@@ -5,6 +5,8 @@ const TANK_MASS = 27000; //kg
 const BOMB_MASS = 1; //kg
 const DEFAULT_FIRING_IMPULSE = 20;
 const TANK_CANNON_LENGTH = 1;
+const TANK_POS_HEIGHT = 0.5;
+
 export const createDemoGame = (scene) => {
       const localTank = scene.tankMesh;
       const socketTank = localTank.clone("socketTank");
@@ -107,13 +109,13 @@ export class Game{
 
 
     this.players[this.myPlayerIdx].tank.position = globalCoordinates;
-    this.players[this.myPlayerIdx].tank.position.y += 0.1;
+    this.players[this.myPlayerIdx].tank.position.y = TANK_POS_HEIGHT;
     const otherPlayerIdx = this.myPlayerIdx === 0 ? 1 : 0;
     const matrix = BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI);
     this.players[otherPlayerIdx].tank.position = BABYLON.Vector3.TransformCoordinates(
       globalCoordinates, matrix
     );
-    this.players[otherPlayerIdx].tank.position.y += 0.1;
+    this.players[otherPlayerIdx].tank.position.y = TANK_POS_HEIGHT;
     for(let i = 0; i < this.players.length; ++i){
       this.players[i].resetCannon();
     }
@@ -147,6 +149,8 @@ export class Game{
   }
   receiveMovePosition(position){
     this.players[this.currentPlayerIdx].tank.position = position;
+    this.players[this.currentPlayerIdx].tank.position.y =
+      TANK_POS_HEIGHT;
     this._switchPlayer();
     this._startListeningForMoveOptions();
   }
