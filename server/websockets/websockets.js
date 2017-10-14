@@ -48,6 +48,24 @@ module.exports = io => {
       delete activeSockets[socket.id];
     });
 
+    // chat relay
+    socket.on('chatMessage', message => {
+      io.to(activeSockets[socket.id].opponentSocketId).emit(
+        'chatMessage',
+        {
+          sender: activeSockets[socket.id].displayName,
+          message
+        }
+      );
+      io.to(socket.id).emit(
+        'chatMessage',
+        {
+          sender: activeSockets[socket.id].displayName,
+          message
+        }
+      );
+    });
+
     //--------------------------------------------- the game
     const sendToOpponent = message =>(
       socket.on(message, data => {

@@ -1,6 +1,7 @@
 import {Game, createDemoGame, startOnlineGame} from "./game.js";
 import authStuff from "./auth_stuff/auth_stuff.js";
 import { webSockets, socket } from './websockets';
+import liveChat from './ui/live_chat';
 import disableMobileScrolling from
 './mobile_friendliness/mobile_scroll';
 
@@ -84,4 +85,5 @@ const setupAssetsManager = function setupAssetsManager(scene){
 document.addEventListener("DOMContentLoaded", createScene);
 document.addEventListener("DOMContentLoaded", authStuff);
 document.addEventListener("DOMContentLoaded", webSockets);
+document.addEventListener("DOMContentLoaded", liveChat);
 document.addEventListener("DOMContentLoaded", disableMobileScrolling);
