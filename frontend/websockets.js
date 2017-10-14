@@ -181,4 +181,5 @@ export const webSockets = () => {
     chatLog.appendChild(chatMessage);
     chatLog.scrollTop = chatLog.scrollHeight;
   });
+
 };
