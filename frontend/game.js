@@ -107,6 +107,51 @@ export class Game{
     this.initialPositionTanks();
     this.players[0].health = 100;
   }
+  _applyGameState(state){
+    const statePlayers = [state.activePlayer, state.passivePlayer];
+    const playerPhysicsImpostors = state.playerPhysicsImpostors;
+    let players;
+    if(this.currentPlayerIdx === 0){
+      players= this.players;
+    }
+    else{
+      players = [this.players[1], this.players[0]];
+    }
+
+    let statePlayersKeys;
+    for(let i = 0; i < 2 ; ++i){
+      statePlayersKeys = Object.keys(statePlayers[i]);
+      statePlayersKeys.forEach(key => {
+        players[i][key] = statePlayers[i][key];
+      });
+    }
+    let physicsImpostorsKeys;
+    for(let i = 0; i< 2; ++i){
+      physicsImpostorsKeys = Object.keys(playerPhysicsImpostors[i]);
+      physicsImpostorsKeys.forEach(key => {
+        players[i].physicsImpostor[key] = playerPhysicsImpostors[i][key];
+      })
+    }
+  }
+  getGameState(){
+    const state = {playerPhysicsImpostors: []};
+    const activePlayer = this.players[this.currentPlayerIdx];
+    const passivePlayer = this.players[this.currentPlayerIdx === 0 ? 1 : 0];
+    const players = [activePlayer, passivePlayer];
+    const statePlayers = [{},{}];
+    for(let i = 0; i < 2; ++i){
+      statePlayers[i].health = players[i].health;
+      statePlayers[i].position = players[i].position;
+      statePlayers[i].rotation = players[i].rotation;
+      state.playerPhysicsImpostors[i].linearVelocity =
+        players[i].physicsImpostor.getLinearVelocity();
+      state.playerPhysicsImpostors[i].angularVelocitu =
+        players[i].physicsImpostor[i].getAngularVelocity();
+    }
+    state.activePlayer = statePlayers[0];
+    state.passivePlayer = statePlayers[1];
+    return state;
+  }
   initialPositionTanks(){
     const midX = Math.floor(this.arena.ground.cellCount / 2);
     const midZ = Math.floor(this.arena.ground.cellCount /4);
