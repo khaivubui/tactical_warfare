@@ -33,8 +33,8 @@ module.exports = io => {
     socket.on('challengeAccepted', (player1Id, player2Id) => {
       activeSockets[player1Id].opponentSocketId = player2Id;
       activeSockets[player2Id].opponentSocketId = player1Id;
-      io.to(player1Id).emit('startGame', true);
-      io.to(player2Id).emit('startGame', false);
+      io.to(player1Id).emit('startGame', true); // true === your turn
+      io.to(player2Id).emit('startGame', false); // false === not your turn
     });
 
     // handling challenge refused

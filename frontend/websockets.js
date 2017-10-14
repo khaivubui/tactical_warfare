@@ -129,13 +129,24 @@ export const webSockets = () => {
     }
   });
 
+<<<<<<< HEAD
 
 
   // ---------- startGame toggling widget ----------
+=======
+  // ---------- startGame ui ----------
+>>>>>>> e4a70e5a16537e51c40c16c67508fe97f7b91fd7
 
-  socket.on('startGame', () => {
+  socket.on('startGame', yourTurn => {
     closeActiveSocketsWidget();
     closeAuthWidget();
+    const turnNotification = document.querySelector('.turn-notification');
+    turnNotification.innerHTML = yourTurn ? 'YOUR TURN' : "ENEMY TURN";
+    turnNotification.style['max-width'] = '300px';
+    window.setTimeout(
+      () => { turnNotification.style['max-width'] = '0'; },
+      1500
+    );
   });
 
 };

@@ -52,7 +52,7 @@ const createScene = function () {
       socket.on('startGame', isFirst=>{
           startOnlineGame(game, isFirst);
       });
-      engine.runRenderLoop( () => {
+      engine.runRenderLoop(() => {
         window.scene = scene;
         scene.render();
       });
@@ -73,6 +73,11 @@ const setupAssetsManager = function setupAssetsManager(scene){
       scene.bombMesh = task.loadedMeshes[0];
       scene.bombMesh.setEnabled(false);
     };
+  const greenTextureTask = assetsManager.addTextureTask("greenTextureTask",
+    "models/tanks/sand_tank/green_baked.png");
+    greenTextureTask.onSuccess = task => {
+      scene.greenTankTexture = task.texture;
+    }
   return assetsManager;
 
 }

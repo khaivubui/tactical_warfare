@@ -6,6 +6,8 @@ const TANK_MASS = 27000; //kg
 const BOMB_MASS = 1; //kg
 const DEFAULT_FIRING_IMPULSE = 20;
 const TANK_CANNON_LENGTH = 1;
+const TANK_POS_HEIGHT = 0.5;
+
 export const createDemoGame = (scene) => {
       const localTank = scene.tankMesh;
       const socketTank = localTank.clone("socketTank");
@@ -15,7 +17,9 @@ export const createDemoGame = (scene) => {
       const Player2 = new DemoPlayer(socketTank);
       scene.localTank = localTank;
       scene.socketTank = socketTank;
-
+      socketTank.material.specularPower = 300;
+      socketTank.material.specularColor = new BABYLON.Color3(0.7,0.7,0.7);
+      applyGreenTexture(localTank, scene);
       localTank.physicsImpostor = new BABYLON.PhysicsImpostor(localTank,
          BABYLON.PhysicsImpostor.BoxImpostor, {mass: 2, restitution: 0},
           scene);
@@ -34,6 +38,31 @@ export const createDemoGame = (scene) => {
       return game;
 };
 
+const applyGreenTexture = (tank, scene) => {
+  const originalMat = tank.material;
+  const greenTankMaterial = new BABYLON.StandardMaterial("green");
+      greenTankMaterial.specularPower = 300;
+      greenTankMaterial.specularColor = new BABYLON.Color3(0.7,0.7,0.7);
+      greenTankMaterial.diffuseTexture = scene.greenTankTexture;
+      greenTankMaterial.diffuseTexture.hasAlpha = true;
+      greenTankMaterial.bumpTexture = originalMat.bumpTexture;
+      tank.material = greenTankMaterial;
+      const childMeshes = tank.getChildMeshes();
+      debugger;
+      let name;
+      for(let i = 0; i < childMeshes.length; ++i){
+        name = childMeshes[i].name.split(".");
+        name = name[name.length -1];
+        switch(name){
+          case "tank_tracks":
+            break;
+          default:
+            childMeshes[i].material = greenTankMaterial;
+            break;
+        }
+      }
+
+};
 export const startOnlineGame = (game, isFirst) => {
   game.reset();
   if(isFirst){
@@ -84,13 +113,13 @@ export class Game{
     );
 
     this.players[this.myPlayerIdx].tank.position = globalCoordinates;
-    this.players[this.myPlayerIdx].tank.position.y += 0.1;
+    this.players[this.myPlayerIdx].tank.position.y = TANK_POS_HEIGHT;
     const otherPlayerIdx = this.myPlayerIdx === 0 ? 1 : 0;
     const matrix = BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI);
     this.players[otherPlayerIdx].tank.position = BABYLON.Vector3.TransformCoordinates(
       globalCoordinates, matrix
     );
-    this.players[otherPlayerIdx].tank.position.y += 0.1;
+    this.players[otherPlayerIdx].tank.position.y = TANK_POS_HEIGHT;
     for(let i = 0; i < this.players.length; ++i){
       this.players[i].resetCannon();
     }
@@ -125,6 +154,8 @@ export class Game{
   receiveMovePosition(position){
     clearTimeout(this.timeoutID);
     this.players[this.currentPlayerIdx].tank.position = position;
+    this.players[this.currentPlayerIdx].tank.position.y =
+      TANK_POS_HEIGHT;
     this._switchPlayer();
     this._startListeningForMoveOptions();
   }
