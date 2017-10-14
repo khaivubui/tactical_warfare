@@ -4,6 +4,8 @@ import { closeAuthWidget } from './auth_stuff/auth_stuff';
 
 export const socket = io();
 
+export let notifyTurn;
+
 export const webSockets = () => {
   const otherActiveSockets =
   document.querySelector('.other-active-sockets');
@@ -129,18 +131,28 @@ export const webSockets = () => {
     }
   });
 
-  // ---------- startGame ui effects ----------
+  // ---------- Turn Notification ----------
 
-  socket.on('startGame', yourTurn => {
-    closeActiveSocketsWidget();
-    closeAuthWidget();
+  notifyTurn = notification => {
     const turnNotification = document.querySelector('.turn-notification');
-    turnNotification.innerHTML = yourTurn ? 'YOUR TURN' : "ENEMY TURN";
+    turnNotification.innerHTML = notification;
     turnNotification.style['max-width'] = '300px';
     window.setTimeout(
       () => { turnNotification.style['max-width'] = '0'; },
       1500
     );
+  };
+
+  // ---------- startGame ui effects ----------
+
+  socket.on('startGame', yourTurn => {
+    closeActiveSocketsWidget();
+    closeAuthWidget();
+    if (yourTurn) {
+      notifyTurn('YOUR TURN');
+    } else {
+      notifyTurn('ENEMY TURN');
+    }
   });
 
   // ---------- Chat handler ----------
