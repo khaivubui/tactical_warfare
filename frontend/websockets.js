@@ -4,6 +4,8 @@ import { closeAuthWidget } from './auth_stuff/auth_stuff';
 
 export const socket = io();
 
+export let notifyTurn;
+
 export const webSockets = () => {
   const otherActiveSockets =
   document.querySelector('.other-active-sockets');
@@ -129,23 +131,47 @@ export const webSockets = () => {
     }
   });
 
+  // ---------- Turn Notification ----------
 
+  const notifications = ['YOUR TURN'];
+  let notificationIndex = 0;
 
-  // ---------- startGame toggling widget ----------
+  notifyTurn = () => {
+    const turnNotification = document.querySelector('.turn-notification');
+    turnNotification.innerHTML = notifications[notificationIndex];
+    turnNotification.style['max-width'] = '300px';
+    notificationIndex = (notificationIndex + 1) % notifications.length;
+    window.setTimeout(
+      () => {
+        turnNotification.style['max-width'] = '0';
+      },
+      1000
+    );
+  };
 
-  // ---------- startGame ui ----------
+  // ---------- startGame ui effects ----------
 
+  const chatWidget = document.querySelector('.chat-widget');
+  const chatLog = document.querySelector('.chat-log');
 
   socket.on('startGame', yourTurn => {
     closeActiveSocketsWidget();
     closeAuthWidget();
-    const turnNotification = document.querySelector('.turn-notification');
-    turnNotification.innerHTML = yourTurn ? 'YOUR TURN' : "ENEMY TURN";
-    turnNotification.style['max-width'] = '300px';
-    window.setTimeout(
-      () => { turnNotification.style['max-width'] = '0'; },
-      1500
-    );
+    chatLog.innerHTML = '';
+    chatWidget.style['max-height'] = '150px';
+    notifications.push('ENEMY TURN');
+    notificationIndex = yourTurn ? 0 : 1;
+    notifyTurn();
+  });
+
+  // ---------- Chat handler ----------
+
+  socket.on('chatMessage', data => {
+    const chatMessage = document.createElement('span');
+    chatMessage.classList.add('chat-message');
+    chatMessage.innerHTML = `${data.sender}: ${data.message}`;
+    chatLog.appendChild(chatMessage);
+    chatLog.scrollTop = chatLog.scrollHeight;
   });
 
 };
