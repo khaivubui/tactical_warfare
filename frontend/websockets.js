@@ -166,5 +166,6 @@ export const webSockets = () => {
     chatMessage.classList.add('chat-message');
     chatMessage.innerHTML = `${data.sender}: ${data.message}`;
     chatLog.appendChild(chatMessage);
+    chatLog.scrollTop = chatLog.scrollHeight;
   });
 };
