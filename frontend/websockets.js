@@ -145,7 +145,7 @@ export const webSockets = () => {
       () => {
         turnNotification.style['max-width'] = '0';
       },
-      1500
+      1000
     );
   };
 

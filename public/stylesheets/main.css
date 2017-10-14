@@ -247,7 +247,7 @@ body {
 	box-shadow: 1px 1px 10px #333;
 	border-radius: 2px;
 	background: white;
-	transition: max-height 1s;
+	transition: max-height 0.4s;
 	z-index: 1000;
 }
 
@@ -286,6 +286,7 @@ body {
 .turn-notification {
 	position: absolute;
 	font-size: 5em;
+	text-align: center;
 	color: #EDC9AF;
 	top: 50%;
 	left: 50%;
