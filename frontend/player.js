@@ -216,6 +216,7 @@ export class LocalPlayer extends Player{
 
   _stopListeningForPosition(){
     this._minimizeTankOptions('position-options');
+    this.arena.ground.cancelListeningForPosition();
   }
 
   startListeningForPosition(onDoneCallback, onCancelledCallback){
