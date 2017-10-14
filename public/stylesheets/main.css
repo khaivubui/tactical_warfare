@@ -405,9 +405,16 @@ body {
 }
 
 .chat-log {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
 	padding: 10px;
 	height: 100px;
 	overflow: auto;
+}
+
+.chat-message {
+	margin-top: 5px;
 }
 
 .chat-input {
