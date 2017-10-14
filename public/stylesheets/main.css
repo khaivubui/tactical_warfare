@@ -452,3 +452,14 @@ body {
 	color: #27ae60;
 	font-family: Geostar;
 }
+
+/*---------- health-widget ----------*/
+
+.health-widget {
+	position: absolute;
+	font-size: 2em;
+	font-family: Revalia;
+	left: 10px;
+	top: 10px;
+	color: #c0392b;
+}
