@@ -118,8 +118,12 @@ body {
   border: none;
   background: transparent;
 	cursor: pointer;
+	padding: 0;
 	height: 30px;
 	width: 90px;
+	max-height: 30px;
+	overflow: hidden;
+	transition: max-height 0.7s;
 }
 
 .auth-widget-toggle:hover {
