@@ -48,7 +48,6 @@ const applyGreenTexture = (tank, scene) => {
       greenTankMaterial.bumpTexture = originalMat.bumpTexture;
       tank.material = greenTankMaterial;
       const childMeshes = tank.getChildMeshes();
-      debugger;
       let name;
       for(let i = 0; i < childMeshes.length; ++i){
         name = childMeshes[i].name.split(".");
@@ -92,9 +91,10 @@ export class Game{
     this.bombsCreatedSinceStart = 0;
     this.explosionsCreatedSinceStart = 0;
     this._switchPlayer = this._switchPlayer.bind(this);
+    this._startTurn = this._startTurn.bind(this);
     socket.on("switchPlayer", () => {
       this._switchPlayer();
-      this._startListeningForMoveOptions();
+      this._startTurn();
     });
   }
   reset(){
@@ -124,13 +124,24 @@ export class Game{
       this.players[i].resetCannon();
     }
   }
+
   startGame(){
-    this._startListeningForMoveOptions();
+    this._startTurn();
   }
+
+  _startTurn() {
+    this._startListeningForMoveOptions();
+    if (this.players[this.currentPlayerIdx] instanceof LocalPlayer) {
+      this.timeoutID = setTimeout(() => {
+        socket.emit("switchPlayer");
+        this._switchPlayer();
+        this._startTurn();
+      }, 10000);
+    }
+  }
+
   _startListeningForMoveOptions(){
     this.players[this.currentPlayerIdx].startListeningForMoveOptions(this._receiveMoveType);
-    this.timeoutID = setTimeout(() =>
-    socket.emit("switchPlayer"), 10000);
   }
   startListeningForPosition(){
     this.players[this.currentPlayerIdx].startListeningForPosition(
@@ -157,10 +168,11 @@ export class Game{
     this.players[this.currentPlayerIdx].tank.position.y =
       TANK_POS_HEIGHT;
     this._switchPlayer();
-    this._startListeningForMoveOptions();
+    this._startTurn();
   }
 
   _switchPlayer(){
+    this.players[this.currentPlayerIdx].endTurn();
     if (this.currentPlayerIdx === 0) {
       this.currentPlayerIdx = 1;
     } else {
@@ -169,6 +181,7 @@ export class Game{
   }
 
   _receiveAttack(matrix){
+    clearTimeout(this.timeoutID);
     const bombScale = new BABYLON.Vector3.Zero();
     const bombRot = new BABYLON.Quaternion.Identity();
     const bombPos = new BABYLON.Vector3.Zero();
@@ -184,6 +197,6 @@ export class Game{
   }
   _receiveAttackFinished(){
     this._switchPlayer();
-    this._startListeningForMoveOptions();
+    this._startTurn();
   }
 }

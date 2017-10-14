@@ -129,13 +129,12 @@ export const webSockets = () => {
     }
   });
 
-<<<<<<< HEAD
 
 
   // ---------- startGame toggling widget ----------
-=======
+
   // ---------- startGame ui ----------
->>>>>>> e4a70e5a16537e51c40c16c67508fe97f7b91fd7
+
 
   socket.on('startGame', yourTurn => {
     closeActiveSocketsWidget();
