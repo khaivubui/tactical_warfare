@@ -406,6 +406,7 @@ body {
 	max-width: 50%;
 	max-height: 0;
 	transition: max-height 0.8s;
+	overflow: hidden;
 }
 
 .chat-log {
