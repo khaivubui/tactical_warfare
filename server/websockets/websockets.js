@@ -48,13 +48,14 @@ module.exports = io => {
       delete activeSockets[socket.id];
     });
 
+
     //--------------------------------------------- the game
     const sendToOpponent = message =>(
       socket.on(message, data => {
         io.to(activeSockets[socket.id].opponentSocketId).emit(message, data);
       })
     );
-    const gameplayMessages = ["position", "moveType", "attack", "cancel"];
+    const gameplayMessages = ["position", "moveType", "attack", "cancel", "switchPlayer"];
     for(let i = 0; i< gameplayMessages.length; ++i){
       sendToOpponent(gameplayMessages[i]);
     }

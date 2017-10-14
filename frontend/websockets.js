@@ -129,10 +129,13 @@ export const webSockets = () => {
     }
   });
 
+
+
   // ---------- startGame toggling widget ----------
 
   socket.on('startGame', () => {
     closeActiveSocketsWidget();
     closeAuthWidget();
   });
+
 };

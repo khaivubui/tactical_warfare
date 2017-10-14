@@ -1,6 +1,7 @@
 import Arena from "./arena.js";
 import {Player, OpponentPlayer, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
 import {Bomb} from "./projectile/projectile";
+import {socket} from "./websockets";
 const TANK_MASS = 27000; //kg
 const BOMB_MASS = 1; //kg
 const DEFAULT_FIRING_IMPULSE = 20;
@@ -61,7 +62,11 @@ export class Game{
     this.initialPositionTanks();
     this.bombsCreatedSinceStart = 0;
     this.explosionsCreatedSinceStart = 0;
-
+    this._switchPlayer = this._switchPlayer.bind(this);
+    socket.on("switchPlayer", () => {
+      this._switchPlayer();
+      this._startListeningForMoveOptions();
+    });
   }
   reset(){
     const turnOptions = document.getElementById('turn-options');
@@ -76,8 +81,6 @@ export class Game{
     const globalCoordinates = this.arena.ground.cellIndicesToGlobalCoordinates(
       [midX, midZ]
     );
-
-
 
     this.players[this.myPlayerIdx].tank.position = globalCoordinates;
     this.players[this.myPlayerIdx].tank.position.y += 0.1;
@@ -96,14 +99,14 @@ export class Game{
   }
   _startListeningForMoveOptions(){
     this.players[this.currentPlayerIdx].startListeningForMoveOptions(this._receiveMoveType);
+    this.timeoutID = setTimeout(() =>
+    socket.emit("switchPlayer"), 5000);
   }
   startListeningForPosition(){
     this.players[this.currentPlayerIdx].startListeningForPosition(
       this.receiveMovePosition, this._startListeningForMoveOptions);
   }
-  _stopListeningForPosition(){
 
-  }
   startListeningForAttack(){
     this.players[this.currentPlayerIdx].startListeningForAttack(
       this._receiveAttack, this._startListeningForMoveOptions);
@@ -119,6 +122,7 @@ export class Game{
     }
   }
   receiveMovePosition(position){
+    clearTimeout(this.timeoutID);
     this.players[this.currentPlayerIdx].tank.position = position;
     this._switchPlayer();
     this._startListeningForMoveOptions();
@@ -142,7 +146,6 @@ export class Game{
       new BABYLON.Vector3(0,0, -DEFAULT_FIRING_IMPULSE),
       rotationComponent
     );
-    //vector3 TransformCoordinates(ve, mat)
     const bomb = new Bomb(this,bombPos,
       bombRot.toEulerAngles());
     bomb.fire(impulseVector, this._receiveAttackFinished);
