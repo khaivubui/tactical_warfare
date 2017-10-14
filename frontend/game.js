@@ -4,6 +4,8 @@ import {Bomb} from "./projectile/projectile";
 import {socket} from "./websockets";
 import { notifyTurn } from './websockets';
 
+import {renderTimer} from './ui/timer';
+
 const TANK_MASS = 27000; //kg
 const BOMB_MASS = 1; //kg
 const DEFAULT_FIRING_IMPULSE = 20;
@@ -135,6 +137,7 @@ export class Game{
     this._startListeningForMoveOptions();
     const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
     if (this.players[otherPlayer] instanceof SocketPlayer) {
+      renderTimer(10000);
       this.timeoutID = setTimeout(() => {
         socket.emit("switchPlayer");
         this._switchPlayer();
