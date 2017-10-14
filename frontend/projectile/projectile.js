@@ -27,6 +27,9 @@ export class Bomb extends Projectile{
     this._explode = this._explode.bind(this);
     this.impostor = new BABYLON.PhysicsImpostor(this._mesh,
       BABYLON.PhysicsImpostor.SphereImpostor, {mass: BOMB_MASS, restitution: 0.8, friction: 0.8}, game.scene);
+    this._mesh.scaling.x = 0.6;
+    this._mesh.scaling.y = 0.6;
+    this._mesh.scaling.z = 0.6;
   }
   fire(impulseVector, onDoneCallback){
     const camera = this.game.scene.activeCamera;
