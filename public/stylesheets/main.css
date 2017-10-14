@@ -307,6 +307,7 @@ body {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	cursor: pointer;
+	z-index: -100;
 }
 
 .camera-rotation:hover {
