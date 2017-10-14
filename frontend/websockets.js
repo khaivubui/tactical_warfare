@@ -4,6 +4,8 @@ import { closeAuthWidget } from './auth_stuff/auth_stuff';
 
 export const socket = io();
 
+export let notifyTurn;
+
 export const webSockets = () => {
   const otherActiveSockets =
   document.querySelector('.other-active-sockets');
@@ -129,17 +131,40 @@ export const webSockets = () => {
     }
   });
 
-  // ---------- startGame ui ----------
+  // ---------- Turn Notification ----------
+
+  const notifications = ['YOUR TURN', 'ENEMY TURN'];
+  let notificationIndex;
+
+  notifyTurn = () => {
+    const turnNotification = document.querySelector('.turn-notification');
+    turnNotification.innerHTML = notifications[notificationIndex];
+    turnNotification.style['max-width'] = '300px';
+    notificationIndex = (notificationIndex + 1) % 2;
+    window.setTimeout(
+      () => {
+        turnNotification.style['max-width'] = '0';
+      },
+      1500
+    );
+  };
+
+  // ---------- startGame ui effects ----------
 
   socket.on('startGame', yourTurn => {
     closeActiveSocketsWidget();
     closeAuthWidget();
-    const turnNotification = document.querySelector('.turn-notification');
-    turnNotification.innerHTML = yourTurn ? 'YOUR TURN' : "ENEMY TURN";
-    turnNotification.style['max-width'] = '300px';
-    window.setTimeout(
-      () => { turnNotification.style['max-width'] = '0'; },
-      1500
-    );
+    notificationIndex = yourTurn ? 0 : 1;
+    notifyTurn();
+  });
+
+  // ---------- Chat handler ----------
+
+  socket.on('chatMessage', data => {
+    const chatLog = document.querySelector('.chat-log');
+    const chatMessage = document.createElement('span');
+    chatMessage.classList.add('chat-message');
+    chatMessage.innerHTML = `${data.sender}: ${data.message}`;
+    chatLog.appendChild(chatMessage);
   });
 };

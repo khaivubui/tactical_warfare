@@ -1,6 +1,8 @@
 import Arena from "./arena.js";
 import {Player, OpponentPlayer, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
 import {Bomb} from "./projectile/projectile";
+import { notifyTurn } from './websockets';
+
 const TANK_MASS = 27000; //kg
 const BOMB_MASS = 1; //kg
 const DEFAULT_FIRING_IMPULSE = 20;
@@ -47,7 +49,6 @@ const applyGreenTexture = (tank, scene) => {
       greenTankMaterial.bumpTexture = originalMat.bumpTexture;
       tank.material = greenTankMaterial;
       const childMeshes = tank.getChildMeshes();
-      debugger;
       let name;
       for(let i = 0; i < childMeshes.length; ++i){
         name = childMeshes[i].name.split(".");
@@ -161,6 +162,7 @@ export class Game{
     } else {
       this.currentPlayerIdx = 0;
     }
+    notifyTurn();
   }
 
   _receiveAttack(matrix){
