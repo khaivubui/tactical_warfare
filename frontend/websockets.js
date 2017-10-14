@@ -129,7 +129,7 @@ export const webSockets = () => {
     }
   });
 
-  // ---------- startGame ui ----------
+  // ---------- startGame ui effects ----------
 
   socket.on('startGame', yourTurn => {
     closeActiveSocketsWidget();
@@ -141,5 +141,15 @@ export const webSockets = () => {
       () => { turnNotification.style['max-width'] = '0'; },
       1500
     );
+  });
+
+  // ---------- Chat handler ----------
+
+  socket.on('chatMessage', data => {
+    const chatLog = document.querySelector('.chat-log');
+    const chatMessage = document.createElement('span');
+    chatMessage.classList.add('chat-message');
+    chatMessage.innerHTML = `${data.sender}: ${data.message}`;
+    chatLog.appendChild(chatMessage);
   });
 };
