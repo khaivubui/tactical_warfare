@@ -14,7 +14,9 @@ export const createDemoGame = (scene) => {
       const Player2 = new DemoPlayer(socketTank);
       scene.localTank = localTank;
       scene.socketTank = socketTank;
-
+      socketTank.material.specularPower = 300;
+      socketTank.material.specularColor = new BABYLON.Color3(0.7,0.7,0.7);
+      applyGreenTexture(localTank, scene);
       localTank.physicsImpostor = new BABYLON.PhysicsImpostor(localTank,
          BABYLON.PhysicsImpostor.BoxImpostor, {mass: 2, restitution: 0},
           scene);
@@ -33,6 +35,31 @@ export const createDemoGame = (scene) => {
       return game;
 };
 
+const applyGreenTexture = (tank, scene) => {
+  const originalMat = tank.material;
+  const greenTankMaterial = new BABYLON.StandardMaterial("green");
+      greenTankMaterial.specularPower = 300;
+      greenTankMaterial.specularColor = new BABYLON.Color3(0.7,0.7,0.7);
+      greenTankMaterial.diffuseTexture = scene.greenTankTexture;
+      greenTankMaterial.diffuseTexture.hasAlpha = true;
+      greenTankMaterial.bumpTexture = originalMat.bumpTexture;
+      tank.material = greenTankMaterial;
+      const childMeshes = tank.getChildMeshes();
+      debugger;
+      let name;
+      for(let i = 0; i < childMeshes.length; ++i){
+        name = childMeshes[i].name.split(".");
+        name = name[name.length -1];
+        switch(name){
+          case "tank_tracks":
+            break;
+          default:
+            childMeshes[i].material = greenTankMaterial;
+            break;
+        }
+      }
+
+};
 export const startOnlineGame = (game, isFirst) => {
   game.reset();
   if(isFirst){
