@@ -2,6 +2,8 @@ import axios from "axios";
 
 export let openAuthWidget;
 export let closeAuthWidget;
+export let hideAuthWidgetToggle;
+export let unhideAuthWidgetToggle;
 
 export default () => {
   const registerForm = document.querySelector("#register-form");
@@ -94,4 +96,12 @@ export default () => {
       }
     }
   );
+
+  hideAuthWidgetToggle = () => {
+    authWidgetToggle.style['max-height'] = '0px';
+  };
+
+  unhideAuthWidgetToggle = () => {
+    authWidgetToggle.style['max-height'] = '30px';
+  };
 };
