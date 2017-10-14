@@ -394,15 +394,17 @@ body {
 
 /*------------------------------- live chat -------------------*/
 
-.live-chat {
+.chat-widget {
 	position: absolute;
 	display: flex;
 	flex-direction: column;
 	background: rgba(150, 150, 150, 0.6);
 	right: 0;
 	bottom: 0;
-	width: 200px;
+	width: 400px;
 	max-width: 50%;
+	max-height: 0;
+	transition: max-height 0.8s;
 }
 
 .chat-log {
@@ -424,4 +426,5 @@ body {
 	padding: 5px;
 	border-top: 1px solid #AAA;
 	font-size: 1em;
+	width: 100%;
 }

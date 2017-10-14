@@ -151,9 +151,14 @@ export const webSockets = () => {
 
   // ---------- startGame ui effects ----------
 
+  const chatWidget = document.querySelector('.chat-widget');
+  const chatLog = document.querySelector('.chat-log');
+
   socket.on('startGame', yourTurn => {
     closeActiveSocketsWidget();
     closeAuthWidget();
+    chatLog.innerHTML = '';
+    chatWidget.style['max-height'] = '150px';
     notifications.push('ENEMY TURN');
     notificationIndex = yourTurn ? 0 : 1;
     notifyTurn();
@@ -162,7 +167,6 @@ export const webSockets = () => {
   // ---------- Chat handler ----------
 
   socket.on('chatMessage', data => {
-    const chatLog = document.querySelector('.chat-log');
     const chatMessage = document.createElement('span');
     chatMessage.classList.add('chat-message');
     chatMessage.innerHTML = `${data.sender}: ${data.message}`;
