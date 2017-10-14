@@ -47,7 +47,6 @@ const applyGreenTexture = (tank, scene) => {
       greenTankMaterial.bumpTexture = originalMat.bumpTexture;
       tank.material = greenTankMaterial;
       const childMeshes = tank.getChildMeshes();
-      debugger;
       let name;
       for(let i = 0; i < childMeshes.length; ++i){
         name = childMeshes[i].name.split(".");
