@@ -247,7 +247,7 @@ body {
 	box-shadow: 1px 1px 10px #333;
 	border-radius: 2px;
 	background: white;
-	transition: max-height 0.4s;
+	transition: max-height 0.5s;
 	z-index: 1000;
 }
 
@@ -294,7 +294,7 @@ body {
 	overflow: hidden;
 	z-index: 500;
 	max-width: 0;
-	transition: max-width 1s;
+	transition: max-width 0.8s;
 }
 
 /* ---------- new-camera-widget ---------- */
