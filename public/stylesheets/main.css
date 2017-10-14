@@ -79,7 +79,7 @@ body {
   background: rgba(256, 256, 256, 0.9);
   box-shadow: 1px 1px 10px #333;
   border-radius: 0 0 20px 20px;
-  width: 100%;
+  width: 90%;
   max-width: 500px;
   left: 50%;
   top: 15px;
@@ -279,6 +279,21 @@ body {
 
 .challenge-response-options button:last-child {
 	margin-left: 10px;
+}
+
+/* ---------- turn-notification ---------- */
+
+.turn-notification {
+	position: absolute;
+	font-size: 5em;
+	color: #EDC9AF;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	overflow: hidden;
+	z-index: 500;
+	max-width: 0;
+	transition: max-width 1s;
 }
 
 /* ---------- new-camera-widget ---------- */
