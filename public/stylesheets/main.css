@@ -441,3 +441,14 @@ body {
 	font-size: 1em;
 	width: 100%;
 }
+
+/*---------- timer-widget ----------*/
+
+.timer-widget {
+	position: absolute;
+	font-size: 2em;
+	right: 10px;
+	top: 10px;
+	color: #27ae60;
+	font-family: Geostar;
+}
