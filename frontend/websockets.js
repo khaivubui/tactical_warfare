@@ -131,6 +131,12 @@ export const webSockets = () => {
     }
   });
 
+  // ---------- hide widget toggle ----------
+
+  const hideActiveSocketsWidgetToggle = () => {
+    activeSocketsToggle.style['max-width'] = '0px';
+  };
+
   // ---------- Turn Notification ----------
 
   const notifications = ['YOUR TURN'];
@@ -157,6 +163,7 @@ export const webSockets = () => {
   socket.on('startGame', yourTurn => {
     closeActiveSocketsWidget();
     closeAuthWidget();
+    hideActiveSocketsWidgetToggle();
     hideAuthWidgetToggle();
     chatLog.innerHTML = '';
     chatWidget.style['max-height'] = '150px';
