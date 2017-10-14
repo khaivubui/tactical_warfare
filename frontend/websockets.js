@@ -133,12 +133,18 @@ export const webSockets = () => {
 
   // ---------- Turn Notification ----------
 
-  notifyTurn = notification => {
+  const notifications = ['YOUR TURN', 'ENEMY TURN'];
+  let notificationIndex;
+
+  notifyTurn = () => {
     const turnNotification = document.querySelector('.turn-notification');
-    turnNotification.innerHTML = notification;
+    turnNotification.innerHTML = notifications[notificationIndex];
     turnNotification.style['max-width'] = '300px';
+    notificationIndex = (notificationIndex + 1) % 2;
     window.setTimeout(
-      () => { turnNotification.style['max-width'] = '0'; },
+      () => {
+        turnNotification.style['max-width'] = '0';
+      },
       1500
     );
   };
@@ -148,11 +154,8 @@ export const webSockets = () => {
   socket.on('startGame', yourTurn => {
     closeActiveSocketsWidget();
     closeAuthWidget();
-    if (yourTurn) {
-      notifyTurn('YOUR TURN');
-    } else {
-      notifyTurn('ENEMY TURN');
-    }
+    notificationIndex = yourTurn ? 0 : 1;
+    notifyTurn();
   });
 
   // ---------- Chat handler ----------
