@@ -129,9 +129,9 @@ export const webSockets = () => {
     }
   });
 
-  // ---------- startGame toggling widget ----------
+  // ---------- startGame ui ----------
 
-  socket.on('startGame', () => {
+  socket.on('startGame', yourTurn => {
     closeActiveSocketsWidget();
     closeAuthWidget();
   });
