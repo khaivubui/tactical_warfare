@@ -133,7 +133,8 @@ export class Game{
 
   _startTurn() {
     this._startListeningForMoveOptions();
-    if (this.players[this.currentPlayerIdx] instanceof LocalPlayer) {
+    const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
+    if (this.players[otherPlayer] instanceof SocketPlayer) {
       this.timeoutID = setTimeout(() => {
         socket.emit("switchPlayer");
         this._switchPlayer();
@@ -167,6 +168,7 @@ export class Game{
   receiveMovePosition(position){
     clearTimeout(this.timeoutID);
     this.players[this.currentPlayerIdx].tank.position = position;
+    // this.players[this.currentPlayerIdx].tank.rotation = new BABYLON.Vector3.Zero();
     this.players[this.currentPlayerIdx].tank.position.y =
       TANK_POS_HEIGHT;
     this._switchPlayer();
@@ -175,12 +177,15 @@ export class Game{
 
   _switchPlayer(){
     this.players[this.currentPlayerIdx].endTurn();
-    if (this.currentPlayerIdx === 0) {
-      this.currentPlayerIdx = 1;
-    } else {
-      this.currentPlayerIdx = 0;
+    const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
+    if (!(this.players[otherPlayer] instanceof DemoPlayer)) {
+      if (this.currentPlayerIdx === 0) {
+        this.currentPlayerIdx = 1;
+      } else {
+        this.currentPlayerIdx = 0;
+      }
+      notifyTurn();
     }
-    notifyTurn();
   }
 
   _receiveAttack(matrix){
