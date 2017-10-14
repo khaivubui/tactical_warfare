@@ -69,6 +69,7 @@ export class Game{
     });
   }
   reset(){
+    clearTimeout(this.timeoutID);
     const turnOptions = document.getElementById('turn-options');
     turnOptions.style["max-width"] = 0;
     this.currentPlayerIdx = 0;
@@ -100,7 +101,7 @@ export class Game{
   _startListeningForMoveOptions(){
     this.players[this.currentPlayerIdx].startListeningForMoveOptions(this._receiveMoveType);
     this.timeoutID = setTimeout(() =>
-    socket.emit("switchPlayer"), 5000);
+    socket.emit("switchPlayer"), 10000);
   }
   startListeningForPosition(){
     this.players[this.currentPlayerIdx].startListeningForPosition(
