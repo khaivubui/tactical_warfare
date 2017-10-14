@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-import { closeAuthWidget } from './auth_stuff/auth_stuff';
+import { closeAuthWidget, hideAuthWidgetToggle } from './auth_stuff/auth_stuff';
 
 export const socket = io();
 
@@ -131,6 +131,12 @@ export const webSockets = () => {
     }
   });
 
+  // ---------- hide widget toggle ----------
+
+  const hideActiveSocketsWidgetToggle = () => {
+    activeSocketsToggle.style['max-width'] = '0px';
+  };
+
   // ---------- Turn Notification ----------
 
   const notifications = ['YOUR TURN'];
@@ -157,6 +163,8 @@ export const webSockets = () => {
   socket.on('startGame', yourTurn => {
     closeActiveSocketsWidget();
     closeAuthWidget();
+    hideActiveSocketsWidgetToggle();
+    hideAuthWidgetToggle();
     chatLog.innerHTML = '';
     chatWidget.style['max-height'] = '150px';
     notifications.push('ENEMY TURN');
@@ -177,7 +185,7 @@ export const webSockets = () => {
     chatMessage.classList.add('chat-message');
     chatMessage.appendChild(sender);
     chatMessage.appendChild(message);
-    
+
     chatLog.appendChild(chatMessage);
     chatLog.scrollTop = chatLog.scrollHeight;
   });
