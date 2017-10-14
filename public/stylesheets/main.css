@@ -390,3 +390,29 @@ body {
 	background: #e74c3c;
 	color: white;
 }
+
+/*------------------------------- live chat -------------------*/
+
+.live-chat {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	background: rgba(150, 150, 150, 0.6);
+	right: 0;
+	bottom: 0;
+	width: 200px;
+	max-width: 50%;
+}
+
+.chat-log {
+	padding: 10px;
+	height: 100px;
+	overflow: auto;
+}
+
+.chat-input {
+	border: none;
+	background: transparent;
+	padding: 5px;
+	border-top: 1px solid #AAA;
+}
