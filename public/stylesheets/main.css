@@ -106,6 +106,18 @@ body {
 
 .auth-main input[type=submit] {
 	margin-bottom: 10px;
+	height: 28px;
+	background: transparent;
+	border: 1px solid #333;
+	border-radius: 3px;
+	font-size: 1em;
+	cursor: pointer;
+}
+
+.auth-main input[type=submit]:hover {
+	background: #27ae60;
+	border-color: #27ae60;
+	color: white;
 }
 
 .auth-widget h1 {
