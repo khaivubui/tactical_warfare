@@ -371,18 +371,13 @@ body {
 	overflow: hidden;
 }
 
-.cancel-button, .turn-option, #health {
+.cancel-button, .turn-option {
 	padding: 5px 20px;
 }
 
 .cancel-button, .turn-option {
 	cursor: pointer;
 	width: 100px;
-}
-
-#health {
-	width: 122px;
-	cursor: default;
 }
 
 .cancel-button:hover {
@@ -440,4 +435,30 @@ body {
 	border-top: 1px solid #AAA;
 	font-size: 1em;
 	width: 100%;
+}
+
+/*---------- timer-widget ----------*/
+
+.timer-widget {
+	position: absolute;
+	font-size: 2em;
+	right: 10px;
+	top: 10px;
+	color: #27ae60;
+	font-family: Geostar;
+}
+
+/*---------- health-widget ----------*/
+
+.health-widget {
+	position: absolute;
+	font-size: 2em;
+	font-family: Revalia;
+	left: 10px;
+	top: 10px;
+	color: #c0392b;
+}
+
+#health {
+	cursor: default;
 }

@@ -197,13 +197,11 @@ export class LocalPlayer extends Player{
     const forfeit = document.getElementById('forfeit-button');
     const zoomin = document.querySelector(".zoom-in");
     const zoomout = document.querySelector(".zoom-out");
-    const health = document.querySelector("#health");
     attack.onclick = this._handleMoveOption(onDoneCallback)("attack");
     move.onclick = this._handleMoveOption(onDoneCallback)("position");
     forfeit.onclick = this._handleMoveOption(onDoneCallback)("forfeit");
     zoomin.onclick = this._handleZoomIn();
     zoomout.onclick = this._handleZoomOut();
-    health.innerHTML = `Health: ${this.health}`;
   }
 
   _handleConfirmPosition(onDoneCallback){
@@ -357,4 +355,9 @@ export class LocalPlayer extends Player{
     this._stopListeningForPosition();
   }
 
+  receiveDamage(amount) {
+    super.receiveDamage(amount);
+    const health = document.querySelector("#health");
+    health.innerHTML = this.health;
+  }
 }
