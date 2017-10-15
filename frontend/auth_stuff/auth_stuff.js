@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookie from 'js-cookie';
 
 export let openAuthWidget;
 export let closeAuthWidget;
@@ -44,9 +45,12 @@ export default () => {
     ).value;
 
     axios.post('/users/register', { username, password })
-      .then(response => {
-        console.log(response);
-        window.currentUser = response.data.username;
+      .then(({ data }) => {
+        if (data.success) {
+          Cookie.set('auth-token', data.token);
+        } else {
+          alert(data.msg);
+        }
       });
   });
 
@@ -61,10 +65,13 @@ export default () => {
     ).value;
 
     axios.post('/users/authenticate', { username, password })
-      .then(response => {
-        console.log(response);
-        window.currentUser = response.data;
-    });
+      .then(({ data }) => {
+        if (data.success) {
+          Cookie.set('auth-token', data.token);
+        } else {
+          alert(data.msg);
+        }
+      });
   });
 
   // Toggling the auth ui

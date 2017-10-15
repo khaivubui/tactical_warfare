@@ -9,7 +9,7 @@ const config = require('../config/database');
 
 // Register
 router.post("/register", (req, res, next) => {
-  let newUser = new User({
+  const newUser = new User({
     username: req.body.username,
     password: req.body.password
   });
@@ -18,15 +18,23 @@ router.post("/register", (req, res, next) => {
     if (err) {
       res.json({success: false, msg:'Failed to register user'});
     } else {
-      res.json({success: true, msg:'User registered', username: newUser.username});
+      const token = jwt.sign({_id: user._id.toString()}, config.secret);
+
+      res.json({
+        success: true,
+        token,
+        user: {
+          username: user.username
+        }
+      });
+
     }
   });
 });
 
 // Authenticate
 router.post('/authenticate', (req, res, next) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const { username, password } = req.body;
 
   User.getUserByUsername(username, (err, user) => {
     if (err) {
@@ -41,15 +49,12 @@ router.post('/authenticate', (req, res, next) => {
         throw error;
       }
       if (isMatch) {
-        const token = jwt.sign({data: user}, config.secret, {
-          expiresIn: 604800 // 1 week in seconds
-        });
+        const token = jwt.sign({_id: user._id.toString()}, config.secret);
 
         res.json({
           success: true,
-          token: 'JWT '+token,
+          token,
           user: {
-            id: user._id,
             username: user.username
           }
         });
@@ -59,11 +64,5 @@ router.post('/authenticate', (req, res, next) => {
     });
   });
 });
-
-// Profile (protected route because of passport.authenticate('jwt', {session:false}))
-router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-  res.json({user: req.user});
-});
-
 
 module.exports = router;
