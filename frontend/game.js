@@ -179,27 +179,29 @@ export class Game{
     }
 
     for(let i = 0; i < state.bombs.length; ++i){
-      BABYLON.Vector3.TransformCoordinatesToRef(state.bombs[i].position,
-         worldRotYmatrix,
-        this.bombs[i].mesh.position);
-      BABYLON.Quaternion.FromRotationMatrixToRef(
-        this.bombs[i].mesh.worldMatrixFromCache.multiply(worldRotYmatrix),
-        this.bombs[i].mesh.rotationQuaternion
-      );
-      this.bombs[i].physicsImpostor.setLinearVelocity(
-        BABYLON.Vector3.TransformCoordinates(
-          state.bombs[i].linearVelocity,
-          worldRotYmatrix
-        )
-      );
-      this.bombs[i].physicsImpostor.setAngularVelocity(
-        new BABYLON.Quaternion(
-          state.bombs[i].angularVelocity.x,
-          state.bombs[i].angularVelocity.y,
-          state.bombs[i].angularVelocity.z,
-          state.bombs[i].angularVelocity.w
-        )
-      );
+      if(this.bombs[i].mesh){
+        BABYLON.Vector3.TransformCoordinatesToRef(state.bombs[i].position,
+           worldRotYmatrix,
+          this.bombs[i].mesh.position);
+        BABYLON.Quaternion.FromRotationMatrixToRef(
+          this.bombs[i].mesh.worldMatrixFromCache.multiply(worldRotYmatrix),
+          this.bombs[i].mesh.rotationQuaternion
+        );
+        this.bombs[i].physicsImpostor.setLinearVelocity(
+          BABYLON.Vector3.TransformCoordinates(
+            state.bombs[i].linearVelocity,
+            worldRotYmatrix
+          )
+        );
+        this.bombs[i].physicsImpostor.setAngularVelocity(
+          new BABYLON.Quaternion(
+            state.bombs[i].angularVelocity.x,
+            state.bombs[i].angularVelocity.y,
+            state.bombs[i].angularVelocity.z,
+            state.bombs[i].angularVelocity.w
+          )
+        );
+      }
     }
   }
   getGameState(){
@@ -221,13 +223,20 @@ export class Game{
       state.playerPhysicsImpostors[i].angularVelocity =
         players[i].tank.physicsImpostor.getAngularVelocity();
     }
+    let bombState;
     for(let i = 0; i < this.bombs.length; ++i){
-      state.bombs.push({
-        position: this.bombs[i].mesh.position,
-        rotation: this.bombs[i].mesh.rotationQuaterion,
-        linearVelocity: this.bombs[i].physicsImpostor.getLinearVelocity(),
-        angularVelocity: this.bombs[i].physicsImpostor.getLinearVelocity()
-      });
+      bombState = {};
+      if(this.bombs[i].mesh){
+        console.log("mesh");
+        bombState.position = this.bombs[i].mesh.position;
+        bombState.rotation = this.bombs[i].mesh.rotationQuaterion;
+        if(this.bombs[i].physicsImpostor){
+          console.log("physics");
+          bombState.linearVelocity = this.bombs[i].physicsImpostor.getLinearVelocity();
+          bombState.angularVelocity = this.bombs[i].physicsImpostor.getAngularVelocity();
+        }
+        state.bombs.push(bombState);
+      }
     }
     state.activePlayer = statePlayers[0];
     state.passivePlayer = statePlayers[1];

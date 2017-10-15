@@ -68,8 +68,6 @@ export class Bomb extends Projectile{
   }
   _explode(onDoneCallback){
     let diffVector, magnitudeSquared;
-    this.mesh.dispose();
-    this.physicsImpostor.dispose();
     new Explosion(this.game, this.mesh.position).start(()=>{
       restoreCameraState(this.game.scene.activeCamera,
         this.previousCameraState);
@@ -82,5 +80,9 @@ export class Bomb extends Projectile{
         this.game.players[i].receiveDamage(DEFAULT_BOMB_DAMAGE);
       }
     }
+    this.mesh.dispose();
+    this.mesh = null
+    this.physicsImpostor.dispose();
+    this.physicsImpostor = null;
   }
 }
