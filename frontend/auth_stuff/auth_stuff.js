@@ -1,6 +1,8 @@
 import axios from "axios";
 import Cookie from 'js-cookie';
 
+import { signInAs } from '../ui/auth_ui';
+
 export let openAuthWidget;
 export let closeAuthWidget;
 export let hideAuthWidgetToggle;
@@ -48,6 +50,7 @@ export default () => {
       .then(({ data }) => {
         if (data.success) {
           Cookie.set('auth-token', data.token);
+          signInAs(data.user.username);
         } else {
           alert(data.msg);
         }
@@ -68,6 +71,7 @@ export default () => {
       .then(({ data }) => {
         if (data.success) {
           Cookie.set('auth-token', data.token);
+          signInAs(data.user.username);
         } else {
           alert(data.msg);
         }
