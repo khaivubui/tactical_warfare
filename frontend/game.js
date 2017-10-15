@@ -3,7 +3,6 @@ import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
 import {Bomb} from "./projectile/projectile";
 import {socket} from "./websockets";
 import { notifyTurn } from './websockets';
-
 import {renderTimer} from './ui/timer';
 
 const TANK_MASS = 27000; //kg
@@ -106,15 +105,17 @@ export class Game{
       this._switchPlayer();
       this._startTurn();
     });
-    socket.on("gameOver", () => {
-      this.restartGame();
-    });
+    // socket.on("gameOver", () => {
+    //   this.restartGame();
+    // });
   }
 
   restartGame() {
     const socketPlayer = this.findSocketPlayer();
     this.players[0] = new LocalPlayer(this.findLocalPlayer().tank,this.scene, this.arena);
     this.players[1] = new DemoPlayer(socketPlayer.tank);
+    const chatWidget = document.querySelector('.chat-widget');
+    chatWidget.style['max-height'] = '0px';
     this._switchPlayer();
     this.reset();
     this.startGame();
@@ -216,6 +217,9 @@ export class Game{
         break;
       case "attack":
         this.startListeningForAttack();
+        break;
+      case "forfeit":
+        this._gameOver(this.players[this.currentPlayerIdx]);
         break;
     }
   }

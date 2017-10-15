@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-import { closeAuthWidget, hideAuthWidgetToggle } from './auth_stuff/auth_stuff';
+import { closeAuthWidget, hideAuthWidgetToggle} from './auth_stuff/auth_stuff';
 
 export const socket = io();
 

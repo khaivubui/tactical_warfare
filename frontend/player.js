@@ -72,6 +72,7 @@ export class SocketPlayer extends Player{
     this.stopListeningForPosition = this.stopListeningForPosition.bind(this);
     this.stopListeningForMoveOptions = this.stopListeningForMoveOptions.bind(this);
     this.stopListeningForAttack = this.stopListeningForAttack.bind(this);
+
   }
 
   startListeningForPosition(onDoneCallback, onCancelledCallback){
@@ -85,12 +86,12 @@ export class SocketPlayer extends Player{
     }
   );
   }
-
+  // Turn off socket when LocalPlayer is emitting positions
   stopListeningForPosition() {
     socket.off("position");
     socket.off("cancel");
   }
-
+  // Socket player listens for opponent's move options
   startListeningForMoveOptions(onDoneCallback){
     socket.on("moveType", type=>{
       onDoneCallback(type);
@@ -98,6 +99,7 @@ export class SocketPlayer extends Player{
     });
   }
 
+  // Turn off socket when LocalPlayer is emitting initial move choices
   stopListeningForMoveOptions(){
     socket.off("moveType");
   }
@@ -320,7 +322,7 @@ export class LocalPlayer extends Player{
     window.onmousemove = null;
     window.onmouseup = null;
   }
-
+  // Zoom in button on the left
   _handleZoomIn(){
     return e => {
       if (this.scene.activeCamera.radius > 0) {
@@ -328,7 +330,7 @@ export class LocalPlayer extends Player{
       }
     };
   }
-
+  // Zoom out button on the left
   _handleZoomOut(){
     return e => {
       this.scene.activeCamera.radius += 3;
