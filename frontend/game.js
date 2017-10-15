@@ -118,7 +118,8 @@ export class Game{
     const chatWidget = document.querySelector('.chat-widget');
     chatWidget.style['max-height'] = '0px';
     this.players[0].hideForfeitButton();
-    this._switchPlayer();
+    // this._switchPlayer();
+
     this.reset();
     this.startGame();
     showActiveSocketsWidgetToggle();
@@ -196,8 +197,12 @@ export class Game{
   _gameOver(loser) {
     if (loser instanceof LocalPlayer) {
       console.log("sorry you lost");
+      const gameoverNotification = document.querySelector('.turn-notification');
+      gameoverNotification.innerHTML = "Game Over, You lost.";
     } else if (loser instanceof SocketPlayer) {
       console.log("Good job you won!");
+      const gameoverNotification = document.querySelector('.turn-notification');
+      gameoverNotification.innerHTML = "YOU WON!!!";
     }
     this.restartGame();
   }
