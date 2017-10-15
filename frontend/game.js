@@ -198,7 +198,7 @@ export class Game{
     if (loser instanceof LocalPlayer) {
       console.log("sorry you lost");
       const gameoverNotification = document.querySelector('.turn-notification');
-      gameoverNotification.innerHTML = "Game Over, You lost.";
+      gameoverNotification.innerHTML = "YOU LOST!!!";
     } else if (loser instanceof SocketPlayer) {
       console.log("Good job you won!");
       const gameoverNotification = document.querySelector('.turn-notification');
