@@ -11,8 +11,8 @@ export class Projectile {
     this.game = game;
   }
   fire(impulseVector){
-    this.impostor.applyImpulse(impulseVector,
-        this._mesh.getAbsolutePosition());
+    this.physicsImpostor.applyImpulse(impulseVector,
+        this.mesh.getAbsolutePosition());
   }
 }
 
@@ -20,16 +20,16 @@ export class Bomb extends Projectile{
   constructor(game, pos, rot){
     super(game, pos, rot);
     this.game = game;
-    this._mesh = game.scene.bombMesh.createInstance(
+    this.mesh = game.scene.bombMesh.createInstance(
       `bomb${game.scene.bombsCreatedSinceStart++}`);
-    this._mesh.position = pos;
-    this._mesh.rotation = rot;
+    this.mesh.position = pos;
+    this.mesh.rotation = rot;
     this._explode = this._explode.bind(this);
-    this.impostor = new BABYLON.PhysicsImpostor(this._mesh,
+    this.physicsImpostor = new BABYLON.PhysicsImpostor(this.mesh,
       BABYLON.PhysicsImpostor.SphereImpostor, {mass: BOMB_MASS, restitution: 0.8, friction: 0.8}, game.scene);
-    this._mesh.scaling.x = 0.6;
-    this._mesh.scaling.y = 0.6;
-    this._mesh.scaling.z = 0.6;
+    this.mesh.scaling.x = 0.6;
+    this.mesh.scaling.y = 0.6;
+    this.mesh.scaling.z = 0.6;
   }
   fire(impulseVector, onDoneCallback){
     const camera = this.game.scene.activeCamera;
@@ -52,7 +52,7 @@ export class Bomb extends Projectile{
   _setUpProjectileCamera(impulseVector){
     const camera = this.game.scene.activeCamera;
     camera.radius = 12;
-    camera.lockedTarget = this._mesh;
+    camera.lockedTarget = this.mesh;
     camera.alpha = this._initialCameraAlpha(impulseVector);
     camera.beta = Math.PI/4;
   }
@@ -67,15 +67,15 @@ export class Bomb extends Projectile{
   }
   _explode(onDoneCallback){
     let diffVector, magnitudeSquared;
-    this._mesh.dispose();
-    this.impostor.dispose();
-    new Explosion(this.game, this._mesh.position).start(()=>{
+    this.mesh.dispose();
+    this.physicsImpostor.dispose();
+    new Explosion(this.game, this.mesh.position).start(()=>{
       restoreCameraState(this.game.scene.activeCamera,
         this.previousCameraState);
       onDoneCallback();
     });
     for(let i = 0; i < this.game.players.length; ++i){
-      diffVector = this._mesh.position.subtract(
+      diffVector = this.mesh.position.subtract(
         this.game.players[i].tank.position);
       if(diffVector.lengthSquared() < BOMB_EXPLOSION_RADIUS_SQUARED){
         this.game.players[i].receiveDamage(DEFAULT_BOMB_DAMAGE);

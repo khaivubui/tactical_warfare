@@ -79,6 +79,7 @@ export const startOnlineGame = (game, isFirst) => {
 
 export class Game{
   constructor(scene, players, arena ){
+    window.game = this;
     this.players = players;
     this.currentPlayerIdx = 0;
     this.myPlayerIdx = 0;
@@ -98,6 +99,7 @@ export class Game{
       this._switchPlayer();
       this._startTurn();
     });
+    this.bombs = [];
   }
   reset(){
     clearTimeout(this.timeoutID);
@@ -117,7 +119,6 @@ export class Game{
     else{
       players = [this.players[1], this.players[0]];
     }
-
     let statePlayersKeys;
     for(let i = 0; i < 2 ; ++i){
       statePlayersKeys = Object.keys(statePlayers[i]);
@@ -129,27 +130,62 @@ export class Game{
     for(let i = 0; i< 2; ++i){
       physicsImpostorsKeys = Object.keys(playerPhysicsImpostors[i]);
       physicsImpostorsKeys.forEach(key => {
-        players[i].physicsImpostor[key] = playerPhysicsImpostors[i][key];
-      })
+        players[i].tank.physicsImpostor[key] = playerPhysicsImpostors[i][key];
+      });
+    }
+    let tanksKeys;
+    for(let i = 0; i<2; ++i){
+      tanksKeys = Object.keys(state.tanks[i]);
+      tanksKeys.forEach(key=>{
+        players[i].tank[key] = state.tanks[i][key];
+      });
+
+      if(state.tanks[i].cannonX !== undefined){
+          debugger;
+        players[i]._rotXMesh.rotation.x = state.tanks[i].cannonX;
+      }
+      if(state.tanks[i].cannonY !== undefined){
+        players[i]._rotYMesh.rotation.y = state.tanks[i].cannonY;
+      }
+    }
+    for(let i = 0; i < state.bombs.length; ++i){
+      this.bombs[i].mesh.position  = state.bombs[i].position;
+      this.bombs[i].mesh.rotation = state.bombs[i].rotation;
+      this.bombs[i].physicsImpostor.linearVelocity = state.bombs[i].linearVelocity;
+      this.bombs[i].physicsImpostor.angularVelocity = state.bombs[i].angularVelocity;
     }
   }
   getGameState(){
-    const state = {playerPhysicsImpostors: []};
+    debugger;
+    const state = {playerPhysicsImpostors: [{},{}],
+      bombs: []};
     const activePlayer = this.players[this.currentPlayerIdx];
     const passivePlayer = this.players[this.currentPlayerIdx === 0 ? 1 : 0];
     const players = [activePlayer, passivePlayer];
     const statePlayers = [{},{}];
+    const stateTanks = [{},{}];
     for(let i = 0; i < 2; ++i){
       statePlayers[i].health = players[i].health;
-      statePlayers[i].position = players[i].position;
-      statePlayers[i].rotation = players[i].rotation;
+      stateTanks[i].position = players[i].tank.position;
+      stateTanks[i].rotation = players[i].tank.rotation;
+      stateTanks[i].cannonX = players[i]._rotXMesh.rotation.x;
+      stateTanks[i].cannonY = players[i]._rotYMesh.rotation.y;
       state.playerPhysicsImpostors[i].linearVelocity =
-        players[i].physicsImpostor.getLinearVelocity();
-      state.playerPhysicsImpostors[i].angularVelocitu =
-        players[i].physicsImpostor[i].getAngularVelocity();
+        players[i].tank.physicsImpostor.getLinearVelocity();
+      state.playerPhysicsImpostors[i].angularVelocity =
+        players[i].tank.physicsImpostor.getAngularVelocity();
+    }
+    for(let i = 0; i < this.bombs.length; ++i){
+      state.bombs.push({
+        position: this.bombs[i].mesh.position,
+        rotation: this.bombs[i].mesh.rotation,
+        linearVelocity: this.bombs[i].physicsImpostor.getLinearVelocity(),
+        angularVelocity: this.bombs[i].physicsImpostor.getLinearVelocity()
+      });
     }
     state.activePlayer = statePlayers[0];
     state.passivePlayer = statePlayers[1];
+    state.tanks = stateTanks;
     return state;
   }
   initialPositionTanks(){
@@ -246,7 +282,11 @@ export class Game{
     );
     const bomb = new Bomb(this,bombPos,
       bombRot.toEulerAngles());
-    bomb.fire(impulseVector, this._receiveAttackFinished);
+    bomb.fire(impulseVector,()=>{
+        this.bombs.shift();
+        this._receiveAttackFinished();
+    });
+    this.bombs.push(bomb);
   }
   _receiveAttackFinished(){
     this._switchPlayer();
