@@ -17,9 +17,13 @@ module.exports = io => {
       faker.commerce.productName()
     };
 
-    let token = socket.request.headers.cookie['auth-token'];
+    let token;
+    if (socket.request.headers.cookie) {
+      token = socket.request.headers.cookie['auth-token'];
+    }
+    
+    const currentSocket = activeSockets[socket.id];
     User.findByToken(token).then(user => {
-      const currentSocket = activeSockets[socket.id];
       if (user) {
         currentSocket.displayName = user.username;
       }
@@ -76,7 +80,6 @@ module.exports = io => {
 
     //auth
     socket.on('signIn', newToken => {
-      const currentSocket = activeSockets[socket.id];
       User.findByToken(newToken).then(user => {
         currentSocket.displayName = user.username;
         io.to(socket.id).emit('currentSocket', currentSocket);
@@ -85,7 +88,6 @@ module.exports = io => {
     });
 
     socket.on('signOut', () => {
-      const currentSocket = activeSockets[socket.id];
       currentSocket.displayName = faker.commerce.productName();
       io.to(socket.id).emit('currentSocket', currentSocket);
       socket.broadcast.emit('updateActiveSocket', currentSocket);

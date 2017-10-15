@@ -46,14 +46,12 @@ User.comparePassword = function(candidatePassword, hash, callback) {
 };
 
 User.findByToken = token => {
-  let data;
-  try {
-    data = jwt.verify(token, config.secret);
-  } catch (e) {
-    data = {_id: ''};
-  } finally {
-    const {_id} = data;
-    return User.findById(_id);
-  }
+  let _id;
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (!err) {
+      _id = decoded._id;
+    }
+  });
+  return User.findById(_id);
   // const _id = mongoose.Types.ObjectId(data._id);
 };
