@@ -109,6 +109,8 @@ export class Game{
       this._switchPlayer();
       this._startTurn();
     });
+
+    socket.on('resetGame', () => this.restartGame());
   }
   // Restart a Demo game for both players after one player lost
   restartGame() {

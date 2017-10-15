@@ -60,9 +60,13 @@ module.exports = io => {
     socket.on('disconnect', reason => {
       socket.broadcast.emit('removeActiveSocket', activeSockets[socket.id]);
       delete activeSockets[socket.id];
+
+      if (currentSocket.opponentSocketId) {
+        socket.to(currentSocket.opponentSocketId).emit('resetGame');
+      }
     });
 
-    // chat relay
+    // --------- chat relay ---------
     socket.on('chatMessage', message => {
       io.to(activeSockets[socket.id].opponentSocketId).emit(
         'chatMessage',
@@ -80,7 +84,7 @@ module.exports = io => {
       );
     });
 
-    //auth
+    // ---------- auth ---------
     socket.on('signIn', newToken => {
       User.findByToken(newToken).then(user => {
         currentSocket.displayName = user.username;
@@ -101,7 +105,7 @@ module.exports = io => {
         io.to(activeSockets[socket.id].opponentSocketId).emit(message, data);
       })
     );
-    const gameplayMessages = ["position", "moveType", "attack", "cancel", "switchPlayer"];
+    const gameplayMessages = ["position", "moveType", "attack", "cancel", "switchPlayer", "resetGame"];
     for(let i = 0; i< gameplayMessages.length; ++i){
       sendToOpponent(gameplayMessages[i]);
     }
