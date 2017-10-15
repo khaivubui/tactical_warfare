@@ -104,7 +104,7 @@ export const webSockets = () => {
 
   // ---------- denial handler ----------
 
-  socket.on('challengeDenied', denierId => {
+  socket.on('clearChallenge', denierId => {
     const challengeButton =
     document.querySelector(`button#${denierId}`);
 
