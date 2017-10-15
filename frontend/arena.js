@@ -98,6 +98,41 @@ export default class Arena{
     this._ceiling.material.diffuseTexture.uScale = 10.0;
     this._ceiling.material.diffuseTexture.vScale = 10.0;
 
+    // Fun Objects
+    setTimeout(()=> {
+      const box = new BABYLON.Mesh.CreateBox("box",2.5, scene);
+      box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.4, restitution: 0}, scene);
+      box.position.x = -8.5;
+      box.position.z = -9.5;
+      box.position.y = 1;
+      const box1 = new BABYLON.Mesh.CreateBox("box1",2.5, scene);
+      box1.physicsImpostor = new BABYLON.PhysicsImpostor(box1, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.4, restitution: 0}, scene);
+      box1.position.x = 8.5;
+      box1.position.z = 9.5;
+      box1.position.y = 1;
+      const box2 = new BABYLON.Mesh.CreateBox("box2",2.5, scene);
+      box2.physicsImpostor = new BABYLON.PhysicsImpostor(box2, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.4, restitution: 0}, scene);
+      box2.position.x = 5.5;
+      box2.position.z = -5.5;
+      box2.position.y = 1;
+      const box3 = new BABYLON.Mesh.CreateBox("box3",2.5, scene);
+      box3.physicsImpostor = new BABYLON.PhysicsImpostor(box3, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0, friction: 0.4, restitution: 0}, scene);
+      box3.position.x = -5.5;
+      box3.position.z = 5.5;
+      box3.position.y = 1;
+
+      box.material = new BABYLON.StandardMaterial("box", scene);
+      box1.material = new BABYLON.StandardMaterial("box1", scene);
+      box2.material = new BABYLON.StandardMaterial("box2", scene);
+      box3.material = new BABYLON.StandardMaterial("box3", scene);
+
+      box.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1508111349/box_dx73md.jpg", scene);
+      box1.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1508111349/box_dx73md.jpg", scene);
+      box2.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1508111349/box_dx73md.jpg", scene);
+      box3.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1508111349/box_dx73md.jpg", scene);
+
+
+    }, 100);
 
 
     // Physics Engine
