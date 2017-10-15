@@ -15,7 +15,7 @@ const TANK_CANNON_LENGTH = 1.8;
 export class Player{
   constructor(tank){
     this.tank = tank;
-    this.health = 10;
+    this.health = 100;
 
     const childMeshes = this.tank.getChildMeshes();
     this._rotXMesh = null;
