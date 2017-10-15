@@ -12,7 +12,4 @@ export const signInAs = username => {
 
   const authWidgetToggle = document.querySelector('.auth-widget-toggle');
   authWidgetToggle.innerHTML = 'Sign Out';
-
-  const currentSocket = document.querySelector('.current-socket');
-  currentSocket.innerHTML = username;
 };

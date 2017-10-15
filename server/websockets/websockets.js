@@ -19,13 +19,14 @@ module.exports = io => {
 
     let token = socket.request.headers.cookie['auth-token'];
     User.findByToken(token).then(user => {
+      const currentSocket = activeSockets[socket.id];
       if (user) {
-        activeSockets[socket.id].displayName = user.username;
+        currentSocket.displayName = user.username;
       }
       // emit to itself
-      io.to(socket.id).emit('currentSocket', activeSockets[socket.id]);
+      io.to(socket.id).emit('currentSocket', currentSocket);
       // emit to other sockets
-      socket.broadcast.emit('newActiveSocket', activeSockets[socket.id]);
+      socket.broadcast.emit('newActiveSocket', currentSocket);
     });
 
     // routing the challenge to the opponent
@@ -76,9 +77,11 @@ module.exports = io => {
     //auth
     socket.on('signIn', () => {
       token = socket.request.headers.cookie['auth-token'];
+      const currentSocket = activeSockets[socket.id];
       User.findByToken(token).then(user => {
-        activeSockets[socket.id].displayName = user.username;
-        socket.broadcast.emit('updateActiveSocket', activeSockets[socket.id]);
+        currentSocket.displayName = user.username;
+        io.to(socket.id).emit('currentSocket', currentSocket);
+        socket.broadcast.emit('updateActiveSocket', currentSocket);
       });
     });
 
