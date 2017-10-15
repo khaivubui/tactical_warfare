@@ -15,7 +15,7 @@ const TANK_CANNON_LENGTH = 1.8;
 export class Player{
   constructor(tank){
     this.tank = tank;
-    this.health = 100;
+    this.health = 10;
 
     const childMeshes = this.tank.getChildMeshes();
     this._rotXMesh = null;
@@ -46,21 +46,6 @@ export class Player{
   }
 }
 
-
-export class OpponentPlayer {
-  constructor(tank) {
-    this.tank = tank;
-    this.health = 100;
-  }
-  startListeningForMoveOptions(onDoneCallback) {
-    onDoneCallback("position");
-    const oppHealth = document.querySelector("#opp-health");
-    oppHealth.innerHTML = `Opponent Health: ${this.health}`;
-  }
-  receiveDamage(amount){
-    this.health -= amount;
-  }
-}
 
 export class DemoPlayer extends Player{
   constructor(tank){

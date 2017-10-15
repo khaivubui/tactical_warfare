@@ -1,5 +1,5 @@
 import Arena from "./arena.js";
-import {Player, OpponentPlayer, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
+import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
 import {Bomb} from "./projectile/projectile";
 import {socket} from "./websockets";
 import { notifyTurn } from './websockets';
@@ -11,6 +11,7 @@ const BOMB_MASS = 1; //kg
 const DEFAULT_FIRING_IMPULSE = 20;
 const TANK_CANNON_LENGTH = 1;
 const TANK_POS_HEIGHT = 3;
+const TURN_TIME = 15000;
 
 export const createDemoGame = (scene) => {
       const localTank = scene.tankMesh;
@@ -96,9 +97,13 @@ export class Game{
     this.explosionsCreatedSinceStart = 0;
     this._switchPlayer = this._switchPlayer.bind(this);
     this._startTurn = this._startTurn.bind(this);
+    this._gameOver = this._gameOver.bind(this);
     socket.on("switchPlayer", () => {
       this._switchPlayer();
       this._startTurn();
+    });
+    socket.on("gameOver", () => {
+      socket.emit('disconnect');
     });
   }
   reset(){
@@ -134,15 +139,31 @@ export class Game{
   }
 
   _startTurn() {
-    this._startListeningForMoveOptions();
+    // debugger
     const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
+    if (this.players[this.currentPlayerIdx].health <= 0) {
+      return this._gameOver(this.players[this.currentPlayerIdx]);
+    } else if (this.players[otherPlayer].health <= 0) {
+      return this._gameOver(this.players[otherPlayer]);
+    }
+    this._startListeningForMoveOptions();
     if (this.players[otherPlayer] instanceof SocketPlayer) {
-      renderTimer(10000);
+      renderTimer(TURN_TIME);
       this.timeoutID = setTimeout(() => {
         socket.emit("switchPlayer");
         this._switchPlayer();
         this._startTurn();
-      }, 10000);
+      }, TURN_TIME);
+    }
+  }
+
+  _gameOver(loser) {
+    if (loser instanceof LocalPlayer) {
+      console.log('you lost');
+      socket.emit("gameOver");
+    } else if (loser instanceof SocketPlayer) {
+      console.log('you won');
+      socket.emit("gameOver");
     }
   }
 
