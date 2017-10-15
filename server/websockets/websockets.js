@@ -1,12 +1,13 @@
 const faker = require('faker');
 
+const User = require('../models/user');
+
 module.exports = io => {
   const activeSockets = {}; // used to store all active sockets
 
   module.exports.activeSockets = activeSockets;
 
   io.on('connection', socket => {
-    console.log(socket.request.headers.cookie.testtest);
     io.to(socket.id).emit('activeSockets', activeSockets);
 
     // add newly connected socket to the store with a random name
@@ -67,6 +68,15 @@ module.exports = io => {
           message
         }
       );
+    });
+
+    //auth
+    socket.on('signIn', () => {
+      const token = socket.request.headers.cookie['auth-token'];
+      User.findByToken(token).then(user => {
+        activeSockets[socket.id].displayName = user.username;
+        socket.broadcast.emit('updateActiveSocket', activeSockets[socket.id]);
+      });
     });
 
     //--------------------------------------------- the game

@@ -2,6 +2,7 @@ import axios from "axios";
 import Cookie from 'js-cookie';
 
 import { signInAs } from '../ui/auth_ui';
+import { socket } from '../websockets';
 
 export let openAuthWidget;
 export let closeAuthWidget;
@@ -50,7 +51,8 @@ export default () => {
       .then(({ data }) => {
         if (data.success) {
           Cookie.set('auth-token', data.token);
-          signInAs(data.user.username);
+          signInAs(data.user.username); // only UI
+          socket.emit('signIn');
         } else {
           alert(data.msg);
         }
@@ -71,7 +73,8 @@ export default () => {
       .then(({ data }) => {
         if (data.success) {
           Cookie.set('auth-token', data.token);
-          signInAs(data.user.username);
+          signInAs(data.user.username); // only UI
+          socket.emit('signIn');
         } else {
           alert(data.msg);
         }

@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const config = require('../config/database');
-
+const jwt = require('jsonwebtoken');
 
 // User Schema
 const UserSchema = mongoose.Schema({
@@ -16,15 +16,15 @@ const UserSchema = mongoose.Schema({
 
 const User = module.exports = mongoose.model('User', UserSchema);
 
-module.exports.getUserById = function(id, callback){
+User.getUserById = function(id, callback){
   User.findById(id, callback);
 };
 
-module.exports.getUserByUsername = function(username, callback){
+User.getUserByUsername = function(username, callback){
   User.findOne({username}, callback);
 };
 
-module.exports.addUser = function(newUser, callback) {
+User.addUser = function(newUser, callback) {
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newUser.password, salt, (errors, hash) => {
       if (errors) {
@@ -36,7 +36,7 @@ module.exports.addUser = function(newUser, callback) {
   });
 };
 
-module.exports.comparePassword = function(candidatePassword, hash, callback) {
+User.comparePassword = function(candidatePassword, hash, callback) {
   bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
     if (err) {
       throw err;
@@ -45,7 +45,9 @@ module.exports.comparePassword = function(candidatePassword, hash, callback) {
   });
 };
 
-
-
-
-// export default mongoose.model("User", UserSchema);
+User.findByToken = token => {
+  const data = jwt.verify(token, config.secret);
+  // const _id = mongoose.Types.ObjectId(data._id);
+  const {_id} = data;
+  return User.findById(_id);
+};

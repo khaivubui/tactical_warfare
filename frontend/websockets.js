@@ -54,6 +54,12 @@ export const webSockets = () => {
     otherActiveSockets.removeChild(activeSocket);
   });
 
+  socket.on('updateActiveSocket', data => {
+    const activeSocket = document.getElementById(data.id);
+    otherActiveSockets.removeChild(activeSocket);
+    otherActiveSockets.appendActiveSocket(data);
+  });
+
   // ---------- challengeReceived ----------
 
   socket.on('challengeReceived', challenger => {
