@@ -203,7 +203,7 @@ export class LocalPlayer extends Player{
     forfeit.onclick = this._handleMoveOption(onDoneCallback)("forfeit");
     zoomin.onclick = this._handleZoomIn();
     zoomout.onclick = this._handleZoomOut();
-    health.innerHTML = `Health: ${this.health}`;
+    health.innerHTML = this.health;
   }
 
   _handleConfirmPosition(onDoneCallback){
