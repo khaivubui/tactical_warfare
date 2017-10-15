@@ -333,7 +333,7 @@ export class LocalPlayer extends Player{
     };
   }
 
-  // For end turn
+  // For end turn, turn off all socket player sockets 
   endTurn(){
     this._stopListeningForMoveOptions();
     this._stopListeningForAttack();
@@ -348,8 +348,12 @@ export class LocalPlayer extends Player{
 
   // hide "forfeit" button in Demo game
   hideForfeitButton(){
-    const forfeit = document.getElementById('forfeit-button');
-    forfeit.style["max-width"] = "0px";
-    forfeit.style["max-height"] = "0px";
+    const forfeitWrapper = document.getElementById('forfeit-wrapper');
+    forfeitWrapper.style["max-height"] = "0px";
+  }
+  // show "forfeit" button in Online game
+  showForfeitButton() {
+    const forfeitWrapper = document.getElementById('forfeit-wrapper');
+    forfeitWrapper.style["max-height"] = "140px";
   }
 }

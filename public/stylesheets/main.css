@@ -390,6 +390,10 @@ body {
 	color: white;
 }
 
+#forfeit-wrapper {
+	overflow: hidden;
+}
+
 #forfeit-button:hover {
 	background: #e74c3c;
 	color: white;

@@ -20,6 +20,7 @@ export const createDemoGame = (scene) => {
       const arena = new Arena(scene);
       const Player1 = new LocalPlayer(localTank, scene, arena);
       const Player2 = new DemoPlayer(socketTank);
+      Player1.hideForfeitButton();
       scene.localTank = localTank;
       scene.socketTank = socketTank;
       socketTank.material.specularPower = 300;
@@ -72,10 +73,12 @@ export const startOnlineGame = (game, isFirst) => {
   if(isFirst){
     game.players[0] = new LocalPlayer(game.scene.localTank,game.scene, game.arena);
     game.players[1] = new SocketPlayer(game.scene.socketTank);
+    game.players[0].showForfeitButton();
   }
   else{
     game.players[0] = new SocketPlayer(game.scene.socketTank);
     game.players[1] =  new LocalPlayer(game.scene.localTank,game.scene, game.arena);
+    game.players[1].showForfeitButton();
   }
   game.startGame();
 };
@@ -107,7 +110,7 @@ export class Game{
       this._startTurn();
     });
   }
-
+  // Restart a Demo game for both players after one player lost
   restartGame() {
     const socketPlayer = this.findSocketPlayer();
     this.players[0] = new LocalPlayer(this.findLocalPlayer().tank,this.scene, this.arena);
@@ -120,7 +123,7 @@ export class Game{
     this.startGame();
     showActiveSocketsWidgetToggle();
   }
-
+  // Find the current Local player helper method
   findLocalPlayer(){
     for (let i = 0; i < this.players.length; i++) {
       if (this.players[i] instanceof LocalPlayer) {
@@ -128,7 +131,7 @@ export class Game{
       }
     }
   }
-
+  //Find the current Socket player helper method
   findSocketPlayer(){
     for (let i = 0; i < this.players.length; i++) {
       if (this.players[i] instanceof SocketPlayer) {
@@ -167,7 +170,7 @@ export class Game{
       this.players[i].resetCannon();
     }
   }
-
+  // Start new Online game
   startGame(){
     this._startTurn();
   }
@@ -267,6 +270,4 @@ export class Game{
     this._switchPlayer();
     this._startTurn();
   }
-
-
 }
