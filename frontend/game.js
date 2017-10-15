@@ -85,6 +85,7 @@ export const startOnlineGame = (game, isFirst) => {
 export class Game{
   constructor(scene, players, arena ){
     this.players = players;
+    window.game = this;
     this.currentPlayerIdx = 0;
     this.myPlayerIdx = 0;
     this.scene = scene;
@@ -111,13 +112,34 @@ export class Game{
   }
 
   restartGame() {
-    this.players[0] = new LocalPlayer(this.players[0].tank,this.scene, this.arena);
-    this.players[1] = new DemoPlayer(this.players[0].tank);
+    console.log('RESTARTGAME');
+    const socketPlayer = this.findSocketPlayer();
+    this.players[0] = new LocalPlayer(this.findLocalPlayer().tank,this.scene, this.arena);
+    this.players[1] = new DemoPlayer(socketPlayer.tank);
     console.log(this.players);
-    this.players[0].health = 100;
-    this.players[1].health = 100;
-    this._startListeningForMoveOptions();
+    this._switchPlayer();
+    this.reset();
+    this.startGame();
   }
+
+  // findLocalPlayer(){
+  //   for (let i = 0; i < this.players.length; i++) {
+  //     if (this.players[i] instanceof LocalPlayer) {
+  //       console.log(this.players[i]);
+  //       return this.players[i];
+  //     }
+  //   }
+  // }
+  //
+  // findSocketPlayer(){
+  //   // debugger
+  //   for (let i = 0; i < this.players.length; i++) {
+  //     if (this.players[i] instanceof SocketPlayer) {
+  //       console.log(this.players[i]);
+  //       return this.players[i];
+  //     }
+  //   }
+  // }
 
   reset(){
     clearTimeout(this.timeoutID);
@@ -128,6 +150,7 @@ export class Game{
     this.players[0].health = 100;
     this.players[1].health = 100;
   }
+
   initialPositionTanks(){
     const midX = Math.floor(this.arena.ground.cellCount / 2);
     const midZ = Math.floor(this.arena.ground.cellCount /4);
@@ -171,11 +194,10 @@ export class Game{
   }
 
   _gameOver(loser) {
-    // socket.emit("gameOver");
     if (loser instanceof LocalPlayer) {
-      socket.emit("gameOver");
+      console.log("sorry you lost");
     } else if (loser instanceof SocketPlayer) {
-      socket.emit("gameOver");
+      console.log("Good job you won!");
     }
   }
 
