@@ -108,11 +108,13 @@ export default () => {
     }
   );
 
+  const authStatus = document.querySelector('.auth-status');
+
   hideAuthWidgetToggle = () => {
-    authWidgetToggle.style['max-height'] = '0px';
+    authStatus.style['max-height'] = '0px';
   };
 
   unhideAuthWidgetToggle = () => {
-    authWidgetToggle.style['max-height'] = '30px';
+    authStatus.style['max-height'] = '30px';
   };
 };
