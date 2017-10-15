@@ -38,7 +38,6 @@ export const webSockets = () => {
   });
 
   socket.on('activeSockets', data => {
-    window.activeSockets = data;
     const activeSocketIds = Object.keys(data);
 
     activeSocketIds.forEach(socketId => {
