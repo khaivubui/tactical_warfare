@@ -84,6 +84,13 @@ module.exports = io => {
       });
     });
 
+    socket.on('signOut', () => {
+      const currentSocket = activeSockets[socket.id];
+      currentSocket.displayName = faker.commerce.productName();
+      io.to(socket.id).emit('currentSocket', currentSocket);
+      socket.broadcast.emit('updateActiveSocket', currentSocket);
+    });
+
     //--------------------------------------------- the game
     const sendToOpponent = message =>(
       socket.on(message, data => {
