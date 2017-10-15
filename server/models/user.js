@@ -8,7 +8,8 @@ const config = require('../config/database');
 // User Schema
 const UserSchema = mongoose.Schema({
   username: { type: 'String', required: true },
-  password: { type: 'String', required: true }
+  password: { type: 'String', required: true },
+  socketId: { type: 'String' }
 });
 
 
@@ -20,8 +21,7 @@ module.exports.getUserById = function(id, callback){
 };
 
 module.exports.getUserByUsername = function(username, callback){
-  const query = {username: username};
-  User.findOne(query, callback);
+  User.findOne({username}, callback);
 };
 
 module.exports.addUser = function(newUser, callback) {

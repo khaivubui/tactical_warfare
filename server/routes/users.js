@@ -27,7 +27,6 @@ router.post("/register", (req, res, next) => {
           username: user.username
         }
       });
-
     }
   });
 });

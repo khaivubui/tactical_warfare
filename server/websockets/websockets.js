@@ -3,6 +3,7 @@ const faker = require('faker');
 module.exports = io => {
   const activeSockets = {}; // used to store all active sockets
 
+  module.exports.activeSockets = activeSockets;
 
   io.on('connection', socket => {
     console.log(socket.request.headers.cookie.testtest);
