@@ -5,6 +5,7 @@ module.exports = io => {
 
 
   io.on('connection', socket => {
+    console.log(socket.request.headers.cookie.testtest);
     io.to(socket.id).emit('activeSockets', activeSockets);
 
     // add newly connected socket to the store with a random name
