@@ -213,7 +213,6 @@ export class LocalPlayer extends Player{
     };
     this.arena.ground.startListeningForPosition(this._handleConfirmPosition(
       onDoneCallback));
-    //socket.emit
   }
   _positionAimingCamera(){
     const camera = this.scene.activeCamera;
@@ -333,7 +332,7 @@ export class LocalPlayer extends Player{
     };
   }
 
-  // For end turn, turn off all socket player sockets 
+  // For end turn, turn off all socket player sockets
   endTurn(){
     this._stopListeningForMoveOptions();
     this._stopListeningForAttack();
@@ -345,7 +344,6 @@ export class LocalPlayer extends Player{
     const health = document.querySelector("#health");
     health.innerHTML = this.health;
   }
-
   // hide "forfeit" button in Demo game
   hideForfeitButton(){
     const forfeitWrapper = document.getElementById('forfeit-wrapper');
