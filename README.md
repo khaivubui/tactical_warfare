@@ -1,6 +1,7 @@
 # Tactical Warfare
 
 ## User Auth
+
 ![user-auth](https://github.com/khaivubui/tactical_warfare/blob/master/docs/auth_demo.gif)
 
 ## Dynamic Camera
