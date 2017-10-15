@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
 
 import { closeAuthWidget, hideAuthWidgetToggle } from './auth_stuff/auth_stuff';
+import { signInAs } from './ui/auth_ui';
 
 export const socket = io();
 
@@ -195,4 +196,9 @@ export const webSockets = () => {
     chatLog.scrollTop = chatLog.scrollHeight;
   });
 
+  // ---------- Auth handler ----------
+
+  socket.on('signIn', data => {
+    signInAs(data.displayName);
+  });
 };

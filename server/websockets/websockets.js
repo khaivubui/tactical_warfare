@@ -21,11 +21,12 @@ module.exports = io => {
     if (socket.request.headers.cookie) {
       token = socket.request.headers.cookie['auth-token'];
     }
-    
+
     const currentSocket = activeSockets[socket.id];
     User.findByToken(token).then(user => {
       if (user) {
         currentSocket.displayName = user.username;
+        io.to(socket.id).emit('signIn', currentSocket);
       }
       // emit to itself
       io.to(socket.id).emit('currentSocket', currentSocket);
