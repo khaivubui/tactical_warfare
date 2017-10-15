@@ -116,11 +116,12 @@ export class Game{
   restartGame() {
     const socketPlayer = this.findSocketPlayer();
     this.players[0] = new LocalPlayer(this.findLocalPlayer().tank,this.scene, this.arena);
-    this.players[1] = new DemoPlayer(socketPlayer.tank);
+    if (socketPlayer) {
+      this.players[1] = new DemoPlayer(socketPlayer.tank);
+    }
     const chatWidget = document.querySelector('.chat-widget');
     chatWidget.style['max-height'] = '0px';
     this.players[0].hideForfeitButton();
-    // this._switchPlayer();
     unhideAuthWidgetToggle();
     this.reset();
     this.startGame();
