@@ -113,6 +113,17 @@ body {
   margin-top: 20px;
 }
 
+.auth-status {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 10px;
+	max-height: 30px;
+	transition: max-height 0.7s;
+	overflow: hidden;
+}
+
 .auth-widget-toggle {
   font-size: 1em;
   border: none;
@@ -121,9 +132,7 @@ body {
 	padding: 0;
 	height: 30px;
 	width: 90px;
-	max-height: 30px;
 	overflow: hidden;
-	transition: max-height 0.7s;
 }
 
 .auth-widget-toggle:hover {
@@ -211,7 +220,7 @@ body {
 }
 
 .other-active-sockets span {
-	display: inline-block;
+	display: block;
 	margin-top: 10px;
 }
 

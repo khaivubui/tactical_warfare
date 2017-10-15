@@ -1,4 +1,8 @@
 import axios from "axios";
+import Cookie from 'js-cookie';
+
+import { signInAs } from '../ui/auth_ui';
+import { socket } from '../websockets';
 
 export let openAuthWidget;
 export let closeAuthWidget;
@@ -44,9 +48,14 @@ export default () => {
     ).value;
 
     axios.post('/users/register', { username, password })
-      .then(response => {
-        console.log(response);
-        window.currentUser = response.data.username;
+      .then(({ data }) => {
+        if (data.success) {
+          Cookie.set('auth-token', data.token);
+          signInAs(data.user.username); // only UI
+          socket.emit('signIn', data.token);
+        } else {
+          alert(data.msg);
+        }
       });
   });
 
@@ -61,10 +70,15 @@ export default () => {
     ).value;
 
     axios.post('/users/authenticate', { username, password })
-      .then(response => {
-        console.log(response);
-        window.currentUser = response.data;
-    });
+      .then(({ data }) => {
+        if (data.success) {
+          Cookie.set('auth-token', data.token);
+          signInAs(data.user.username); // only UI
+          socket.emit('signIn', data.token);
+        } else {
+          alert(data.msg);
+        }
+      });
   });
 
   // Toggling the auth ui
@@ -97,11 +111,13 @@ export default () => {
     }
   );
 
+  const authStatus = document.querySelector('.auth-status');
+
   hideAuthWidgetToggle = () => {
-    authWidgetToggle.style['max-height'] = '0px';
+    authStatus.style['max-height'] = '0px';
   };
 
   unhideAuthWidgetToggle = () => {
-    authWidgetToggle.style['max-height'] = '30px';
+    authStatus.style['max-height'] = '30px';
   };
 };
