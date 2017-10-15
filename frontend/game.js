@@ -112,34 +112,29 @@ export class Game{
   }
 
   restartGame() {
-    console.log('RESTARTGAME');
     const socketPlayer = this.findSocketPlayer();
     this.players[0] = new LocalPlayer(this.findLocalPlayer().tank,this.scene, this.arena);
     this.players[1] = new DemoPlayer(socketPlayer.tank);
-    console.log(this.players);
     this._switchPlayer();
     this.reset();
     this.startGame();
   }
 
-  // findLocalPlayer(){
-  //   for (let i = 0; i < this.players.length; i++) {
-  //     if (this.players[i] instanceof LocalPlayer) {
-  //       console.log(this.players[i]);
-  //       return this.players[i];
-  //     }
-  //   }
-  // }
-  //
-  // findSocketPlayer(){
-  //   // debugger
-  //   for (let i = 0; i < this.players.length; i++) {
-  //     if (this.players[i] instanceof SocketPlayer) {
-  //       console.log(this.players[i]);
-  //       return this.players[i];
-  //     }
-  //   }
-  // }
+  findLocalPlayer(){
+    for (let i = 0; i < this.players.length; i++) {
+      if (this.players[i] instanceof LocalPlayer) {
+        return this.players[i];
+      }
+    }
+  }
+
+  findSocketPlayer(){
+    for (let i = 0; i < this.players.length; i++) {
+      if (this.players[i] instanceof SocketPlayer) {
+        return this.players[i];
+      }
+    }
+  }
 
   reset(){
     clearTimeout(this.timeoutID);
@@ -199,6 +194,7 @@ export class Game{
     } else if (loser instanceof SocketPlayer) {
       console.log("Good job you won!");
     }
+    this.restartGame();
   }
 
   _startListeningForMoveOptions(){
