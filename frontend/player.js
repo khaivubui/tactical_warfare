@@ -154,8 +154,6 @@ export class LocalPlayer extends Player{
     this._stopListeningForPosition = this._stopListeningForPosition.bind(this);
     this._handleZoomIn = this._handleZoomIn.bind(this);
     this._handleZoomOut = this._handleZoomOut.bind(this);
-
-
   }
 
   _handleMoveOption(onDoneCallback){
@@ -346,5 +344,12 @@ export class LocalPlayer extends Player{
     super.receiveDamage(amount);
     const health = document.querySelector("#health");
     health.innerHTML = this.health;
+  }
+
+  // hide "forfeit" button in Demo game
+  hideForfeitButton(){
+    const forfeit = document.getElementById('forfeit-button');
+    forfeit.style["max-width"] = "0px";
+    forfeit.style["max-height"] = "0px";
   }
 }

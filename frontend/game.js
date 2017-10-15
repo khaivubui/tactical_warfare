@@ -106,9 +106,6 @@ export class Game{
       this._switchPlayer();
       this._startTurn();
     });
-    // socket.on("gameOver", () => {
-    //   this.restartGame();
-    // });
   }
 
   restartGame() {
@@ -117,6 +114,7 @@ export class Game{
     this.players[1] = new DemoPlayer(socketPlayer.tank);
     const chatWidget = document.querySelector('.chat-widget');
     chatWidget.style['max-height'] = '0px';
+    this.players[0].hideForfeitButton();
     this._switchPlayer();
     this.reset();
     this.startGame();
@@ -269,4 +267,6 @@ export class Game{
     this._switchPlayer();
     this._startTurn();
   }
+
+
 }
