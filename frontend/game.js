@@ -3,7 +3,7 @@ import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
 import {Bomb} from "./projectile/projectile";
 import {socket} from "./websockets";
 import { notifyTurn, showActiveSocketsWidgetToggle } from './websockets';
-
+import {unhideAuthWidgetToggle} from "./auth_stuff/auth_stuff";
 import {renderTimer, clearTimer} from './ui/timer';
 
 const TANK_MASS = 27000; //kg
@@ -119,7 +119,7 @@ export class Game{
     chatWidget.style['max-height'] = '0px';
     this.players[0].hideForfeitButton();
     // this._switchPlayer();
-
+    unhideAuthWidgetToggle();
     this.reset();
     this.startGame();
     showActiveSocketsWidgetToggle();
