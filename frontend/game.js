@@ -3,7 +3,8 @@ import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
 import {Bomb} from "./projectile/projectile";
 import {socket} from "./websockets";
 import { notifyTurn } from './websockets';
-import {renderTimer} from './ui/timer';
+
+import {renderTimer, clearTimer} from './ui/timer';
 
 const TANK_MASS = 27000; //kg
 const BOMB_MASS = 1; //kg
@@ -139,6 +140,7 @@ export class Game{
 
   reset(){
     clearTimeout(this.timeoutID);
+    clearTimer();
     const turnOptions = document.getElementById('turn-options');
     turnOptions.style["max-width"] = 0;
     this.currentPlayerIdx = 0;
@@ -225,6 +227,7 @@ export class Game{
   }
   receiveMovePosition(position){
     clearTimeout(this.timeoutID);
+    clearTimer();
     this.players[this.currentPlayerIdx].tank.position = position;
     this.players[this.currentPlayerIdx].tank.position.y =
       TANK_POS_HEIGHT;
@@ -247,6 +250,7 @@ export class Game{
 
   _receiveAttack(matrix){
     clearTimeout(this.timeoutID);
+    clearTimer();
     const bombScale = new BABYLON.Vector3.Zero();
     const bombRot = new BABYLON.Quaternion.Identity();
     const bombPos = new BABYLON.Vector3.Zero();
