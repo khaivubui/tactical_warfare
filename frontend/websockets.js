@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
 
-import { closeAuthWidget, hideAuthWidgetToggle} from './auth_stuff/auth_stuff';
+import { closeAuthWidget, hideAuthWidgetToggle } from './auth_stuff/auth_stuff';
+import { signInAs } from './ui/auth_ui';
 
 export const socket = io();
 
@@ -39,7 +40,6 @@ export const webSockets = () => {
   });
 
   socket.on('activeSockets', data => {
-    window.activeSockets = data;
     const activeSocketIds = Object.keys(data);
 
     activeSocketIds.forEach(socketId => {
@@ -54,6 +54,12 @@ export const webSockets = () => {
   socket.on('removeActiveSocket', data => {
     const activeSocket = document.getElementById(data.id);
     otherActiveSockets.removeChild(activeSocket);
+  });
+
+  socket.on('updateActiveSocket', data => {
+    const activeSocket = document.getElementById(data.id);
+    otherActiveSockets.removeChild(activeSocket);
+    otherActiveSockets.appendActiveSocket(data);
   });
 
   // ---------- challengeReceived ----------
@@ -197,4 +203,9 @@ export const webSockets = () => {
     chatLog.scrollTop = chatLog.scrollHeight;
   });
 
+  // ---------- Auth handler ----------
+
+  socket.on('signIn', data => {
+    signInAs(data.displayName);
+  });
 };

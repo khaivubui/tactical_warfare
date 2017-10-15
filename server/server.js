@@ -3,7 +3,6 @@ const passport = require("passport");
 const cors = require("cors");
 const path = require("path");
 
-
 const users = require("./routes/users");
 const config = require('./config/database');
 
@@ -14,6 +13,8 @@ const express = require('express');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const cookieParser = require('socket.io-cookie');
+io.use(cookieParser);
 
 const routes = require("./routes/routes");
 const webSockets = require('./websockets/websockets');

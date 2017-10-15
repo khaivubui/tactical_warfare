@@ -1,8 +1,9 @@
 const faker = require('faker');
 
+const User = require('../models/user');
+
 module.exports = io => {
   const activeSockets = {}; // used to store all active sockets
-
 
   io.on('connection', socket => {
     io.to(socket.id).emit('activeSockets', activeSockets);
@@ -16,11 +17,22 @@ module.exports = io => {
       faker.commerce.productName()
     };
 
-    // emit to the newly connected socket its information
-    io.to(socket.id).emit('currentSocket', activeSockets[socket.id]);
+    let token;
+    if (socket.request.headers.cookie) {
+      token = socket.request.headers.cookie['auth-token'];
+    }
 
-    // emit to all other sockets that there is a new online socket
-    socket.broadcast.emit('newActiveSocket', activeSockets[socket.id]);
+    const currentSocket = activeSockets[socket.id];
+    User.findByToken(token).then(user => {
+      if (user) {
+        currentSocket.displayName = user.username;
+        io.to(socket.id).emit('signIn', currentSocket);
+      }
+      // emit to itself
+      io.to(socket.id).emit('currentSocket', currentSocket);
+      // emit to other sockets
+      socket.broadcast.emit('newActiveSocket', currentSocket);
+    });
 
     // routing the challenge to the opponent
     socket.on('challengeSent', opponentSocketId => {
@@ -65,6 +77,21 @@ module.exports = io => {
           message
         }
       );
+    });
+
+    //auth
+    socket.on('signIn', newToken => {
+      User.findByToken(newToken).then(user => {
+        currentSocket.displayName = user.username;
+        io.to(socket.id).emit('currentSocket', currentSocket);
+        socket.broadcast.emit('updateActiveSocket', currentSocket);
+      });
+    });
+
+    socket.on('signOut', () => {
+      currentSocket.displayName = faker.commerce.productName();
+      io.to(socket.id).emit('currentSocket', currentSocket);
+      socket.broadcast.emit('updateActiveSocket', currentSocket);
     });
 
     //--------------------------------------------- the game
