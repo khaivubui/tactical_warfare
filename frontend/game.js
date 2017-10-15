@@ -80,6 +80,8 @@ export const startOnlineGame = (game, isFirst) => {
   game.startGame();
 };
 
+
+
 export class Game{
   constructor(scene, players, arena ){
     this.players = players;
@@ -98,14 +100,25 @@ export class Game{
     this._switchPlayer = this._switchPlayer.bind(this);
     this._startTurn = this._startTurn.bind(this);
     this._gameOver = this._gameOver.bind(this);
+    this.restartGame = this.restartGame.bind(this);
     socket.on("switchPlayer", () => {
       this._switchPlayer();
       this._startTurn();
     });
     socket.on("gameOver", () => {
-      socket.emit('disconnect');
+      this.restartGame();
     });
   }
+
+  restartGame() {
+    this.players[0] = new LocalPlayer(this.players[0].tank,this.scene, this.arena);
+    this.players[1] = new DemoPlayer(this.players[0].tank);
+    console.log(this.players);
+    this.players[0].health = 100;
+    this.players[1].health = 100;
+    this._startListeningForMoveOptions();
+  }
+
   reset(){
     clearTimeout(this.timeoutID);
     const turnOptions = document.getElementById('turn-options');
@@ -113,6 +126,7 @@ export class Game{
     this.currentPlayerIdx = 0;
     this.initialPositionTanks();
     this.players[0].health = 100;
+    this.players[1].health = 100;
   }
   initialPositionTanks(){
     const midX = Math.floor(this.arena.ground.cellCount / 2);
@@ -139,7 +153,6 @@ export class Game{
   }
 
   _startTurn() {
-    // debugger
     const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
     if (this.players[this.currentPlayerIdx].health <= 0) {
       return this._gameOver(this.players[this.currentPlayerIdx]);
@@ -158,11 +171,10 @@ export class Game{
   }
 
   _gameOver(loser) {
+    // socket.emit("gameOver");
     if (loser instanceof LocalPlayer) {
-      console.log('you lost');
       socket.emit("gameOver");
     } else if (loser instanceof SocketPlayer) {
-      console.log('you won');
       socket.emit("gameOver");
     }
   }
@@ -192,7 +204,6 @@ export class Game{
   receiveMovePosition(position){
     clearTimeout(this.timeoutID);
     this.players[this.currentPlayerIdx].tank.position = position;
-    // this.players[this.currentPlayerIdx].tank.rotation = new BABYLON.Vector3.Zero();
     this.players[this.currentPlayerIdx].tank.position.y =
       TANK_POS_HEIGHT;
     this._switchPlayer();
