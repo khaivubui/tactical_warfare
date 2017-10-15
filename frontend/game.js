@@ -11,6 +11,7 @@ const BOMB_MASS = 1; //kg
 const DEFAULT_FIRING_IMPULSE = 20;
 const TANK_CANNON_LENGTH = 1;
 const TANK_POS_HEIGHT = 3;
+const GAME_STATE_SEND_INTERVAL = 100;
 
 export const createDemoGame = (scene) => {
       const localTank = scene.tankMesh;
@@ -101,6 +102,15 @@ export class Game{
       this._switchPlayer();
       this._startTurn();
     });
+    socket.on("turnResult", state =>{
+
+      this._applyGameState(state);
+      this._switchPlayer();
+      this._startTurn();
+    });
+    socket.on("gameState", state =>{
+      this._applyGameState(state);
+    })
     this.bombs = [];
   }
   reset(){
@@ -113,6 +123,7 @@ export class Game{
     this.players[0].health = 100;
   }
   _applyGameState(state){
+    const worldRotYmatrix = BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI);
     const statePlayers = [state.activePlayer, state.passivePlayer];
     const playerPhysicsImpostors = state.playerPhysicsImpostors;
     let players;
@@ -129,37 +140,69 @@ export class Game{
         players[i][key] = statePlayers[i][key];
       });
     }
-    let physicsImpostorsKeys;
-    for(let i = 0; i< 2; ++i){
-      physicsImpostorsKeys = Object.keys(playerPhysicsImpostors[i]);
-      physicsImpostorsKeys.forEach(key => {
-        players[i].tank.physicsImpostor[key] = playerPhysicsImpostors[i][key];
-      });
-    }
-    let tanksKeys;
     for(let i = 0; i<2; ++i){
-      tanksKeys = Object.keys(state.tanks[i]);
-      tanksKeys.forEach(key=>{
-        players[i].tank[key] = state.tanks[i][key];
-      });
-
       if(state.tanks[i].cannonX !== undefined){
-          debugger;
         players[i]._rotXMesh.rotation.x = state.tanks[i].cannonX;
       }
       if(state.tanks[i].cannonY !== undefined){
         players[i]._rotYMesh.rotation.y = state.tanks[i].cannonY;
       }
+      if(state.tanks[i].position){
+        BABYLON.Vector3.TransformCoordinatesToRef(state.tanks[i].position,
+           worldRotYmatrix,
+           players[i].tank.position
+        );
+      }
+      if(state.tanks[i].rotation){
+        BABYLON.Quaternion.FromRotationMatrix(worldRotYmatrix).multiplyToRef(
+          state.tanks[i].rotation, players[i].tank.rotationQuaternion
+        );
+      }
+      if(state.playerPhysicsImpostors[i].angularVelocity){
+        players[i].tank.physicsImpostor.setAngularVelocity(
+          new BABYLON.Quaternion(
+            state.playerPhysicsImpostors[i].angularVelocity.x,
+            state.playerPhysicsImpostors[i].angularVelocity.y,
+            state.playerPhysicsImpostors[i].angularVelocity.z,
+            state.playerPhysicsImpostors[i].angularVelocity.w
+          )
+        );
+      }
+      if(state.playerPhysicsImpostors[i].linearVelocity){
+        players[i].tank.physicsImpostor.setLinearVelocity(
+          BABYLON.Vector3.TransformCoordinates(
+            state.playerPhysicsImpostors[i].linearVelocity,
+            worldRotYmatrix
+          )
+        );
+      }
     }
+
     for(let i = 0; i < state.bombs.length; ++i){
-      this.bombs[i].mesh.position  = state.bombs[i].position;
-      this.bombs[i].mesh.rotation = state.bombs[i].rotation;
-      this.bombs[i].physicsImpostor.linearVelocity = state.bombs[i].linearVelocity;
-      this.bombs[i].physicsImpostor.angularVelocity = state.bombs[i].angularVelocity;
+      BABYLON.Vector3.TransformCoordinatesToRef(state.bombs[i].position,
+         worldRotYmatrix,
+        this.bombs[i].mesh.position);
+      BABYLON.Quaternion.FromRotationMatrixToRef(
+        this.bombs[i].mesh.worldMatrixFromCache.multiply(worldRotYmatrix),
+        this.bombs[i].mesh.rotationQuaternion
+      );
+      this.bombs[i].physicsImpostor.setLinearVelocity(
+        BABYLON.Vector3.TransformCoordinates(
+          state.bombs[i].linearVelocity,
+          worldRotYmatrix
+        )
+      );
+      this.bombs[i].physicsImpostor.setAngularVelocity(
+        new BABYLON.Quaternion(
+          state.bombs[i].angularVelocity.x,
+          state.bombs[i].angularVelocity.y,
+          state.bombs[i].angularVelocity.z,
+          state.bombs[i].angularVelocity.w
+        )
+      );
     }
   }
   getGameState(){
-    debugger;
     const state = {playerPhysicsImpostors: [{},{}],
       bombs: []};
     const activePlayer = this.players[this.currentPlayerIdx];
@@ -170,7 +213,7 @@ export class Game{
     for(let i = 0; i < 2; ++i){
       statePlayers[i].health = players[i].health;
       stateTanks[i].position = players[i].tank.position;
-      stateTanks[i].rotation = players[i].tank.rotation;
+      stateTanks[i].rotation = players[i].tank.rotationQuaternion;
       stateTanks[i].cannonX = players[i]._rotXMesh.rotation.x;
       stateTanks[i].cannonY = players[i]._rotYMesh.rotation.y;
       state.playerPhysicsImpostors[i].linearVelocity =
@@ -181,7 +224,7 @@ export class Game{
     for(let i = 0; i < this.bombs.length; ++i){
       state.bombs.push({
         position: this.bombs[i].mesh.position,
-        rotation: this.bombs[i].mesh.rotation,
+        rotation: this.bombs[i].mesh.rotationQuaterion,
         linearVelocity: this.bombs[i].physicsImpostor.getLinearVelocity(),
         angularVelocity: this.bombs[i].physicsImpostor.getLinearVelocity()
       });
@@ -225,7 +268,11 @@ export class Game{
         this._switchPlayer();
         this._startTurn();
       }, 10000);
+      this.gameStateTimerID = setInterval(() => {
+        socket.emit("gameState", this.getGameState());
+      }, GAME_STATE_SEND_INTERVAL);
     }
+
   }
 
   _startListeningForMoveOptions(){
@@ -263,6 +310,7 @@ export class Game{
 
   _switchPlayer(){
     this.players[this.currentPlayerIdx].endTurn();
+    clearInterval(this.gameStateTimerID);
     const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
     if (!(this.players[otherPlayer] instanceof DemoPlayer)) {
       if (this.currentPlayerIdx === 0) {
@@ -295,7 +343,11 @@ export class Game{
     this.bombs.push(bomb);
   }
   _receiveAttackFinished(){
-    this._switchPlayer();
-    this._startTurn();
+
+    if(this.players[this.currentPlayerIdx] instanceof LocalPlayer){
+      socket.emit("turnResult", this.getGameState());
+      this._switchPlayer();
+      this._startTurn();
+    }
   }
 }

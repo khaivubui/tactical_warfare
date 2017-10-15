@@ -73,7 +73,8 @@ module.exports = io => {
         io.to(activeSockets[socket.id].opponentSocketId).emit(message, data);
       })
     );
-    const gameplayMessages = ["position", "moveType", "attack", "cancel", "switchPlayer"];
+    const gameplayMessages = ["position", "moveType", "attack",
+     "cancel", "switchPlayer", "turnResult", "gameState"];
     for(let i = 0; i< gameplayMessages.length; ++i){
       sendToOpponent(gameplayMessages[i]);
     }

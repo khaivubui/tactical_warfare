@@ -31,6 +31,7 @@ export class Bomb extends Projectile{
     this.mesh.scaling.y = 0.6;
     this.mesh.scaling.z = 0.6;
   }
+
   fire(impulseVector, onDoneCallback){
     const camera = this.game.scene.activeCamera;
     const aimArrow = document.querySelector(".camera-rotation");
