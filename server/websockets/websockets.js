@@ -75,10 +75,9 @@ module.exports = io => {
     });
 
     //auth
-    socket.on('signIn', () => {
-      token = socket.request.headers.cookie['auth-token'];
+    socket.on('signIn', newToken => {
       const currentSocket = activeSockets[socket.id];
-      User.findByToken(token).then(user => {
+      User.findByToken(newToken).then(user => {
         currentSocket.displayName = user.username;
         io.to(socket.id).emit('currentSocket', currentSocket);
         socket.broadcast.emit('updateActiveSocket', currentSocket);

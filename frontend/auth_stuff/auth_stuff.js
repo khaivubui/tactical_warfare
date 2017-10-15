@@ -52,7 +52,7 @@ export default () => {
         if (data.success) {
           Cookie.set('auth-token', data.token);
           signInAs(data.user.username); // only UI
-          socket.emit('signIn');
+          socket.emit('signIn', data.token);
         } else {
           alert(data.msg);
         }
@@ -74,7 +74,7 @@ export default () => {
         if (data.success) {
           Cookie.set('auth-token', data.token);
           signInAs(data.user.username); // only UI
-          socket.emit('signIn');
+          socket.emit('signIn', data.token);
         } else {
           alert(data.msg);
         }
