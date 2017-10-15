@@ -1,8 +1,8 @@
 import Arena from "./arena.js";
-import {Player, OpponentPlayer, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
+import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
 import {Bomb} from "./projectile/projectile";
 import {socket} from "./websockets";
-import { notifyTurn } from './websockets';
+import { notifyTurn, showActiveSocketsWidgetToggle } from './websockets';
 
 import {renderTimer, clearTimer} from './ui/timer';
 
@@ -11,6 +11,7 @@ const BOMB_MASS = 1; //kg
 const DEFAULT_FIRING_IMPULSE = 20;
 const TANK_CANNON_LENGTH = 1;
 const TANK_POS_HEIGHT = 3;
+const TURN_TIME = 15000;
 
 export const createDemoGame = (scene) => {
       const localTank = scene.tankMesh;
@@ -19,6 +20,7 @@ export const createDemoGame = (scene) => {
       const arena = new Arena(scene);
       const Player1 = new LocalPlayer(localTank, scene, arena);
       const Player2 = new DemoPlayer(socketTank);
+      Player1.hideForfeitButton();
       scene.localTank = localTank;
       scene.socketTank = socketTank;
       socketTank.material.specularPower = 300;
@@ -71,17 +73,22 @@ export const startOnlineGame = (game, isFirst) => {
   if(isFirst){
     game.players[0] = new LocalPlayer(game.scene.localTank,game.scene, game.arena);
     game.players[1] = new SocketPlayer(game.scene.socketTank);
+    game.players[0].showForfeitButton();
   }
   else{
     game.players[0] = new SocketPlayer(game.scene.socketTank);
     game.players[1] =  new LocalPlayer(game.scene.localTank,game.scene, game.arena);
+    game.players[1].showForfeitButton();
   }
   game.startGame();
 };
 
+
+
 export class Game{
   constructor(scene, players, arena ){
     this.players = players;
+    window.game = this;
     this.currentPlayerIdx = 0;
     this.myPlayerIdx = 0;
     this.scene = scene;
@@ -96,11 +103,44 @@ export class Game{
     this.explosionsCreatedSinceStart = 0;
     this._switchPlayer = this._switchPlayer.bind(this);
     this._startTurn = this._startTurn.bind(this);
+    this._gameOver = this._gameOver.bind(this);
+    this.restartGame = this.restartGame.bind(this);
     socket.on("switchPlayer", () => {
       this._switchPlayer();
       this._startTurn();
     });
   }
+  // Restart a Demo game for both players after one player lost
+  restartGame() {
+    const socketPlayer = this.findSocketPlayer();
+    this.players[0] = new LocalPlayer(this.findLocalPlayer().tank,this.scene, this.arena);
+    this.players[1] = new DemoPlayer(socketPlayer.tank);
+    const chatWidget = document.querySelector('.chat-widget');
+    chatWidget.style['max-height'] = '0px';
+    this.players[0].hideForfeitButton();
+    // this._switchPlayer();
+
+    this.reset();
+    this.startGame();
+    showActiveSocketsWidgetToggle();
+  }
+  // Find the current Local player helper method
+  findLocalPlayer(){
+    for (let i = 0; i < this.players.length; i++) {
+      if (this.players[i] instanceof LocalPlayer) {
+        return this.players[i];
+      }
+    }
+  }
+  //Find the current Socket player helper method
+  findSocketPlayer(){
+    for (let i = 0; i < this.players.length; i++) {
+      if (this.players[i] instanceof SocketPlayer) {
+        return this.players[i];
+      }
+    }
+  }
+
   reset(){
     clearTimeout(this.timeoutID);
     clearTimer();
@@ -109,7 +149,9 @@ export class Game{
     this.currentPlayerIdx = 0;
     this.initialPositionTanks();
     this.players[0].health = 100;
+    this.players[1].health = 100;
   }
+
   initialPositionTanks(){
     const midX = Math.floor(this.arena.ground.cellCount / 2);
     const midZ = Math.floor(this.arena.ground.cellCount /4);
@@ -129,22 +171,40 @@ export class Game{
       this.players[i].resetCannon();
     }
   }
-
+  // Start new Online game
   startGame(){
     this._startTurn();
   }
 
   _startTurn() {
-    this._startListeningForMoveOptions();
     const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
+    if (this.players[this.currentPlayerIdx].health <= 0) {
+      return this._gameOver(this.players[this.currentPlayerIdx]);
+    } else if (this.players[otherPlayer].health <= 0) {
+      return this._gameOver(this.players[otherPlayer]);
+    }
+    this._startListeningForMoveOptions();
     if (this.players[otherPlayer] instanceof SocketPlayer) {
-      renderTimer(10000);
+      renderTimer(TURN_TIME);
       this.timeoutID = setTimeout(() => {
         socket.emit("switchPlayer");
         this._switchPlayer();
         this._startTurn();
-      }, 10000);
+      }, TURN_TIME);
     }
+  }
+
+  _gameOver(loser) {
+    if (loser instanceof LocalPlayer) {
+      console.log("sorry you lost");
+      const gameoverNotification = document.querySelector('.turn-notification');
+      gameoverNotification.innerHTML = "YOU LOST!!!";
+    } else if (loser instanceof SocketPlayer) {
+      console.log("Good job you won!");
+      const gameoverNotification = document.querySelector('.turn-notification');
+      gameoverNotification.innerHTML = "YOU WON!!!";
+    }
+    this.restartGame();
   }
 
   _startListeningForMoveOptions(){
@@ -167,13 +227,15 @@ export class Game{
       case "attack":
         this.startListeningForAttack();
         break;
+      case "forfeit":
+        this._gameOver(this.players[this.currentPlayerIdx]);
+        break;
     }
   }
   receiveMovePosition(position){
     clearTimeout(this.timeoutID);
     clearTimer();
     this.players[this.currentPlayerIdx].tank.position = position;
-    // this.players[this.currentPlayerIdx].tank.rotation = new BABYLON.Vector3.Zero();
     this.players[this.currentPlayerIdx].tank.position.y =
       TANK_POS_HEIGHT;
     this._switchPlayer();

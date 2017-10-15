@@ -61,7 +61,6 @@ export class Bomb extends Projectile{
     const crossProduct = BABYLON.Vector3.Cross(impulseVector,
        BABYLON.Vector3.Left());
     const signFlip = (crossProduct.y > 0) ? 1 : -1;
-    console.log(signFlip);
     return signFlip * Math.acos(BABYLON.Vector3.Dot(impulseNormalized,
       new BABYLON.Vector3.Left()));
   }

@@ -47,21 +47,6 @@ export class Player{
 }
 
 
-export class OpponentPlayer {
-  constructor(tank) {
-    this.tank = tank;
-    this.health = 100;
-  }
-  startListeningForMoveOptions(onDoneCallback) {
-    onDoneCallback("position");
-    const oppHealth = document.querySelector("#opp-health");
-    oppHealth.innerHTML = `Opponent Health: ${this.health}`;
-  }
-  receiveDamage(amount){
-    this.health -= amount;
-  }
-}
-
 export class DemoPlayer extends Player{
   constructor(tank){
     super(tank);
@@ -87,6 +72,7 @@ export class SocketPlayer extends Player{
     this.stopListeningForPosition = this.stopListeningForPosition.bind(this);
     this.stopListeningForMoveOptions = this.stopListeningForMoveOptions.bind(this);
     this.stopListeningForAttack = this.stopListeningForAttack.bind(this);
+
   }
 
   startListeningForPosition(onDoneCallback, onCancelledCallback){
@@ -100,12 +86,12 @@ export class SocketPlayer extends Player{
     }
   );
   }
-
+  // Turn off socket when LocalPlayer is emitting positions
   stopListeningForPosition() {
     socket.off("position");
     socket.off("cancel");
   }
-
+  // Socket player listens for opponent's move options
   startListeningForMoveOptions(onDoneCallback){
     socket.on("moveType", type=>{
       onDoneCallback(type);
@@ -113,6 +99,7 @@ export class SocketPlayer extends Player{
     });
   }
 
+  // Turn off socket when LocalPlayer is emitting initial move choices
   stopListeningForMoveOptions(){
     socket.off("moveType");
   }
@@ -167,8 +154,6 @@ export class LocalPlayer extends Player{
     this._stopListeningForPosition = this._stopListeningForPosition.bind(this);
     this._handleZoomIn = this._handleZoomIn.bind(this);
     this._handleZoomOut = this._handleZoomOut.bind(this);
-
-
   }
 
   _handleMoveOption(onDoneCallback){
@@ -228,7 +213,6 @@ export class LocalPlayer extends Player{
     };
     this.arena.ground.startListeningForPosition(this._handleConfirmPosition(
       onDoneCallback));
-    //socket.emit
   }
   _positionAimingCamera(){
     const camera = this.scene.activeCamera;
@@ -333,7 +317,7 @@ export class LocalPlayer extends Player{
     window.onmousemove = null;
     window.onmouseup = null;
   }
-
+  // Zoom in button on the left
   _handleZoomIn(){
     return e => {
       if (this.scene.activeCamera.radius > 0) {
@@ -341,14 +325,14 @@ export class LocalPlayer extends Player{
       }
     };
   }
-
+  // Zoom out button on the left
   _handleZoomOut(){
     return e => {
       this.scene.activeCamera.radius += 3;
     };
   }
 
-  // For end turn
+  // For end turn, turn off all socket player sockets
   endTurn(){
     this._stopListeningForMoveOptions();
     this._stopListeningForAttack();
@@ -359,5 +343,15 @@ export class LocalPlayer extends Player{
     super.receiveDamage(amount);
     const health = document.querySelector("#health");
     health.innerHTML = this.health;
+  }
+  // hide "forfeit" button in Demo game
+  hideForfeitButton(){
+    const forfeitWrapper = document.getElementById('forfeit-wrapper');
+    forfeitWrapper.style["max-height"] = "0px";
+  }
+  // show "forfeit" button in Online game
+  showForfeitButton() {
+    const forfeitWrapper = document.getElementById('forfeit-wrapper');
+    forfeitWrapper.style["max-height"] = "140px";
   }
 }
