@@ -5,6 +5,7 @@ import { closeAuthWidget, hideAuthWidgetToggle} from './auth_stuff/auth_stuff';
 export const socket = io();
 
 export let notifyTurn;
+export let showActiveSocketsWidgetToggle;
 
 export const webSockets = () => {
   const otherActiveSockets =
@@ -135,6 +136,12 @@ export const webSockets = () => {
 
   const hideActiveSocketsWidgetToggle = () => {
     activeSocketsToggle.style['max-width'] = '0px';
+  };
+
+  // ---------- show widget toggle ----------
+
+  showActiveSocketsWidgetToggle = () => {
+    activeSocketsToggle.style['max-width'] = '32px';
   };
 
   // ---------- Turn Notification ----------

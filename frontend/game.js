@@ -2,7 +2,7 @@ import Arena from "./arena.js";
 import {Player, DemoPlayer, LocalPlayer, SocketPlayer} from "./player.js";
 import {Bomb} from "./projectile/projectile";
 import {socket} from "./websockets";
-import { notifyTurn } from './websockets';
+import { notifyTurn, showActiveSocketsWidgetToggle } from './websockets';
 
 import {renderTimer, clearTimer} from './ui/timer';
 
@@ -120,6 +120,7 @@ export class Game{
     this._switchPlayer();
     this.reset();
     this.startGame();
+    showActiveSocketsWidgetToggle();
   }
 
   findLocalPlayer(){
