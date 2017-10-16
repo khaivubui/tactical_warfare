@@ -345,9 +345,16 @@ export class Game{
     );
     const bomb = new Bomb(this,bombPos,
       bombRot.toEulerAngles());
+    let bombDoneCallback;
+    if(this.players[this.currentPlayerIdx] instanceof LocalPlayer){
+      bombDoneCallback = this._receiveAttackFinished;
+    }
+    else{
+      bombDoneCallback = ()=>{};
+    }
     bomb.fire(impulseVector,()=>{
         this.bombs.shift();
-        this._receiveAttackFinished();
+        bombDoneCallback();
     });
     this.bombs.push(bomb);
   }
