@@ -55,7 +55,7 @@ const createScene = function() {
     const game = createDemoGame(scene);
     game.startGame();
     socket.on("startGame", isFirst => {
-      startOnlineGame(game, isFirst);
+        startOnlineGame(game, isFirst);
     });
     engine.runRenderLoop(() => {
       window.scene = scene;
@@ -92,6 +92,15 @@ const setupAssetsManager = function setupAssetsManager(scene) {
   greenTextureTask.onSuccess = task => {
     scene.greenTankTexture = task.texture;
   };
+  const centerWallTask = assetsManager.addMeshTask(
+    "centerWallTask",
+    "centerWall",
+    "models/arena/",
+    "wallCenter.babylon"
+  );
+  centerWallTask.onSuccess = task => {
+    scene.centerWall = task.loadedMeshes[0];
+  };
   const boxTask = assetsManager.addTextureTask(
     "boxTexture",
     "models/arena/box.jpg"
@@ -105,13 +114,6 @@ const setupAssetsManager = function setupAssetsManager(scene) {
   );
   ceilingTask.onSuccess = task => {
     scene.ceilingTask = task.texture;
-  };
-  const centerWallTask = assetsManager.addTextureTask(
-    "centerWallTexture",
-    "models/arena/centerBrickWall.jpg"
-  );
-  centerWallTask.onSuccess = task => {
-    scene.centerWallTask = task.texture;
   };
   const groundTask = assetsManager.addTextureTask(
     "groundTask",
