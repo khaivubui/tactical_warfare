@@ -321,14 +321,10 @@ export class Game {
     state.tanks = stateTanks;
     return state;
   }
-<<<<<<< HEAD
+
   initialPositionTanks(){
     const localPlayer = this.findLocalPlayer();
     const opponentPlayer = this.findOpponentPlayer();
-
-=======
-  initialPositionTanks() {
->>>>>>> 71aca6b19b1bfc4e0ebd266791bf6e4b77b99f2d
     const midX = Math.floor(this.arena.ground.cellCount / 2);
     const midZ = Math.floor(this.arena.ground.cellCount / 4);
     const globalCoordinates = this.arena.ground.cellIndicesToGlobalCoordinates([
@@ -364,7 +360,7 @@ export class Game {
       return this._gameOver(this.players[otherPlayer]);
     }
 
-    this.players[this.currentPlayerIdx].setUpright();
+    //this.players[this.currentPlayerIdx].setUpright();
     this._startListeningForMoveOptions();
     if (this.players[otherPlayer] instanceof SocketPlayer) {
       renderTimer(TURN_TIME);
