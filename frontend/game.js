@@ -138,7 +138,7 @@ export class Game {
     const turnNotification = document.querySelector(".turn-notification");
     turnNotification.innerHTML =
       this.players[this.currentPlayerIdx] instanceof LocalPlayer ?
-      "YOUR MOVE" : "ENEMY MOVE"; 
+      "YOUR MOVE" : "ENEMY MOVE";
     turnNotification.style["max-width"] = "300px";
     window.setTimeout(() => {
       turnNotification.style["max-width"] = "0";
@@ -359,11 +359,12 @@ export class Game {
   }
   // Start new Online game
   startGame() {
+    this.notifyTurn();
     this._startTurn();
   }
 
   _startTurn() {
-    this.notifyTurn();
+
     const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
     if (this.players[this.currentPlayerIdx].health <= 0) {
       return this._gameOver(this.players[this.currentPlayerIdx]);
@@ -447,6 +448,7 @@ export class Game {
       } else {
         this.currentPlayerIdx = 0;
       }
+      this.notifyTurn();
     }
   }
 
