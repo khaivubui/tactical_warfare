@@ -12,6 +12,7 @@ export class Explosion {
       1,
       scene
     );
+    this.scene = game.scene;
     this._mesh.position = position;
     this._mesh.material = new BABYLON.StandardMaterial("explosion", game.scene);
     this._mesh.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
@@ -20,6 +21,9 @@ export class Explosion {
     this._decreaseBrightnessStep = this._decreaseBrightnessStep.bind(this);
   }
   start(onDoneCallback) {
+    for(let i = 0; i < this.scene.lights.length; ++i){
+      this.scene.lights[i].intensity = 200;
+    }
     const updateStep = setInterval(() => {
       this._increaseRadiusStep();
       this._decreaseBrightnessStep();
@@ -31,6 +35,9 @@ export class Explosion {
       this._mesh.material.dispose();
       this._mesh.dispose();
       onDoneCallback();
+      for(let i = 0; i < this.scene.lights.length; ++i){
+        this.scene.lights[i].intensity =1;
+      }
     }, 1000);
   }
   _increaseRadiusStep() {
@@ -40,6 +47,11 @@ export class Explosion {
     scale.z = (scale.x * 3 + EXPLOSION_MAX_RADIUS) / 4;
   }
   _decreaseBrightnessStep() {
+    for(let i = 0; i < this.scene.lights.length; ++i){
+      this.scene.lights[i].intensity *=3;
+      this.scene.lights[i].intensity +=1;
+      this.scene.lights[i].intensity = this.scene.lights[i].intensity/4;
+    }
     const col = this._mesh.material.emissiveColor;
     col.g *= GREEN_DECREASE_MULTIPLIER;
     col.r *= RED_DECREASE_MULTIPLIER;
