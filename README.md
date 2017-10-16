@@ -1,5 +1,7 @@
 # [Tactical Warfare](https://tactical-warfare.herokuapp.com/)
 
+[live version](https://tactical-warfare.herokuapp.com/)
+
 ## Overview
 
 Tactical Warfare is a 2 player 3D online Tank game. Implemented almost entirely using JavaScript, the game allows a user to register, sign in, sign out, challenge other players, accept challenges from other players, move their tank, fire projectiles, compete and communicate in real time.
