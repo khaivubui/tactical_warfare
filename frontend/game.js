@@ -137,6 +137,9 @@ export class Game {
   }
   // Restart a Demo game for both players after one player lost
   restartGame() {
+    for(let i = 0; i < this.players.length; ++i){
+      this.players[i].endTurn();
+    }
     const socketPlayer = this.findSocketPlayer();
     this.players[0] = new LocalPlayer(
       this.findLocalPlayer().tank,
@@ -326,6 +329,8 @@ export class Game {
     for (let i = 0; i < this.players.length; ++i) {
       this.players[i].resetCannon();
     }
+    this.players[otherPlayerIdx].setUpright();
+    this.players[this.currentPlayerIdx].setUpright();
   }
   // Start new Online game
   startGame() {
