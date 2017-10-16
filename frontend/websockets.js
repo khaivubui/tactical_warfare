@@ -161,7 +161,17 @@ export const webSockets = () => {
     closeAuthWidget();
     hideActiveSocketsWidgetToggle();
     hideAuthWidgetToggle();
-    chatLog.innerHTML = "";
+    chatLog.innerHTML = "Connected. Game starting in...";
+    let three = 4;
+    const countDown = setInterval(()=> {
+      if (three <= 0) {
+        clearInterval(countDown);
+        chatLog.innerHTML = "";
+      } else if (three <= 3){
+        chatLog.innerHTML = three;
+      }
+      three = three - 1;
+    }, 1000);
     chatWidget.style["max-height"] = "150px";
   });
 
