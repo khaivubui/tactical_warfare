@@ -6,7 +6,8 @@
 
 ## Overview
 
-Tactical Warfare is a 2 players 3D online Tank game. Implemented almost entirely using JavaScript, the game allows a user to register, sign in, sign out, challenge other players, accept challenges from other players, move their tank, fire projectiles, compete and communicate in real time.
+Throw yourself into an epic tank battle with your friends! Tactical Warfare is a 3D online Tank game. The game is a turn-based strategy game between two opponents, with the goal to reduce the opponent's health to zero.
+Implemented almost entirely using JavaScript, the game allows a user to register, sign in, sign out, challenge other active players, accept challenges, position their tank tactfully, fire projectiles, compete and chat in real time.
 
 ## Technology Overview
 
