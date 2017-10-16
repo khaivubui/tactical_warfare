@@ -136,7 +136,9 @@ export class Game {
   }
   notifyTurn(){
     const turnNotification = document.querySelector(".turn-notification");
-    //turnNotification.innerHTML = 
+    turnNotification.innerHTML =
+      this.players[this.currentPlayerIdx] instanceof LocalPlayer ?
+      "YOUR MOVE" : "ENEMY MOVE"; 
     turnNotification.style["max-width"] = "300px";
     window.setTimeout(() => {
       turnNotification.style["max-width"] = "0";
