@@ -10,6 +10,13 @@ Tactical Warfare is a 2 player 3D online Tank game. Implemented almost entirely 
 
 ## Technology Overview
 
+- Node.js
+- Express.js
+- MongoDB / Mongoose
+- Socket.io
+- Cannon.js
+- Babylon.js
+
 ## User Auth
 
 - User can register for an account
@@ -91,5 +98,7 @@ User.findByToken(token).then(user => {
 ![timer](https://github.com/khaivubui/tactical_warfare/blob/master/docs/timer_demo.gif)
 
 ## Live Chat
+
+Using Socket.io, chat messages are relayed to the opponent in real time
 
 ![live-chat](https://github.com/khaivubui/tactical_warfare/blob/master/docs/live_chat_demo.gif)
