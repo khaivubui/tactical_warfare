@@ -140,7 +140,7 @@ export class Game {
     for(let i = 0; i < this.players.length; ++i){
       this.players[i].endTurn();
     }
-    const socketPlayer = this.findSocketPlayer();
+    const socketPlayer = this.findOpponentPlayer();
     this.players[0] = new LocalPlayer(
       this.findLocalPlayer().tank,
       this.scene,
@@ -166,7 +166,7 @@ export class Game {
     }
   }
   //Find the current Socket player helper method
-  findSocketPlayer() {
+  findOpponentPlayer() {
     for (let i = 0; i < this.players.length; i++) {
       if (this.players[i] instanceof SocketPlayer) {
         return this.players[i];
