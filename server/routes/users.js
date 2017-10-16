@@ -2,10 +2,10 @@
 
 const express = require("express");
 const router = express.Router();
-const User = require('../models/user');
-const passport = require('passport');
-const jwt = require('jsonwebtoken');
-const config = require('../config/database');
+const User = require("../models/user");
+const passport = require("passport");
+const jwt = require("jsonwebtoken");
+const config = require("../config/database");
 
 // Register
 router.post("/register", (req, res, next) => {
@@ -16,9 +16,9 @@ router.post("/register", (req, res, next) => {
 
   User.addUser(newUser, (err, user) => {
     if (err) {
-      res.json({success: false, msg:'Failed to register user'});
+      res.json({ success: false, msg: "Failed to register user" });
     } else {
-      const token = jwt.sign({_id: user._id.toString()}, config.secret);
+      const token = jwt.sign({ _id: user._id.toString() }, config.secret);
 
       res.json({
         success: true,
@@ -32,7 +32,7 @@ router.post("/register", (req, res, next) => {
 });
 
 // Authenticate
-router.post('/authenticate', (req, res, next) => {
+router.post("/authenticate", (req, res, next) => {
   const { username, password } = req.body;
 
   User.getUserByUsername(username, (err, user) => {
@@ -40,7 +40,7 @@ router.post('/authenticate', (req, res, next) => {
       throw err;
     }
     if (!user) {
-      return res.json({success: false, msg: 'User not found'});
+      return res.json({ success: false, msg: "User not found" });
     }
     // If username exists, then we check the password
     User.comparePassword(password, user.password, (error, isMatch) => {
@@ -48,7 +48,7 @@ router.post('/authenticate', (req, res, next) => {
         throw error;
       }
       if (isMatch) {
-        const token = jwt.sign({_id: user._id.toString()}, config.secret);
+        const token = jwt.sign({ _id: user._id.toString() }, config.secret);
 
         res.json({
           success: true,
@@ -58,7 +58,7 @@ router.post('/authenticate', (req, res, next) => {
           }
         });
       } else {
-        return res.json({success: false, msg: 'Wrong password'});
+        return res.json({ success: false, msg: "Wrong password" });
       }
     });
   });
