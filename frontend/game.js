@@ -379,9 +379,7 @@ export class Game {
     //this.players[this.currentPlayerIdx].setUpright();
     this._startListeningForMoveOptions();
     if (this.players[otherPlayer] instanceof SocketPlayer) {
-      setTimeout(()=>{
-        renderTimer(TURN_TIME - 5000);
-      }, 5000);
+      renderTimer(TURN_TIME);
       this.timeoutID = setTimeout(() => {
         socket.emit("switchPlayer");
         this._switchPlayer();
