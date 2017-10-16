@@ -55,7 +55,7 @@ const createScene = function() {
     const game = createDemoGame(scene);
     game.startGame();
     socket.on("startGame", isFirst => {
-      startOnlineGame(game, isFirst);
+        startOnlineGame(game, isFirst);
     });
     engine.runRenderLoop(() => {
       window.scene = scene;

@@ -2,7 +2,7 @@ import Arena from "./arena.js";
 import { Player, DemoPlayer, LocalPlayer, SocketPlayer } from "./player.js";
 import { Bomb } from "./projectile/projectile";
 import { socket } from "./websockets";
-import { notifyTurn, showActiveSocketsWidgetToggle } from "./websockets";
+import { showActiveSocketsWidgetToggle } from "./websockets";
 import { unhideAuthWidgetToggle } from "./auth_stuff/auth_stuff";
 import { renderTimer, clearTimer } from "./ui/timer";
 
@@ -13,6 +13,7 @@ const TANK_CANNON_LENGTH = 1;
 const TANK_POS_HEIGHT = 3;
 const GAME_STATE_SEND_INTERVAL = 100;
 const TURN_TIME = 15000;
+const ONLINE_GAME_WAIT_TIME = 5000;
 
 export const createDemoGame = scene => {
   const localTank = scene.tankMesh;
@@ -93,7 +94,8 @@ export const startOnlineGame = (game, isFirst) => {
     );
     game.players[1].showForfeitButton();
   }
-  game.startGame();
+  setTimeout(game.startGame, ONLINE_GAME_WAIT_TIME);
+
 };
 
 export class Game {
@@ -111,6 +113,7 @@ export class Game {
       this
     );
     this._receiveAttackFinished = this._receiveAttackFinished.bind(this);
+    this.startGame = this.startGame.bind(this);
     this.initialPositionTanks();
     this.bombsCreatedSinceStart = 0;
     this.explosionsCreatedSinceStart = 0;
@@ -357,9 +360,9 @@ export class Game {
     opponentPlayer.setUpright();
     localPlayer.setUpright();
   }
-  // Start new Online game
+
   startGame() {
-    this.notifyTurn();
+    if(this.findOpponentPlayer() instanceof SocketPlayer) this.notifyTurn();
     this._startTurn();
   }
 
@@ -376,7 +379,7 @@ export class Game {
     this._startListeningForMoveOptions();
     if (this.players[otherPlayer] instanceof SocketPlayer) {
       setTimeout(()=>{
-        renderTimer(TURN_TIME);
+        renderTimer(TURN_TIME - 5000);
       }, 5000);
       this.timeoutID = setTimeout(() => {
         socket.emit("switchPlayer");
@@ -390,13 +393,16 @@ export class Game {
   }
 
   _gameOver(loser) {
+    const gameoverNotification = document.querySelector(".turn-notification");
     if (loser instanceof LocalPlayer) {
-      const gameoverNotification = document.querySelector(".turn-notification");
       gameoverNotification.innerHTML = "Defeat!";
     } else if (loser instanceof SocketPlayer) {
-      const gameoverNotification = document.querySelector(".turn-notification");
       gameoverNotification.innerHTML = "Victory!";
     }
+    gameoverNotification.style["max-width"] = "300px";
+    window.setTimeout(() => {
+      gameoverNotification.style["max-width"] = "0";
+    }, 1000);
     this.restartGame();
   }
 
@@ -450,10 +456,7 @@ export class Game {
       } else {
         this.currentPlayerIdx = 0;
       }
-      setTimeout(()=> {
-        notifyTurn();
-      }, 5000);
->>>>>>> ee9e1e41efe655ef059dd2ebdc08646757de7e2a
+      this.notifyTurn();
     }
   }
 

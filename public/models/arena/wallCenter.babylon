@@ -1,6 +1,6 @@
 {"producer":{"name":"Blender","version":"2.76 (sub 0)","exporter_version":"4.6.1","file":"wallCenter.babylon"},
 "autoClear":true,"clearColor":[0.0509,0.0509,0.0509],"ambientColor":[0,0,0],"gravity":[0,-9.81,0],
-"materials":[{"name":"wallCenter.Material","id":"wallCenter.Material","ambient":[1,1,1],"diffuse":[1,1,1],"specular":[0.2819,0.1931,0.1319],"emissive":[0,0,0],"specularPower":50,"alpha":1,"backFaceCulling":true,"checkReadyOnlyOnce":false, 
+"materials":[{"name":"wallCenter.Material","id":"wallCenter.Material","ambient":[1,1,1],"diffuse":[0.7819,0.7819,0.7819],"specular":[0.1463,0.1002,0.0684],"emissive":[0,0,0],"specularPower":50,"alpha":1,"backFaceCulling":true,"checkReadyOnlyOnce":false, 
 "diffuseTexture":{"name":"centerBrickWall.png","level":1,"hasAlpha":1,"coordinatesMode":0,"uOffset":0,"vOffset":0,"uScale":1,"vScale":1,"uAng":0,"vAng":0,"wAng":0,"wrapU":1,"wrapV":1,"coordinatesIndex":0}, 
 "bumpTexture":{"name":"centerBrickWall_normal.png","level":1,"hasAlpha":1,"coordinatesMode":0,"uOffset":0,"vOffset":0,"uScale":1,"vScale":1,"uAng":0,"vAng":0,"wAng":0,"wrapU":1,"wrapV":1,"coordinatesIndex":0}}],
 "multiMaterials":[],
