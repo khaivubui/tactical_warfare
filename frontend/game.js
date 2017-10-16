@@ -450,10 +450,10 @@ export class Game {
       } else {
         this.currentPlayerIdx = 0;
       }
-      this.notifyTurn();
       setTimeout(()=> {
         notifyTurn();
       }, 5000);
+>>>>>>> ee9e1e41efe655ef059dd2ebdc08646757de7e2a
     }
   }
 
