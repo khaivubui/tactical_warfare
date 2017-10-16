@@ -1,0 +1,19 @@
+{"producer":{"name":"Blender","version":"2.76 (sub 0)","exporter_version":"4.6.1","file":"wallCenter.babylon"},
+"autoClear":true,"clearColor":[0.0509,0.0509,0.0509],"ambientColor":[0,0,0],"gravity":[0,-9.81,0],
+"materials":[{"name":"wallCenter.Material","id":"wallCenter.Material","ambient":[1,1,1],"diffuse":[1,1,1],"specular":[0.2819,0.1931,0.1319],"emissive":[0,0,0],"specularPower":50,"alpha":1,"backFaceCulling":true,"checkReadyOnlyOnce":false, 
+"diffuseTexture":{"name":"centerBrickWall.png","level":1,"hasAlpha":1,"coordinatesMode":0,"uOffset":0,"vOffset":0,"uScale":1,"vScale":1,"uAng":0,"vAng":0,"wAng":0,"wrapU":1,"wrapV":1,"coordinatesIndex":0}, 
+"bumpTexture":{"name":"centerBrickWall_normal.png","level":1,"hasAlpha":1,"coordinatesMode":0,"uOffset":0,"vOffset":0,"uScale":1,"vScale":1,"uAng":0,"vAng":0,"wAng":0,"wrapU":1,"wrapV":1,"coordinatesIndex":0}}],
+"multiMaterials":[],
+"skeletons":[],
+"meshes":[{"name":"centerWall","id":"centerWall","materialId":"wallCenter.Material","billboardMode":0,"position":[0,0,0],"rotation":[0,0,0],"scaling":[1,1,1],"isVisible":true,"freezeWorldMatrix":false,"isEnabled":true,"checkCollisions":false,"receiveShadows":false
+,"positions":[-20.2314,23.323,19.3993,-20.2314,23.323,-19.3993,20.2313,23.323,-19.3993,20.2313,23.323,19.3993,20.2313,23.323,-19.3993,20.2313,-19.5381,-19.3993,-20.2314,-19.5381,-19.3993,-20.2314,23.323,-19.3993,-20.2314,-19.5381,19.3993,20.2313,-19.5381,19.3993,20.2313,-19.5381,-19.3993,-20.2314,-19.5381,-19.3993,-20.2314,23.323,-19.3993]
+,"normals":[-0.5773,0.5773,0.5773,-0.5773,0.5773,-0.5773,0.5773,0.5773,-0.5773,0.5773,0.5773,0.5773,0.5773,0.5773,-0.5773,0.7071,0,-0.7071,-0.7071,0,-0.7071,-0.5773,0.5773,-0.5773,-0.7071,0,0.7071,0.7071,0,0.7071,0.7071,0,-0.7071,-0.7071,0,-0.7071,-0.5773,0.5773,-0.5773]
+,"uvs":[-12.9114,0.7,-12.9114,2.2991,5.2436,2.2991,5.2436,0.7,6.7752,0.7,6.7752,-4.7729,-12.9114,7.547,-14.1842,0.7,-12.9114,-4.7729,5.2436,-4.7729,5.2436,7.547,-14.1842,-4.7729,-14.1842,0.7]
+,"indices":[0,1,2,3,4,5,2,1,6,7,0,8,9,8,0,3,0,2,9,3,5,10,2,6,11,12,8,3,9,0]
+,"subMeshes":[{"materialIndex":0,"verticesStart":0,"verticesCount":13,"indexStart":0,"indexCount":30}]
+,"instances":[]}
+],
+"cameras":[{"name":"Camera","id":"Camera","position":[7.4811,5.3437,-6.5076],"rotation":[0.4615,-0.8149,0.0108],"fov":0.8576,"minZ":0.1,"maxZ":100,"speed":1,"inertia":0.9,"checkCollisions":false,"applyGravity":false,"ellipsoid":[0.2,0.9,0.2],"cameraRigMode":0,"interaxial_distance":0.0637,"type":"FreeCamera"}],"activeCamera":"Camera",
+"lights":[{"name":"Hemi","id":"Hemi","type":3,"direction":[0,1,0],"groundColor":[0,0,0],"intensity":1,"diffuse":[1,1,1],"specular":[1,1,1]},{"name":"Lamp","id":"Lamp","type":0,"position":[4.0762,5.9039,1.0055],"intensity":1,"diffuse":[1,1,1],"specular":[1,1,1]}],
+"shadowGenerators":[]
+}
