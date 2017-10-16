@@ -10,24 +10,24 @@
 
 ## Functionality and MVP
 #### User Auth
-- [ ] User can register for an account
-- [ ] User can sign in and sign out
-- [ ] User stays signed in if same browser window
+- [x] User can register for an account
+- [x] User can sign in and sign out
+- [x] User stays signed in if same browser window
 
 #### UI
-- [ ] Splash Page (overlay)
-- [ ] Register Form (overlay)
-- [ ] Sign In Form (overlay)
-- [ ] Nav Bar with Register / Sign In / Sign Out button (overlay)
+- [x] Splash Page (overlay)
+- [x] Register Form (overlay)
+- [x] Sign In Form (overlay)
+- [x] Nav Bar with Sign Out button (overlay)
 
 #### Game
-- [ ] Demo mode (1 player shooting at a wall of blocks)
-- [ ] Two Player functionality (WebSockets)
-- [ ] User is assigned a randomly generated name when not signed in
-- [ ] Projectile firing functionality and animation
-- [ ] Health loss functionality and animation
-- [ ] Tank movement functionality and animation
-- [ ] Winning functionality/condition and notification
+- [x] Demo mode (1 player shooting at a wall of blocks)
+- [x] Two Player functionality (WebSockets)
+- [x] User is assigned a randomly generated name when not signed in
+- [x] Projectile firing functionality and animation
+- [x] Health loss functionality and animation
+- [x] Tank movement functionality and animation
+- [x] Winning functionality/condition and notification
 
 ## Technologies
 #### Database:
@@ -47,8 +47,8 @@
 - [x] Learn MongoDB
 - [x] Learn Mongoose
 - [x] Learn Express.js
-- [ ] Learn Socket.io
-- [ ] Learn cannon.js
+- [x] Learn Socket.io
+- [x] Learn cannon.js
 - [x] Work on Proposal
 
 ## Group Members and Work Breakdown

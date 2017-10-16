@@ -106,11 +106,34 @@ body {
 
 .auth-main input[type=submit] {
 	margin-bottom: 10px;
+	height: 28px;
+	background: transparent;
+	border: 1px solid #333;
+	border-radius: 3px;
+	font-size: 1em;
+	cursor: pointer;
+}
+
+.auth-main input[type=submit]:hover {
+	background: #27ae60;
+	border-color: #27ae60;
+	color: white;
 }
 
 .auth-widget h1 {
   font-size: 2em;
   margin-top: 20px;
+}
+
+.auth-status {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 10px;
+	max-height: 30px;
+	transition: max-height 0.7s;
+	overflow: hidden;
 }
 
 .auth-widget-toggle {
@@ -121,9 +144,7 @@ body {
 	padding: 0;
 	height: 30px;
 	width: 90px;
-	max-height: 30px;
 	overflow: hidden;
-	transition: max-height 0.7s;
 }
 
 .auth-widget-toggle:hover {
@@ -211,7 +232,7 @@ body {
 }
 
 .other-active-sockets span {
-	display: inline-block;
+	display: block;
 	margin-top: 10px;
 }
 
@@ -310,7 +331,7 @@ body {
 	color: white;
 	font-size: 2em;
 	position: absolute;
-	top: 50%;
+	top: 75%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	cursor: pointer;
@@ -388,6 +409,10 @@ body {
 .turn-option:hover {
 	background: #27ae60;
 	color: white;
+}
+
+#forfeit-wrapper {
+	overflow: hidden;
 }
 
 #forfeit-button:hover {

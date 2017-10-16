@@ -1,13 +1,16 @@
-import {storeCameraState, restoreCameraState} from '../game_utils/camera_utils';
-import {Explosion} from "./explosion";
+import {
+  storeCameraState,
+  restoreCameraState
+} from "../game_utils/camera_utils";
+import { Explosion } from "./explosion";
 
 const BOMB_EXPLOSION_RADIUS_SQUARED = 64;
-const BOMB_MASS = 1;
+const BOMB_MASS = 2;
 const BOMB_TIME = 5000;
 const DEFAULT_BOMB_DAMAGE = 20;
 
 export class Projectile {
-  constructor(game, pos, rot){
+  constructor(game, pos, rot) {
     this.game = game;
   }
   fire(impulseVector){
@@ -16,8 +19,8 @@ export class Projectile {
   }
 }
 
-export class Bomb extends Projectile{
-  constructor(game, pos, rot){
+export class Bomb extends Projectile {
+  constructor(game, pos, rot) {
     super(game, pos, rot);
     this.game = game;
     this.mesh = game.scene.bombMesh.createInstance(
@@ -39,34 +42,36 @@ export class Bomb extends Projectile{
     this.previousCameraState = storeCameraState(camera);
     this._setUpProjectileCamera(impulseVector);
     super.fire(impulseVector);
-    const bombSound = new BABYLON.Sound("bomb", "http://res.cloudinary.com/foolishhunger/video/upload/v1507789642/time_bomb_sound_h1twf8.mp3", this.game.scene, () => {
-      bombSound.play();
-    }
-    );
-    setTimeout(()=>{
-      this._explode( () => {
+    this.game.scene.bombSound.play();
+    setTimeout(() => {
+      this._explode(() => {
         aimArrow.style.visibility = "visible";
         onDoneCallback();
       });
     }, BOMB_TIME);
   }
-  _setUpProjectileCamera(impulseVector){
+  _setUpProjectileCamera(impulseVector) {
     const camera = this.game.scene.activeCamera;
     camera.radius = 12;
     camera.lockedTarget = this.mesh;
     camera.alpha = this._initialCameraAlpha(impulseVector);
-    camera.beta = Math.PI/4;
+    camera.beta = Math.PI / 4;
   }
-  _initialCameraAlpha(impulseVector){
+  _initialCameraAlpha(impulseVector) {
     const impulseNormalized = BABYLON.Vector3.Normalize(impulseVector);
-    const crossProduct = BABYLON.Vector3.Cross(impulseVector,
-       BABYLON.Vector3.Left());
-    const signFlip = (crossProduct.y > 0) ? 1 : -1;
-    console.log(signFlip);
-    return signFlip * Math.acos(BABYLON.Vector3.Dot(impulseNormalized,
-      new BABYLON.Vector3.Left()));
+    const crossProduct = BABYLON.Vector3.Cross(
+      impulseVector,
+      BABYLON.Vector3.Left()
+    );
+    const signFlip = crossProduct.y > 0 ? 1 : -1;
+    return (
+      signFlip *
+      Math.acos(
+        BABYLON.Vector3.Dot(impulseNormalized, new BABYLON.Vector3.Left())
+      )
+    );
   }
-  _explode(onDoneCallback){
+  _explode(onDoneCallback) {
     let diffVector, magnitudeSquared;
     new Explosion(this.game, this.mesh.position).start(()=>{
       restoreCameraState(this.game.scene.activeCamera,
