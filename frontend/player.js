@@ -252,7 +252,6 @@ export class LocalPlayer extends Player {
     fire.onclick = () => {
       this._stopListeningForAttack();
       const projectileMatrix = this._calculateProjectileMatrix();
-      console.log("emit attack");
       socket.emit("attack", projectileMatrix);
       onDoneCallback(projectileMatrix);
     };
