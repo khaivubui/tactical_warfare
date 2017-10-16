@@ -180,6 +180,8 @@ export class Game {
     this.initialPositionTanks();
     this.players[0].health = 100;
     this.players[1].health = 100;
+    const health = document.querySelector("#health");
+    health.innerHTML = 100;
   }
   _applyGameState(state){
     const worldRotYmatrix = BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI);
@@ -331,7 +333,7 @@ export class Game {
   }
 
   _startTurn() {
-    
+
     const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
     if (this.players[this.currentPlayerIdx].health <= 0) {
       return this._gameOver(this.players[this.currentPlayerIdx]);
