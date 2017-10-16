@@ -28,27 +28,29 @@ export const createDemoGame = scene => {
   socketTank.material.specularPower = 300;
   socketTank.material.specularColor = new BABYLON.Color3(0.7, 0.7, 0.7);
   applyGreenTexture(localTank, scene);
-  localTank.physicsImpostor = new BABYLON.PhysicsImpostor(
-    localTank,
-    BABYLON.PhysicsImpostor.BoxImpostor,
-    { mass: 2, restitution: 0 },
-    scene
-  );
+
   localTank.scaling.y = 0.9;
   localTank.scaling.x = 0.9;
   localTank.scaling.z = 0.9;
 
+
+  socketTank.scaling.y = 0.9;
+  socketTank.scaling.x = 0.9;
+  socketTank.scaling.z = 0.9;
+
+  const game = new Game(scene, [Player1, Player2], arena);
   socketTank.physicsImpostor = new BABYLON.PhysicsImpostor(
     socketTank,
     BABYLON.PhysicsImpostor.BoxImpostor,
     { mass: 2, restitution: 0 },
     scene
   );
-  socketTank.scaling.y = 0.9;
-  socketTank.scaling.x = 0.9;
-  socketTank.scaling.z = 0.9;
-  const game = new Game(scene, [Player1, Player2], arena);
-
+  localTank.physicsImpostor = new BABYLON.PhysicsImpostor(
+    localTank,
+    BABYLON.PhysicsImpostor.BoxImpostor,
+    { mass: 2, restitution: 0 },
+    scene
+  );
   return game;
 };
 
@@ -346,19 +348,18 @@ export class Game {
     ]);
 
     localPlayer.tank.position = globalCoordinates;
-    const otherPlayerIdx = this.myPlayerIdx === 0 ? 1 : 0;
     localPlayer.tank.position.y = TANK_POS_HEIGHT;
     const matrix = BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI);
     opponentPlayer.tank.position = BABYLON.Vector3.TransformCoordinates(
       globalCoordinates,
       matrix
     );
-    opponentPlayer.tank.position.y = 0.5;
+    opponentPlayer.tank.position.y = TANK_POS_HEIGHT;
+    opponentPlayer.setUpright();
+    localPlayer.setUpright();
     for (let i = 0; i < this.players.length; ++i) {
       this.players[i].resetCannon();
     }
-    opponentPlayer.setUpright();
-    localPlayer.setUpright();
   }
 
   startGame() {
