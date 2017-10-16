@@ -1,6 +1,6 @@
 # [Tactical Warfare](https://tactical-warfare.herokuapp.com/)
 
-![preview](https://github.com/khaivubui/tactical_warfare/blob/master/docs/preview.png)
+![preview](https://github.com/khaivubui/tactical_warfare/blob/final-readme-and-styling/docs/preview.png)
 
 [live version](https://tactical-warfare.herokuapp.com/)
 
