@@ -151,19 +151,6 @@ export const webSockets = () => {
 
   // ---------- Turn Notification ----------
 
-  const notifications = ["YOUR TURN"];
-  let notificationIndex = 0;
-
-  notifyTurn = () => {
-    const turnNotification = document.querySelector(".turn-notification");
-    turnNotification.innerHTML = notifications[notificationIndex];
-    turnNotification.style["max-width"] = "300px";
-    notificationIndex = (notificationIndex + 1) % notifications.length;
-    window.setTimeout(() => {
-      turnNotification.style["max-width"] = "0";
-    }, 1000);
-  };
-
   // ---------- startGame ui effects ----------
 
   const chatWidget = document.querySelector(".chat-widget");
@@ -186,9 +173,6 @@ export const webSockets = () => {
       three = three - 1;
     }, 1000);
     chatWidget.style["max-height"] = "150px";
-    notifications.push("ENEMY TURN");
-    notificationIndex = yourTurn ? 0 : 1;
-    notifyTurn();
   });
 
   // ---------- Chat handler ----------

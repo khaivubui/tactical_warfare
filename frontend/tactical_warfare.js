@@ -29,16 +29,17 @@ const createScene = function() {
     new BABYLON.Vector3(0, 1, 0),
     scene
   );
+  light.diffuse = new BABYLON.Color3(1, 0.90, 0.86);
 
   const lightPointSky = new BABYLON.DirectionalLight(
     "Dir0",
-    new BABYLON.Vector3(0, 1, 0),
+    new BABYLON.Vector3(0.3, 0.8, 0.2),
     scene
   );
 
-  light.intensity = 0.9;
-  lightPointSky.intensity = 0.7;
-
+  light.intensity = 1;
+  lightPointSky.intensity = 0.5;
+  lightPointSky.diffuse = new BABYLON.Color3(0.95,0.97,1);
   window.addEventListener("resize", () => {
     engine.resize();
   });

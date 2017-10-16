@@ -134,6 +134,16 @@ export class Game {
 
     socket.on("resetGame", () => this.restartGame());
   }
+  notifyTurn(){
+    const turnNotification = document.querySelector(".turn-notification");
+    turnNotification.innerHTML =
+      this.players[this.currentPlayerIdx] instanceof LocalPlayer ?
+      "YOUR MOVE" : "ENEMY MOVE";
+    turnNotification.style["max-width"] = "300px";
+    window.setTimeout(() => {
+      turnNotification.style["max-width"] = "0";
+    }, 1000);
+  }
   // Restart a Demo game for both players after one player lost
   restartGame() {
     for(let i = 0; i < this.players.length; ++i){
@@ -349,10 +359,12 @@ export class Game {
   }
   // Start new Online game
   startGame() {
+    this.notifyTurn();
     this._startTurn();
   }
 
   _startTurn() {
+
     const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
     if (this.players[this.currentPlayerIdx].health <= 0) {
       return this._gameOver(this.players[this.currentPlayerIdx]);
@@ -438,6 +450,7 @@ export class Game {
       } else {
         this.currentPlayerIdx = 0;
       }
+      this.notifyTurn();
       setTimeout(()=> {
         notifyTurn();
       }, 5000);
