@@ -81,20 +81,24 @@ const setupAssetsManager = function setupAssetsManager(scene){
     }
   const boxTask = assetsManager.addTextureTask("boxTexture", "models/arena/box.jpg");
   boxTask.onSuccess = task => {
-    scene.greenTankTexture = task.texture;
+    scene.boxTask = task.texture;
   };
-
-  // const arenaAssetsArray = ["models/arena/box.jpg", "models/arena/ceiling6.jpg", "models/arena/centerBrickWall.jpg", "models/arena/ground2.jpg", "models/arena/sideWalls.jpg", "models/arena/time_bomb_sound.mp3"];
-  // let box, ceiling, centerWall, ground, sidewall, timeBomb;
-  // const arenaAssetsKeys = [box, ceiling, centerWall, ground, sidewall, timeBomb];
-  //
-  // for (let i = 0; i < arenaAssetsArray.length; i++) {
-  //   arenaAssetsKeys[i] = assetsManager.addTextureTask(`arena${i}`, arenaAssetsArray[i]);
-  //   debugger
-  //   arenaAssetsKeys[i].onSuccess = task => {
-  //     scene.arenaAssetsKeys[i] = task.texture;
-  //   };
-  // }
+  const ceilingTask = assetsManager.addTextureTask("ceilingTexture", "models/arena/ceiling6.jpg");
+  ceilingTask.onSuccess = task => {
+    scene.ceilingTask = task.texture;
+  };
+  const centerWallTask = assetsManager.addTextureTask("centerWallTexture", "models/arena/centerBrickWall.jpg");
+  centerWallTask.onSuccess = task => {
+    scene.centerWallTask = task.texture;
+  };
+  const groundTask = assetsManager.addTextureTask("groundTask", "models/arena/ground2.jpg");
+  groundTask.onSuccess = task => {
+    scene.groundTask = task.texture;
+  };
+  const sideWallTask = assetsManager.addTextureTask("sideWallTask", "models/arena/sideWalls.jpg");
+  sideWallTask.onSuccess = task => {
+    scene.sideWallTask = task.texture;
+  };
   return assetsManager;
 };
 

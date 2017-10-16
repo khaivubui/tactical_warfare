@@ -16,7 +16,7 @@ export default class Arena{
 
     // Ground material
     this.ground.mesh.material = new BABYLON.StandardMaterial("texture1", scene);
-    this.ground.mesh.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/c_scale,w_361/v1507915046/ground2_wkrjnw.jpg", scene);
+    this.ground.mesh.material.diffuseTexture = new BABYLON.Texture(scene.groundTask, scene);
     this.ground.mesh.material.diffuseTexture.uScale = 5.0;
     this.ground.mesh.material.diffuseTexture.vScale = 5.0;
     this.ground.mesh.material.specularColor = new BABYLON.Color3(0.1,0.1,0.1);
@@ -31,7 +31,7 @@ export default class Arena{
 
     // CenterWall material
     this._wallMesh.material = new BABYLON.StandardMaterial("texture1", scene);
-    this._wallMesh.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507740979/centerBrickWall_gbn3su.png", scene)
+    this._wallMesh.material.diffuseTexture = new BABYLON.Texture(scene.centerWallTask, scene)
     this._wallMesh.material.diffuseTexture.uScale = 10.0;
     this._wallMesh.material.diffuseTexture.vScale = 2.0;
 
@@ -77,10 +77,10 @@ export default class Arena{
     this._sidewall2.material = materialSideWalls;
     this._sidewall3.material = materialSideWalls;
 
-    this._sidewall0.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507741682/sideWalls_nkckv9.jpg", scene);
-    this._sidewall1.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507741682/sideWalls_nkckv9.jpg", scene);
-    this._sidewall2.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507741682/sideWalls_nkckv9.jpg", scene);
-    this._sidewall3.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507741682/sideWalls_nkckv9.jpg", scene);
+    this._sidewall0.material.diffuseTexture = new BABYLON.Texture(scene.sideWallTask, scene);
+    this._sidewall1.material.diffuseTexture = new BABYLON.Texture(scene.sideWallTask, scene);
+    this._sidewall2.material.diffuseTexture = new BABYLON.Texture(scene.sideWallTask, scene);
+    this._sidewall3.material.diffuseTexture = new BABYLON.Texture(scene.sideWallTask, scene);
 
     this._sidewall0.material.diffuseTexture.uScale = 10.0;
     this._sidewall0.material.diffuseTexture.vScale = 2.0;
@@ -93,7 +93,7 @@ export default class Arena{
 
     // Sky material
     this._ceiling.material = new BABYLON.StandardMaterial("texture3", scene);
-    this._ceiling.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1507779445/ceiling6_fwju0g.jpg", scene);
+    this._ceiling.material.diffuseTexture = new BABYLON.Texture(scene.ceilingTask, scene);
 
     this._ceiling.material.diffuseTexture.uScale = 10.0;
     this._ceiling.material.diffuseTexture.vScale = 10.0;
@@ -126,10 +126,10 @@ export default class Arena{
       box2.material = new BABYLON.StandardMaterial("box2", scene);
       box3.material = new BABYLON.StandardMaterial("box3", scene);
 
-      box.material.diffuseTexture = new BABYLON.Texture(scene.box, scene);
-      box1.material.diffuseTexture = new BABYLON.Texture(scene.box, scene);
-      box2.material.diffuseTexture = new BABYLON.Texture(scene.box, scene);
-      box3.material.diffuseTexture = new BABYLON.Texture(scene.box, scene);
+      box.material.diffuseTexture = new BABYLON.Texture(scene.boxTask, scene);
+      box1.material.diffuseTexture = new BABYLON.Texture(scene.boxTask, scene);
+      box2.material.diffuseTexture = new BABYLON.Texture(scene.boxTask, scene);
+      box3.material.diffuseTexture = new BABYLON.Texture(scene.boxTask, scene);
 
 
     }, 100);

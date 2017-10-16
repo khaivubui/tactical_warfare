@@ -2,7 +2,7 @@ import {storeCameraState, restoreCameraState} from '../game_utils/camera_utils';
 import {Explosion} from "./explosion";
 
 const BOMB_EXPLOSION_RADIUS_SQUARED = 64;
-const BOMB_MASS = 1;
+const BOMB_MASS = 2;
 const BOMB_TIME = 5000;
 const DEFAULT_BOMB_DAMAGE = 20;
 
