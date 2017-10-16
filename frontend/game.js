@@ -268,6 +268,7 @@ export class Game{
   }
 
   _startTurn() {
+    this.players[this.currentPlayerIdx].setUpright();
     this._startListeningForMoveOptions();
     const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
     if (this.players[otherPlayer] instanceof SocketPlayer) {
