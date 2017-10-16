@@ -168,7 +168,7 @@ export class Game {
   //Find the current Socket player helper method
   findOpponentPlayer() {
     for (let i = 0; i < this.players.length; i++) {
-      if (this.players[i] instanceof SocketPlayer) {
+      if (! (this.players[i] instanceof LocalPlayer)) {
         return this.players[i];
       }
     }
@@ -176,6 +176,7 @@ export class Game {
 
   reset() {
     clearTimeout(this.timeoutID);
+    clearInterval(this.gameStateTimerID);
     clearTimer();
     const turnOptions = document.getElementById("turn-options");
     turnOptions.style["max-width"] = 0;
@@ -308,6 +309,9 @@ export class Game {
     return state;
   }
   initialPositionTanks(){
+    const localPlayer = this.findLocalPlayer();
+    const opponentPlayer = this.findOpponentPlayer();
+
     const midX = Math.floor(this.arena.ground.cellCount / 2);
     const midZ = Math.floor(this.arena.ground.cellCount / 4);
     const globalCoordinates = this.arena.ground.cellIndicesToGlobalCoordinates([
@@ -315,22 +319,20 @@ export class Game {
       midZ
     ]);
 
-    this.players[this.myPlayerIdx].tank.position = globalCoordinates;
+    localPlayer.tank.position = globalCoordinates;
     const otherPlayerIdx = this.myPlayerIdx === 0 ? 1 : 0;
-    this.players[this.myPlayerIdx].tank.position.y = TANK_POS_HEIGHT;
+    localPlayer.tank.position.y = TANK_POS_HEIGHT;
     const matrix = BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI);
-    this.players[
-      otherPlayerIdx
-    ].tank.position = BABYLON.Vector3.TransformCoordinates(
+    opponentPlayer.tank.position = BABYLON.Vector3.TransformCoordinates(
       globalCoordinates,
       matrix
     );
-    this.players[otherPlayerIdx].tank.position.y = 0.5;
+    opponentPlayer.tank.position.y = 0.5;
     for (let i = 0; i < this.players.length; ++i) {
       this.players[i].resetCannon();
     }
-    this.players[otherPlayerIdx].setUpright();
-    this.players[this.currentPlayerIdx].setUpright();
+    opponentPlayer.setUpright();
+    localPlayer.setUpright();
   }
   // Start new Online game
   startGame() {
@@ -432,7 +434,6 @@ export class Game {
   }
 
   _receiveAttack(matrix) {
-    console.log("attack");
     clearTimeout(this.timeoutID);
     clearTimer();
     const bombScale = new BABYLON.Vector3.Zero();
@@ -460,9 +461,12 @@ export class Game {
     this.bombs.push(bomb);
   }
   _receiveAttackFinished(){
-    if(this.players[this.currentPlayerIdx] instanceof LocalPlayer){
-      socket.emit("turnResult", this.getGameState());
-      this._switchPlayer();
+    const otherPlayer = this.findOpponentPlayer();
+    if(this.players[this.currentPlayerIdx]){
+      if(otherPlayer  instanceof SocketPlayer){
+        socket.emit("turnResult", this.getGameState());
+        this._switchPlayer();
+      }
       this._startTurn();
     }
   }
