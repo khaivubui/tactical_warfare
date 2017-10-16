@@ -56,6 +56,10 @@ export class DemoPlayer extends Player {
   startListeningForMoveOptions(onDoneCallback) {
     onDoneCallback("position");
   }
+  setUpright(){
+    BABYLON.Quaternion.RotationAxisToRef(BABYLON.Vector3.Up(),
+      Math.PI, this.tank.rotationQuaternion);
+  }
 
   startListeningForPosition(onDoneCallback) {
     onDoneCallback(this.tank.position);
@@ -76,6 +80,8 @@ export class SocketPlayer extends Player {
   }
 
   setUpright(){
+    BABYLON.Quaternion.RotationAxisToRef(BABYLON.Vector3.Up(),
+      Math.PI, this.tank.rotationQuaternion);
   }
 
   startListeningForPosition(onDoneCallback, onCancelledCallback){
