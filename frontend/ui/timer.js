@@ -1,7 +1,7 @@
 let timerWidget;
 
 document.addEventListener("DOMContentLoaded", () => {
-  timerWidget = document.querySelector('.timer-widget');
+  timerWidget = document.querySelector(".timer-widget");
 });
 
 let timerTimeout;
@@ -9,7 +9,7 @@ let timerTimeout;
 export const renderTimer = timerDuration => {
   timerWidget.innerHTML = Math.floor(timerDuration / 1000);
   if (timerDuration <= 0) {
-    timerWidget.innerHTML = '';
+    timerWidget.innerHTML = "";
     return;
   }
   timerTimeout = window.setTimeout(
@@ -19,6 +19,6 @@ export const renderTimer = timerDuration => {
 };
 
 export const clearTimer = () => {
-  timerWidget.innerHTML = '';
+  timerWidget.innerHTML = "";
   window.clearTimeout(timerTimeout);
 };

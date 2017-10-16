@@ -1,4 +1,4 @@
-export const storeCameraState = camera =>({
+export const storeCameraState = camera => ({
   inputs: { attachedElement: camera.inputs.attachedElement },
   target: camera.target,
   radius: camera.radius,
@@ -25,4 +25,4 @@ export const restoreCameraState = (camera, state) => {
   camera.upperBetaLimit = state.upperBetaLimit;
   camera.lowerRadiusLimit = state.lowerRadiusLimit;
   camera.upperRadiusLimit = state.upperRadiusLimit;
-}
+};

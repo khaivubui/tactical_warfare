@@ -1,3 +1,3 @@
 module.exports = app => {
-  app.get( '/', (req, res) => res.render('root'));
+  app.get("/", (req, res) => res.render("root"));
 };

@@ -1,27 +1,25 @@
 // USER MODEL
 
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const config = require('../config/database');
-const jwt = require('jsonwebtoken');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const config = require("../config/database");
+const jwt = require("jsonwebtoken");
 
 // User Schema
 const UserSchema = mongoose.Schema({
-  username: { type: 'String', required: true },
-  password: { type: 'String', required: true },
-  socketId: { type: 'String' }
+  username: { type: "String", required: true },
+  password: { type: "String", required: true },
+  socketId: { type: "String" }
 });
 
+const User = (module.exports = mongoose.model("User", UserSchema));
 
-
-const User = module.exports = mongoose.model('User', UserSchema);
-
-User.getUserById = function(id, callback){
+User.getUserById = function(id, callback) {
   User.findById(id, callback);
 };
 
-User.getUserByUsername = function(username, callback){
-  User.findOne({username}, callback);
+User.getUserByUsername = function(username, callback) {
+  User.findOne({ username }, callback);
 };
 
 User.addUser = function(newUser, callback) {
