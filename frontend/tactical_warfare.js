@@ -26,7 +26,7 @@ const createScene = function() {
   camera.attachControl(canvas);
   const light = new BABYLON.HemisphericLight(
     "light1",
-    new BABYLON.Vector3(0, 1, 0),
+    new BABYLON.Vector3(0.12, 0.87, -0.25),
     scene
   );
   light.diffuse = new BABYLON.Color3(1, 0.90, 0.86);
