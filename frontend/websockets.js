@@ -174,7 +174,7 @@ export const webSockets = () => {
     closeAuthWidget();
     hideActiveSocketsWidgetToggle();
     hideAuthWidgetToggle();
-    chatLog.innerHTML = "";
+    chatLog.innerHTML = "Connected";
     chatWidget.style["max-height"] = "150px";
     notifications.push("ENEMY TURN");
     notificationIndex = yourTurn ? 0 : 1;
