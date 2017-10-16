@@ -136,7 +136,10 @@ export class Game {
   }
   // Restart a Demo game for both players after one player lost
   restartGame() {
-    const socketPlayer = this.findSocketPlayer();
+    for(let i = 0; i < this.players.length; ++i){
+      this.players[i].endTurn();
+    }
+    const socketPlayer = this.findOpponentPlayer();
     this.players[0] = new LocalPlayer(
       this.findLocalPlayer().tank,
       this.scene,
@@ -162,9 +165,9 @@ export class Game {
     }
   }
   //Find the current Socket player helper method
-  findSocketPlayer() {
+  findOpponentPlayer() {
     for (let i = 0; i < this.players.length; i++) {
-      if (this.players[i] instanceof SocketPlayer) {
+      if (! (this.players[i] instanceof LocalPlayer)) {
         return this.players[i];
       }
     }
@@ -172,6 +175,7 @@ export class Game {
 
   reset() {
     clearTimeout(this.timeoutID);
+    clearInterval(this.gameStateTimerID);
     clearTimer();
     const turnOptions = document.getElementById("turn-options");
     turnOptions.style["max-width"] = 0;
@@ -317,7 +321,14 @@ export class Game {
     state.tanks = stateTanks;
     return state;
   }
+<<<<<<< HEAD
+  initialPositionTanks(){
+    const localPlayer = this.findLocalPlayer();
+    const opponentPlayer = this.findOpponentPlayer();
+
+=======
   initialPositionTanks() {
+>>>>>>> 71aca6b19b1bfc4e0ebd266791bf6e4b77b99f2d
     const midX = Math.floor(this.arena.ground.cellCount / 2);
     const midZ = Math.floor(this.arena.ground.cellCount / 4);
     const globalCoordinates = this.arena.ground.cellIndicesToGlobalCoordinates([
@@ -325,20 +336,20 @@ export class Game {
       midZ
     ]);
 
-    this.players[this.myPlayerIdx].tank.position = globalCoordinates;
+    localPlayer.tank.position = globalCoordinates;
     const otherPlayerIdx = this.myPlayerIdx === 0 ? 1 : 0;
-    this.players[this.myPlayerIdx].tank.position.y = TANK_POS_HEIGHT;
+    localPlayer.tank.position.y = TANK_POS_HEIGHT;
     const matrix = BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI);
-    this.players[
-      otherPlayerIdx
-    ].tank.position = BABYLON.Vector3.TransformCoordinates(
+    opponentPlayer.tank.position = BABYLON.Vector3.TransformCoordinates(
       globalCoordinates,
       matrix
     );
-    this.players[otherPlayerIdx].tank.position.y = 0.5;
+    opponentPlayer.tank.position.y = 0.5;
     for (let i = 0; i < this.players.length; ++i) {
       this.players[i].resetCannon();
     }
+    opponentPlayer.setUpright();
+    localPlayer.setUpright();
   }
   // Start new Online game
   startGame() {
@@ -458,10 +469,13 @@ export class Game {
     });
     this.bombs.push(bomb);
   }
-  _receiveAttackFinished() {
-    if (this.players[this.currentPlayerIdx] instanceof LocalPlayer) {
-      socket.emit("turnResult", this.getGameState());
-      this._switchPlayer();
+  _receiveAttackFinished(){
+    const otherPlayer = this.findOpponentPlayer();
+    if(this.players[this.currentPlayerIdx]){
+      if(otherPlayer  instanceof SocketPlayer){
+        socket.emit("turnResult", this.getGameState());
+        this._switchPlayer();
+      }
       this._startTurn();
     }
   }
