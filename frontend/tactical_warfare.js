@@ -79,9 +79,25 @@ const setupAssetsManager = function setupAssetsManager(scene){
     greenTextureTask.onSuccess = task => {
       scene.greenTankTexture = task.texture;
     }
-  return assetsManager;
+  const boxTask = assetsManager.addTextureTask("boxTexture", "models/arena/box.jpg");
+  boxTask.onSuccess = task => {
+    scene.greenTankTexture = task.texture;
+  };
 
-}
+  // const arenaAssetsArray = ["models/arena/box.jpg", "models/arena/ceiling6.jpg", "models/arena/centerBrickWall.jpg", "models/arena/ground2.jpg", "models/arena/sideWalls.jpg", "models/arena/time_bomb_sound.mp3"];
+  // let box, ceiling, centerWall, ground, sidewall, timeBomb;
+  // const arenaAssetsKeys = [box, ceiling, centerWall, ground, sidewall, timeBomb];
+  //
+  // for (let i = 0; i < arenaAssetsArray.length; i++) {
+  //   arenaAssetsKeys[i] = assetsManager.addTextureTask(`arena${i}`, arenaAssetsArray[i]);
+  //   debugger
+  //   arenaAssetsKeys[i].onSuccess = task => {
+  //     scene.arenaAssetsKeys[i] = task.texture;
+  //   };
+  // }
+  return assetsManager;
+};
+
 document.addEventListener("DOMContentLoaded", createScene);
 document.addEventListener("DOMContentLoaded", authStuff);
 document.addEventListener("DOMContentLoaded", webSockets);

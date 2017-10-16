@@ -126,10 +126,10 @@ export default class Arena{
       box2.material = new BABYLON.StandardMaterial("box2", scene);
       box3.material = new BABYLON.StandardMaterial("box3", scene);
 
-      box.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1508111349/box_dx73md.jpg", scene);
-      box1.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1508111349/box_dx73md.jpg", scene);
-      box2.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1508111349/box_dx73md.jpg", scene);
-      box3.material.diffuseTexture = new BABYLON.Texture("http://res.cloudinary.com/foolishhunger/image/upload/v1508111349/box_dx73md.jpg", scene);
+      box.material.diffuseTexture = new BABYLON.Texture(scene.box, scene);
+      box1.material.diffuseTexture = new BABYLON.Texture(scene.box, scene);
+      box2.material.diffuseTexture = new BABYLON.Texture(scene.box, scene);
+      box3.material.diffuseTexture = new BABYLON.Texture(scene.box, scene);
 
 
     }, 100);
