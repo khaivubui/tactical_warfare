@@ -199,42 +199,42 @@ export default class Arena {
     this._wallMesh.physicsImpostor = new BABYLON.PhysicsImpostor(
       this._wallMesh,
       BABYLON.PhysicsImpostor.BoxImpostor,
-      { mass: 0, friction: 0.5, restitution: 0.8 },
+      { mass: 0, friction: 1, restitution: 0.8 },
       scene
     );
 
     this._sidewall0.physicsImpostor = new BABYLON.PhysicsImpostor(
       this._sidewall0,
       BABYLON.PhysicsImpostor.BoxImpostor,
-      { mass: 0, friction: 0.8, restitution: 0.8 },
+      { mass: 0, friction: 1, restitution: 0.8 },
       scene
     );
 
     this._sidewall1.physicsImpostor = new BABYLON.PhysicsImpostor(
       this._sidewall1,
       BABYLON.PhysicsImpostor.BoxImpostor,
-      { mass: 0, friction: 0.8, restitution: 0.8 },
+      { mass: 0, friction: 1, restitution: 0.8 },
       scene
     );
 
     this._sidewall2.physicsImpostor = new BABYLON.PhysicsImpostor(
       this._sidewall2,
       BABYLON.PhysicsImpostor.BoxImpostor,
-      { mass: 0, friction: 0.8, restitution: 0.8 },
+      { mass: 0, friction: 1, restitution: 0.8 },
       scene
     );
 
     this._sidewall3.physicsImpostor = new BABYLON.PhysicsImpostor(
       this._sidewall3,
       BABYLON.PhysicsImpostor.BoxImpostor,
-      { mass: 0, friction: 0.8, restitution: 0.8 },
+      { mass: 0, friction: 1, restitution: 0.8 },
       scene
     );
 
     this._ceiling.physicsImpostor = new BABYLON.PhysicsImpostor(
       this._ceiling,
       BABYLON.PhysicsImpostor.BoxImpostor,
-      { mass: 0, friction: 0.8, restitution: 0.8 },
+      { mass: 0, friction: 1, restitution: 0.8 },
       scene
     );
   }
