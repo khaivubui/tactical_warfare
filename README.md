@@ -6,7 +6,8 @@
 
 ## Overview
 
-Tactical Warfare is a 2 player 3D online Tank game. Implemented almost entirely using JavaScript, the game allows a user to register, sign in, sign out, challenge other players, accept challenges from other players, move their tank, fire projectiles, compete and communicate in real time.
+Throw yourself into an epic tank battle with your friends! Tactical Warfare is a 3D online Tank game. The game is a turn-based strategy game between two opponents, with the goal to reduce the opponent's health to zero.
+Implemented almost entirely using JavaScript, the game allows a user to register, sign in, sign out, challenge other active players, accept challenges, position their tank tactfully, fire projectiles, compete and chat in real time.
 
 ## Technology Overview
 
@@ -82,6 +83,23 @@ User.findByToken(token).then(user => {
 });
 ```
 
+## BABYLON Game Engine
+We used BABYLON game engine for the game physics logics and setting up the arena environment.
+```javascript
+this._sidewall0 = new BABYLON.Mesh.CreatePlane(
+  "sidewall0",
+  groundWidth,
+  scene
+);
+this._sidewall1 = this._sidewall0.clone("sidewall1");
+const matrix = BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI);
+this._sidewall1.position = BABYLON.Vector3.TransformCoordinates(
+  this._sidewall1.position,
+  matrix
+);
+this._sidewall1.rotation.y = Math.PI;
+```
+
 ## Dynamic Camera
 
 ![camera-general](https://github.com/khaivubui/tactical_warfare/blob/master/docs/camera_general_demo.gif)
@@ -102,3 +120,8 @@ User.findByToken(token).then(user => {
 Using Socket.io, chat messages are relayed to the opponent in real time
 
 ![live-chat](https://github.com/khaivubui/tactical_warfare/blob/master/docs/live_chat_demo.gif)
+
+## Future Implementation
+* Store game state in database for each user so users can reconnect back to the game
+* Add different kinds of battleground for users to choose
+* Players can adjust tank's impulse force
