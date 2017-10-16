@@ -99,6 +99,12 @@ const setupAssetsManager = function setupAssetsManager(scene){
   sideWallTask.onSuccess = task => {
     scene.sideWallTask = task.texture;
   };
+
+  const timeBombTask = assetsManager.addBinaryFileTask("timeBombTask", "models/arena/time_bomb_sound.mp3");
+  timeBombTask.onSuccess = task => {
+    scene.bombSound = new BABYLON.Sound("bomb", task.data, scene);
+  };
+
   return assetsManager;
 };
 
