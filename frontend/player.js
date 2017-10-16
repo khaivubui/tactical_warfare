@@ -201,6 +201,7 @@ export class LocalPlayer extends Player {
 
   _handleConfirmPosition(onDoneCallback) {
     return position => {
+      this.setUpright();
       this._stopListeningForPosition();
       socket.emit("position", position);
       onDoneCallback(position);
@@ -243,6 +244,7 @@ export class LocalPlayer extends Player {
     options.style["max-width"] = "0";
   }
   startListeningForAttack(onDoneCallback, onCancelledCallback) {
+    this.setUpright();
     showCameraRotation();
     this._maximizeTankOptions("attack-options");
     const camera = this.scene.activeCamera;

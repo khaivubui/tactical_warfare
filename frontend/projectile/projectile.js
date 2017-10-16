@@ -8,6 +8,7 @@ const BOMB_EXPLOSION_RADIUS_SQUARED = 64;
 const BOMB_MASS = 2;
 const BOMB_TIME = 5000;
 const DEFAULT_BOMB_DAMAGE = 20;
+const DEFAULT_EXPLOSION_FORCE = 30;
 
 export class Projectile {
   constructor(game, pos, rot) {
@@ -72,17 +73,20 @@ export class Bomb extends Projectile {
     );
   }
   _explode(onDoneCallback) {
-    let diffVector, magnitudeSquared;
+    let diffVector, magnitudeSquared, normalizedVector;
     new Explosion(this.game, this.mesh.position).start(()=>{
       restoreCameraState(this.game.scene.activeCamera,
         this.previousCameraState);
       onDoneCallback();
     });
     for(let i = 0; i < this.game.players.length; ++i){
-      diffVector = this.mesh.position.subtract(
-        this.game.players[i].tank.position);
+      diffVector = this.game.players[i].tank.position.subtract(this.mesh.position);
       if(diffVector.lengthSquared() < BOMB_EXPLOSION_RADIUS_SQUARED){
         this.game.players[i].receiveDamage(DEFAULT_BOMB_DAMAGE);
+        normalizedVector = diffVector.normalize();
+        this.game.players[i].tank.physicsImpostor.applyImpulse(
+          normalizedVector.scaleInPlace(DEFAULT_EXPLOSION_FORCE),
+          this.game.players[i].tank.position);
       }
     }
     this.mesh.dispose();
