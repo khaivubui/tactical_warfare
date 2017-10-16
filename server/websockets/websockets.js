@@ -101,7 +101,9 @@ module.exports = io => {
       "attack",
       "cancel",
       "switchPlayer",
-      "resetGame"
+      "resetGame",
+      , "turnResult",
+       "gameState"
     ];
     for (let i = 0; i < gameplayMessages.length; ++i) {
       sendToOpponent(gameplayMessages[i]);

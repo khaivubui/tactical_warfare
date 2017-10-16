@@ -75,8 +75,12 @@ export class SocketPlayer extends Player {
     this.stopListeningForAttack = this.stopListeningForAttack.bind(this);
   }
 
-  startListeningForPosition(onDoneCallback, onCancelledCallback) {
-    socket.on("position", pos => {
+  setUpright(){
+  }
+
+  startListeningForPosition(onDoneCallback, onCancelledCallback){
+    socket.on("position", pos =>{
+      this.setUpright();
       onDoneCallback(this._rotateOpponentPos(pos));
       this.stopListeningForPosition();
     });
@@ -103,8 +107,9 @@ export class SocketPlayer extends Player {
     socket.off("moveType");
   }
 
-  startListeningForAttack(onDoneCallback, onCancelledCallback) {
-    socket.on("attack", matrix => {
+  startListeningForAttack(onDoneCallback, onCancelledCallback){
+    this.setUpright();
+    socket.on("attack", matrix=> {
       onDoneCallback(this._rotateOpponentAttack(matrix));
       this.stopListeningForAttack();
     });
@@ -152,8 +157,10 @@ export class LocalPlayer extends Player {
     this._handleZoomIn = this._handleZoomIn.bind(this);
     this._handleZoomOut = this._handleZoomOut.bind(this);
   }
-
-  _handleMoveOption(onDoneCallback) {
+  setUpright(){
+    this.tank.rotationQuaternion = new BABYLON.Quaternion.Identity();
+  }
+  _handleMoveOption(onDoneCallback){
     return type => e => {
       this._stopListeningForMoveOptions();
       socket.emit("moveType", type);
@@ -245,6 +252,7 @@ export class LocalPlayer extends Player {
     fire.onclick = () => {
       this._stopListeningForAttack();
       const projectileMatrix = this._calculateProjectileMatrix();
+      console.log("emit attack");
       socket.emit("attack", projectileMatrix);
       onDoneCallback(projectileMatrix);
     };

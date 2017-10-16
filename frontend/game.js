@@ -11,6 +11,7 @@ const BOMB_MASS = 1; //kg
 const DEFAULT_FIRING_IMPULSE = 20;
 const TANK_CANNON_LENGTH = 1;
 const TANK_POS_HEIGHT = 3;
+const GAME_STATE_SEND_INTERVAL = 100;
 const TURN_TIME = 15000;
 
 export const createDemoGame = scene => {
@@ -74,6 +75,7 @@ const applyGreenTexture = (tank, scene) => {
   }
 };
 export const startOnlineGame = (game, isFirst) => {
+  console.log("startOnline");
   game.reset();
   if (isFirst) {
     game.players[0] = new LocalPlayer(
@@ -121,6 +123,15 @@ export class Game {
       this._switchPlayer();
       this._startTurn();
     });
+    socket.on("turnResult", state =>{
+      this._applyGameState(state);
+      this._switchPlayer();
+      this._startTurn();
+    });
+    socket.on("gameState", state =>{
+      this._applyGameState(state);
+    })
+    this.bombs = [];
 
     socket.on("resetGame", () => this.restartGame());
   }
@@ -170,8 +181,128 @@ export class Game {
     this.players[0].health = 100;
     this.players[1].health = 100;
   }
+  _applyGameState(state){
+    const worldRotYmatrix = BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI);
+    const statePlayers = [state.activePlayer, state.passivePlayer];
+    const playerPhysicsImpostors = state.playerPhysicsImpostors;
+    let players;
+    if(this.currentPlayerIdx === 0){
+      players= this.players;
+    }
+    else{
+      players = [this.players[1], this.players[0]];
+    }
+    let statePlayersKeys;
+    for(let i = 0; i < 2 ; ++i){
+      statePlayersKeys = Object.keys(statePlayers[i]);
+      statePlayersKeys.forEach(key => {
+        players[i][key] = statePlayers[i][key];
+      });
+    }
+    for(let i = 0; i<2; ++i){
+      if(state.tanks[i].cannonX !== undefined){
+        players[i]._rotXMesh.rotation.x = state.tanks[i].cannonX;
+      }
+      if(state.tanks[i].cannonY !== undefined){
+        players[i]._rotYMesh.rotation.y = state.tanks[i].cannonY;
+      }
+      if(state.tanks[i].position){
+        BABYLON.Vector3.TransformCoordinatesToRef(state.tanks[i].position,
+           worldRotYmatrix,
+           players[i].tank.position
+        );
+      }
+      if(state.tanks[i].rotation){
+        BABYLON.Quaternion.FromRotationMatrix(worldRotYmatrix).multiplyToRef(
+          state.tanks[i].rotation, players[i].tank.rotationQuaternion
+        );
+      }
+      if(state.playerPhysicsImpostors[i].angularVelocity){
+        players[i].tank.physicsImpostor.setAngularVelocity(
+          new BABYLON.Quaternion(
+            state.playerPhysicsImpostors[i].angularVelocity.x,
+            state.playerPhysicsImpostors[i].angularVelocity.y,
+            state.playerPhysicsImpostors[i].angularVelocity.z,
+            state.playerPhysicsImpostors[i].angularVelocity.w
+          )
+        );
+      }
+      if(state.playerPhysicsImpostors[i].linearVelocity){
+        players[i].tank.physicsImpostor.setLinearVelocity(
+          BABYLON.Vector3.TransformCoordinates(
+            state.playerPhysicsImpostors[i].linearVelocity,
+            worldRotYmatrix
+          )
+        );
+      }
+    }
 
-  initialPositionTanks() {
+    for(let i = 0; i < state.bombs.length; ++i){
+      if(this.bombs[i].mesh){
+        BABYLON.Vector3.TransformCoordinatesToRef(state.bombs[i].position,
+           worldRotYmatrix,
+          this.bombs[i].mesh.position);
+        BABYLON.Quaternion.FromRotationMatrixToRef(
+          this.bombs[i].mesh.worldMatrixFromCache.multiply(worldRotYmatrix),
+          this.bombs[i].mesh.rotationQuaternion
+        );
+        this.bombs[i].physicsImpostor.setLinearVelocity(
+          BABYLON.Vector3.TransformCoordinates(
+            state.bombs[i].linearVelocity,
+            worldRotYmatrix
+          )
+        );
+        this.bombs[i].physicsImpostor.setAngularVelocity(
+          new BABYLON.Quaternion(
+            state.bombs[i].angularVelocity.x,
+            state.bombs[i].angularVelocity.y,
+            state.bombs[i].angularVelocity.z,
+            state.bombs[i].angularVelocity.w
+          )
+        );
+      }
+    }
+  }
+  getGameState(){
+    const state = {playerPhysicsImpostors: [{},{}],
+      bombs: []};
+    const activePlayer = this.players[this.currentPlayerIdx];
+    const passivePlayer = this.players[this.currentPlayerIdx === 0 ? 1 : 0];
+    const players = [activePlayer, passivePlayer];
+    const statePlayers = [{},{}];
+    const stateTanks = [{},{}];
+    for(let i = 0; i < 2; ++i){
+      statePlayers[i].health = players[i].health;
+      stateTanks[i].position = players[i].tank.position;
+      stateTanks[i].rotation = players[i].tank.rotationQuaternion;
+      stateTanks[i].cannonX = players[i]._rotXMesh.rotation.x;
+      stateTanks[i].cannonY = players[i]._rotYMesh.rotation.y;
+      state.playerPhysicsImpostors[i].linearVelocity =
+        players[i].tank.physicsImpostor.getLinearVelocity();
+      state.playerPhysicsImpostors[i].angularVelocity =
+        players[i].tank.physicsImpostor.getAngularVelocity();
+    }
+    let bombState;
+    for(let i = 0; i < this.bombs.length; ++i){
+      bombState = {};
+      if(this.bombs[i].mesh){
+        console.log("mesh");
+        bombState.position = this.bombs[i].mesh.position;
+        bombState.rotation = this.bombs[i].mesh.rotationQuaterion;
+        if(this.bombs[i].physicsImpostor){
+          console.log("physics");
+          bombState.linearVelocity = this.bombs[i].physicsImpostor.getLinearVelocity();
+          bombState.angularVelocity = this.bombs[i].physicsImpostor.getAngularVelocity();
+        }
+        state.bombs.push(bombState);
+      }
+    }
+    state.activePlayer = statePlayers[0];
+    state.passivePlayer = statePlayers[1];
+    state.tanks = stateTanks;
+    return state;
+  }
+  initialPositionTanks(){
     const midX = Math.floor(this.arena.ground.cellCount / 2);
     const midZ = Math.floor(this.arena.ground.cellCount / 4);
     const globalCoordinates = this.arena.ground.cellIndicesToGlobalCoordinates([
@@ -200,13 +331,17 @@ export class Game {
   }
 
   _startTurn() {
+    
     const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
     if (this.players[this.currentPlayerIdx].health <= 0) {
       return this._gameOver(this.players[this.currentPlayerIdx]);
     } else if (this.players[otherPlayer].health <= 0) {
       return this._gameOver(this.players[otherPlayer]);
     }
+
+    this.players[this.currentPlayerIdx].setUpright();
     this._startListeningForMoveOptions();
+    console.log("moveOptions");
     if (this.players[otherPlayer] instanceof SocketPlayer) {
       renderTimer(TURN_TIME);
       this.timeoutID = setTimeout(() => {
@@ -214,7 +349,11 @@ export class Game {
         this._switchPlayer();
         this._startTurn();
       }, TURN_TIME);
+      this.gameStateTimerID = setInterval(() => {
+        socket.emit("gameState", this.getGameState());
+      }, GAME_STATE_SEND_INTERVAL);
     }
+
   }
 
   _gameOver(loser) {
@@ -249,6 +388,7 @@ export class Game {
     );
   }
   _receiveMoveType(type) {
+    console.log("receivetype");
     switch (type) {
       case "position":
         this.startListeningForPosition();
@@ -272,6 +412,7 @@ export class Game {
 
   _switchPlayer() {
     this.players[this.currentPlayerIdx].endTurn();
+    clearInterval(this.gameStateTimerID);
     const otherPlayer = this.currentPlayerIdx === 0 ? 1 : 0;
     if (!(this.players[otherPlayer] instanceof DemoPlayer)) {
       if (this.currentPlayerIdx === 0) {
@@ -284,6 +425,7 @@ export class Game {
   }
 
   _receiveAttack(matrix) {
+    console.log("attack");
     clearTimeout(this.timeoutID);
     clearTimer();
     const bombScale = new BABYLON.Vector3.Zero();
@@ -295,11 +437,26 @@ export class Game {
       new BABYLON.Vector3(0, 0, -DEFAULT_FIRING_IMPULSE),
       rotationComponent
     );
-    const bomb = new Bomb(this, bombPos, bombRot.toEulerAngles());
-    bomb.fire(impulseVector, this._receiveAttackFinished);
+    const bomb = new Bomb(this,bombPos,
+      bombRot.toEulerAngles());
+    let bombDoneCallback;
+    if(this.players[this.currentPlayerIdx] instanceof LocalPlayer){
+      bombDoneCallback = this._receiveAttackFinished;
+    }
+    else{
+      bombDoneCallback = ()=>{};
+    }
+    bomb.fire(impulseVector,()=>{
+        this.bombs.shift();
+        bombDoneCallback();
+    });
+    this.bombs.push(bomb);
   }
-  _receiveAttackFinished() {
-    this._switchPlayer();
-    this._startTurn();
+  _receiveAttackFinished(){
+    if(this.players[this.currentPlayerIdx] instanceof LocalPlayer){
+      socket.emit("turnResult", this.getGameState());
+      this._switchPlayer();
+      this._startTurn();
+    }
   }
 }
