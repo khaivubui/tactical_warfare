@@ -70,7 +70,7 @@ http.listen(port, () => console.log(`Server started on port ${port}`));
 
 setInterval(() => http.get("http://tactical-warfare.herokuapp.com"), 300000);
 
-setInterval(() => http.get("http://http://vuu.herokuapp.com/"), 300000);
+setInterval(() => http.get("http://vuu.herokuapp.com/"), 300000);
 
 setInterval(() => http.get("http://knightvviking.herokuapp.com/"), 300000);
 
