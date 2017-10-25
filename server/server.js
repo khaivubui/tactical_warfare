@@ -68,14 +68,12 @@ http.listen(port, () => console.log(`Server started on port ${port}`));
 
 // ---------- Dyno Wake ----------
 
-setInterval(() => {
-  http.get("http://tactical-warfare.herokuapp.com");
-}, 300000);
+setInterval(() => http.get("http://tactical-warfare.herokuapp.com"), 300000);
 
-setInterval(() => {
-  http.get("http://http://vuu.herokuapp.com/");
-}, 300000);
+setInterval(() => http.get("http://http://vuu.herokuapp.com/"), 300000);
 
-setInterval(() => {
-  http.get("https://knightvviking.herokuapp.com/");
-}, 300000);
+setInterval(() => http.get("http://knightvviking.herokuapp.com/"), 300000);
+
+setInterval(() => http.get("http://thawing-beach-78183.herokuapp.com/"), 300000);
+
+setInterval(() => http.get("http://score-keep-khai-bui.herokuapp.com/"), 300000);
