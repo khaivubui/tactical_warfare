@@ -273,7 +273,7 @@ export class LocalPlayer extends Player {
   startListeningForAttack(onDoneCallback, onCancelledCallback) {
     this.setUpright();
     showCameraRotation();
-    this._maximizeTankOptions("attack-options");
+    //this._maximizeTankOptions("attack-options");
     const camera = this.scene.activeCamera;
     const canvas = document.getElementById("render-canvas");
     const rotationWidget = document.querySelector(".camera-rotation");
