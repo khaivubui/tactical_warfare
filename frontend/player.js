@@ -44,7 +44,7 @@ export class Player {
 
   resetCannon() {
     this._rotXMesh.rotation.x = 0;
-    this._rotYMesh.rotation.y = this.tank.rotation.y;
+    this._rotYMesh.rotation.y = 0;
   }
 }
 
@@ -57,8 +57,15 @@ export class DemoPlayer extends Player {
     onDoneCallback("position");
   }
   setUpright(){
-    BABYLON.Quaternion.RotationAxisToRef(BABYLON.Vector3.Up(),
-      Math.PI, this.tank.rotationQuaternion);
+    if(this.tank.rotationQuaternion){
+      BABYLON.Quaternion.RotationAxisToRef(BABYLON.Vector3.Up(),
+        Math.PI, this.tank.rotationQuaternion);
+    }
+    else{
+      this.tank.rotation.x = 0;
+      this.tank.rotation.y = Math.PI;
+      this.tank.rotation.z = 0;
+    }
   }
 
   startListeningForPosition(onDoneCallback) {
@@ -80,8 +87,15 @@ export class SocketPlayer extends Player {
   }
 
   setUpright(){
-    BABYLON.Quaternion.RotationAxisToRef(BABYLON.Vector3.Up(),
-      Math.PI, this.tank.rotationQuaternion);
+    if(this.tank.rotationQuaternion){
+      BABYLON.Quaternion.RotationAxisToRef(BABYLON.Vector3.Up(),
+        Math.PI, this.tank.rotationQuaternion);
+    }
+    else{
+      this.tank.rotation.x = 0;
+      this.tank.rotation.y = Math.PI;
+      this.tank.rotation.z = 0;
+    }
   }
 
   startListeningForPosition(onDoneCallback, onCancelledCallback){
@@ -161,7 +175,14 @@ export class LocalPlayer extends Player {
     this._lockChangeAlert = this._lockChangeAlert.bind(this);
   }
   setUpright(){
-    this.tank.rotationQuaternion = new BABYLON.Quaternion.Identity();
+    if(this.tank.rotationQuaternion){
+      this.tank.rotationQuaternion = new BABYLON.Quaternion.Identity();
+    }
+    else{
+      this.tank.rotation.x = 0;
+      this.tank.rotation.y = 0;
+      this.tank.rotation.z  = 0;
+    }
   }
   _handleMoveOption(onDoneCallback){
     return type => e => {

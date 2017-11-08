@@ -2,7 +2,7 @@ import Arena from "./arena.js";
 import { Player, DemoPlayer, LocalPlayer, SocketPlayer } from "./player.js";
 import { Bomb } from "./projectile/projectile";
 import { socket } from "./websockets";
-import { notifyTurn, showActiveSocketsWidgetToggle } from "./websockets";
+import { showActiveSocketsWidgetToggle } from "./websockets";
 import { unhideAuthWidgetToggle } from "./auth_stuff/auth_stuff";
 import { renderTimer, clearTimer } from "./ui/timer";
 
@@ -13,6 +13,7 @@ const TANK_CANNON_LENGTH = 1;
 const TANK_POS_HEIGHT = 3;
 const GAME_STATE_SEND_INTERVAL = 100;
 const TURN_TIME = 15000;
+const ONLINE_GAME_WAIT_TIME = 5000;
 
 export const createDemoGame = scene => {
   const localTank = scene.tankMesh;
@@ -27,27 +28,29 @@ export const createDemoGame = scene => {
   socketTank.material.specularPower = 300;
   socketTank.material.specularColor = new BABYLON.Color3(0.7, 0.7, 0.7);
   applyGreenTexture(localTank, scene);
-  localTank.physicsImpostor = new BABYLON.PhysicsImpostor(
-    localTank,
-    BABYLON.PhysicsImpostor.BoxImpostor,
-    { mass: 2, restitution: 0 },
-    scene
-  );
+
   localTank.scaling.y = 0.9;
   localTank.scaling.x = 0.9;
   localTank.scaling.z = 0.9;
 
+
+  socketTank.scaling.y = 0.9;
+  socketTank.scaling.x = 0.9;
+  socketTank.scaling.z = 0.9;
+
+  const game = new Game(scene, [Player1, Player2], arena);
   socketTank.physicsImpostor = new BABYLON.PhysicsImpostor(
     socketTank,
     BABYLON.PhysicsImpostor.BoxImpostor,
     { mass: 2, restitution: 0 },
     scene
   );
-  socketTank.scaling.y = 0.9;
-  socketTank.scaling.x = 0.9;
-  socketTank.scaling.z = 0.9;
-  const game = new Game(scene, [Player1, Player2], arena);
-
+  localTank.physicsImpostor = new BABYLON.PhysicsImpostor(
+    localTank,
+    BABYLON.PhysicsImpostor.BoxImpostor,
+    { mass: 2, restitution: 0 },
+    scene
+  );
   return game;
 };
 
@@ -93,7 +96,8 @@ export const startOnlineGame = (game, isFirst) => {
     );
     game.players[1].showForfeitButton();
   }
-  game.startGame();
+  setTimeout(game.startGame, ONLINE_GAME_WAIT_TIME);
+
 };
 
 export class Game {
@@ -111,6 +115,7 @@ export class Game {
       this
     );
     this._receiveAttackFinished = this._receiveAttackFinished.bind(this);
+    this.startGame = this.startGame.bind(this);
     this.initialPositionTanks();
     this.bombsCreatedSinceStart = 0;
     this.explosionsCreatedSinceStart = 0;
@@ -343,23 +348,22 @@ export class Game {
     ]);
 
     localPlayer.tank.position = globalCoordinates;
-    const otherPlayerIdx = this.myPlayerIdx === 0 ? 1 : 0;
     localPlayer.tank.position.y = TANK_POS_HEIGHT;
     const matrix = BABYLON.Matrix.RotationAxis(BABYLON.Axis.Y, Math.PI);
     opponentPlayer.tank.position = BABYLON.Vector3.TransformCoordinates(
       globalCoordinates,
       matrix
     );
-    opponentPlayer.tank.position.y = 0.5;
+    opponentPlayer.tank.position.y = TANK_POS_HEIGHT;
+    opponentPlayer.setUpright();
+    localPlayer.setUpright();
     for (let i = 0; i < this.players.length; ++i) {
       this.players[i].resetCannon();
     }
-    opponentPlayer.setUpright();
-    localPlayer.setUpright();
   }
-  // Start new Online game
+
   startGame() {
-    this.notifyTurn();
+    if(this.findOpponentPlayer() instanceof SocketPlayer) this.notifyTurn();
     this._startTurn();
   }
 
@@ -375,9 +379,7 @@ export class Game {
     //this.players[this.currentPlayerIdx].setUpright();
     this._startListeningForMoveOptions();
     if (this.players[otherPlayer] instanceof SocketPlayer) {
-      setTimeout(()=>{
-        renderTimer(TURN_TIME);
-      }, 5000);
+      renderTimer(TURN_TIME);
       this.timeoutID = setTimeout(() => {
         socket.emit("switchPlayer");
         this._switchPlayer();
@@ -390,13 +392,16 @@ export class Game {
   }
 
   _gameOver(loser) {
+    const gameoverNotification = document.querySelector(".turn-notification");
     if (loser instanceof LocalPlayer) {
-      const gameoverNotification = document.querySelector(".turn-notification");
       gameoverNotification.innerHTML = "Defeat!";
     } else if (loser instanceof SocketPlayer) {
-      const gameoverNotification = document.querySelector(".turn-notification");
       gameoverNotification.innerHTML = "Victory!";
     }
+    gameoverNotification.style["max-width"] = "300px";
+    window.setTimeout(() => {
+      gameoverNotification.style["max-width"] = "0";
+    }, 1000);
     this.restartGame();
   }
 
@@ -451,9 +456,6 @@ export class Game {
         this.currentPlayerIdx = 0;
       }
       this.notifyTurn();
-      setTimeout(()=> {
-        notifyTurn();
-      }, 5000);
     }
   }
 

@@ -149,8 +149,6 @@ export const webSockets = () => {
     activeSocketsToggle.style["max-width"] = "32px";
   };
 
-  // ---------- Turn Notification ----------
-
   // ---------- startGame ui effects ----------
 
   const chatWidget = document.querySelector(".chat-widget");

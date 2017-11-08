@@ -30,25 +30,20 @@ export default class Arena {
     this.ground.mesh.material.diffuseTexture.vScale = 5.0;
     this.ground.mesh.material.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
 
-    this._wallMesh = new BABYLON.Mesh.CreateBox(
-      "centerWall",
-      groundWidth,
-      scene
-    );
+    this._wallMesh = scene.centerWall;
     this._wallMesh.scaling.z = wallThickness / groundWidth;
     this._wallMesh.scaling.y = wallHeight / groundWidth;
     this._wallMesh.scaling.x = wallWidth;
     this._wallMesh.position.y += wallHeight / 2;
-    window.wallMesh = this._wallMesh;
 
     // CenterWall material
-    this._wallMesh.material = new BABYLON.StandardMaterial("texture1", scene);
-    this._wallMesh.material.diffuseTexture = new BABYLON.Texture(
-      scene.centerWallTask,
-      scene
-    );
-    this._wallMesh.material.diffuseTexture.uScale = 10.0;
-    this._wallMesh.material.diffuseTexture.vScale = 2.0;
+    // this._wallMesh.material = new BABYLON.StandardMaterial("texture1", scene);
+    // this._wallMesh.material.diffuseTexture = new BABYLON.Texture(
+    //   scene.centerWallTask,
+    //   scene
+    // );
+    // this._wallMesh.material.diffuseTexture.uScale = 10.0;
+    // this._wallMesh.material.diffuseTexture.vScale = 2.0;
 
     // Create side walls
     this._sidewall0 = new BABYLON.Mesh.CreatePlane(
