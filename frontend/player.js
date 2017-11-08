@@ -5,7 +5,7 @@ import {
 import { socket } from "./websockets";
 import { hideCameraRotation, showCameraRotation } from "./ui/camera_rotation";
 
-const AIMING_CAMERA_ROT_SPEED = 0.05;
+const AIMING_CAMERA_ROT_SPEED = 0.035;
 const AIMING_CAMERA_RADIUS = 2;
 const AIMING_CAMERA_HEIGHT = 1;
 
@@ -313,6 +313,7 @@ export class LocalPlayer extends Player {
     const rotationWidget = document.querySelector(".camera-rotation");
     rotationWidget.onmousedown = this.originalRotationWidgetMouseDown;
     canvas.onmousemove = undefined;
+    canvas.onclick = undefined;
   }
 
   _setUpAimingCamera() {
