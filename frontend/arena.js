@@ -5,7 +5,7 @@ const DEFAULT_CELL_SIZE = 3.5;
 const DEFAULT_CELL_COUNT = 10;
 const DEFAULT_WALL_HEIGHT = 3;
 const DEFAULT_WALL_WIDTH = 0.6;
-const SIDE_WALL_HEIGHT = 6;
+const SIDE_WALL_HEIGHT = 8;
 
 export default class Arena {
   constructor(
