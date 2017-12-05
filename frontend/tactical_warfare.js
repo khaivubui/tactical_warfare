@@ -3,8 +3,14 @@ import authStuff from "./auth_stuff/auth_stuff.js";
 import { webSockets, socket } from "./websockets";
 import liveChat from "./ui/live_chat";
 import disableMobileScrolling from "./mobile_friendliness/mobile_scroll";
-
+const alertIfOutdatedBrowser = function() {
+  const canvas = document.getElementById("render-canvas");
+  if(canvas.requestPointerLock === undefined){
+    alert("Please update your internet browser to the latest version to play this game");
+  }
+};
 const createScene = function() {
+  alertIfOutdatedBrowser();
   const canvas = document.getElementById("render-canvas");
   const engine = new BABYLON.Engine(canvas, true);
   const scene = new BABYLON.Scene(engine);
